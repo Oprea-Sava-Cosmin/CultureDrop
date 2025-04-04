@@ -35,6 +35,7 @@ const Hero = () => {
       sx={{
         position: 'relative',
         height: { xs: '80vh', md: '90vh' },
+        maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
@@ -53,7 +54,7 @@ const Hero = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: 'url(/images/hero-bg.jpg)',
+          backgroundImage: 'url(/images/hero-bg.svg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           zIndex: -1,
