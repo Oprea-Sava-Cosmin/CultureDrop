@@ -31,7 +31,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useStore } from '@tanstack/react-store';
 import { appStore, toggleCart } from '../../store/appStore';
 import { culturalThemes } from '../../data/mockData';
-import CartDrawer from '../cart/CartDrawer'; // We'll create this component next
+import CartDrawer from '../cart/CartDrawer';
 
 const pages = ['Home', 'Shop', 'Music', 'About'];
 const routes = ['/', '/shop', '/music', '/about'];
