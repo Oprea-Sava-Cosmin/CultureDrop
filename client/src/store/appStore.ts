@@ -93,21 +93,21 @@ export const filterProducts = (category?: string | null, culture?: string | null
   });
 };
 
-export const addToCart = (product: Product) => {
+export const addToCart = (product: Product, quantity: number = 1) => {
   appStore.setState((state) => {
     const existingItem = state.cart.find((item) => item.product.id === product.id);
-
+    console.log(existingItem);
     if (existingItem) {
       return {
         ...state,
         cart: state.cart.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
         ),
       };
     } else {
       return {
         ...state,
-        cart: [...state.cart, { product, quantity: 1 }],
+        cart: [...state.cart, { product, quantity }],
       };
     }
   });

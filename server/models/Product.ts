@@ -25,10 +25,14 @@ const productSchema = new mongoose.Schema({
         required: true,
         enum: ['T-Shirts', 'Hoodies', 'Pants', 'Jackets', 'Vinyl', 'Digital', 'Caps', 'Bags', 'Other']
     },
-    size: {
+    images: [{
+        type: String,
+        required: true
+    }],
+    size: [{
         type: String,
         enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size']
-    },
+    }],
     stock: {
         type: Number,
         required: true,

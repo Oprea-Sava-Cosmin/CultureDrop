@@ -88,7 +88,7 @@ function ProductDetailPage() {
   // Handle add to cart
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product);
+      addToCart(product, quantity);
       // Reset quantity after adding to cart
       setQuantity(1);
     }
