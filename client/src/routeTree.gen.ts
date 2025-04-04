@@ -11,13 +11,48 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ShopImport } from './routes/shop'
+import { Route as MusicImport } from './routes/music'
+import { Route as CheckoutImport } from './routes/checkout'
+import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProductIdImport } from './routes/product.$id'
 
 // Create/Update Routes
+
+const ShopRoute = ShopImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MusicRoute = MusicImport.update({
+  id: '/music',
+  path: '/music',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CheckoutRoute = CheckoutImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AboutRoute = AboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductIdRoute = ProductIdImport.update({
+  id: '/product/$id',
+  path: '/product/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +67,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/music': {
+      id: '/music'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof MusicImport
+      parentRoute: typeof rootRoute
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopImport
+      parentRoute: typeof rootRoute
+    }
+    '/product/$id': {
+      id: '/product/$id'
+      path: '/product/$id'
+      fullPath: '/product/$id'
+      preLoaderRoute: typeof ProductIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +109,64 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/checkout': typeof CheckoutRoute
+  '/music': typeof MusicRoute
+  '/shop': typeof ShopRoute
+  '/product/$id': typeof ProductIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/checkout': typeof CheckoutRoute
+  '/music': typeof MusicRoute
+  '/shop': typeof ShopRoute
+  '/product/$id': typeof ProductIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/checkout': typeof CheckoutRoute
+  '/music': typeof MusicRoute
+  '/shop': typeof ShopRoute
+  '/product/$id': typeof ProductIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/about' | '/checkout' | '/music' | '/shop' | '/product/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/about' | '/checkout' | '/music' | '/shop' | '/product/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/checkout'
+    | '/music'
+    | '/shop'
+    | '/product/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CheckoutRoute: typeof CheckoutRoute
+  MusicRoute: typeof MusicRoute
+  ShopRoute: typeof ShopRoute
+  ProductIdRoute: typeof ProductIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CheckoutRoute: CheckoutRoute,
+  MusicRoute: MusicRoute,
+  ShopRoute: ShopRoute,
+  ProductIdRoute: ProductIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +179,31 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/about",
+        "/checkout",
+        "/music",
+        "/shop",
+        "/product/$id"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/about": {
+      "filePath": "about.tsx"
+    },
+    "/checkout": {
+      "filePath": "checkout.tsx"
+    },
+    "/music": {
+      "filePath": "music.tsx"
+    },
+    "/shop": {
+      "filePath": "shop.tsx"
+    },
+    "/product/$id": {
+      "filePath": "product.$id.tsx"
     }
   }
 }

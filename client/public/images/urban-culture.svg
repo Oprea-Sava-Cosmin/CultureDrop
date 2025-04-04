@@ -1,0 +1,67 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with urban skyline silhouette -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3f51b5" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#757de8" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rectangle -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)"/>
+  
+  <!-- Urban skyline silhouette -->
+  <g fill="#1a237e" opacity="0.7">
+    <!-- Buildings -->
+    <rect x="50" y="200" width="40" height="200"/>
+    <rect x="100" y="150" width="60" height="250"/>
+    <rect x="170" y="180" width="30" height="220"/>
+    <rect x="210" y="100" width="80" height="300"/>
+    <rect x="300" y="220" width="50" height="180"/>
+    <rect x="360" y="180" width="70" height="220"/>
+    <rect x="440" y="120" width="40" height="280"/>
+    <rect x="490" y="200" width="60" height="200"/>
+    
+    <!-- Windows (small rectangles on buildings) -->
+    <g fill="#ffffff" opacity="0.5">
+      <!-- Windows for each building -->
+      <rect x="60" y="220" width="20" height="20"/>
+      <rect x="60" y="260" width="20" height="20"/>
+      <rect x="60" y="300" width="20" height="20"/>
+      
+      <rect x="110" y="170" width="20" height="20"/>
+      <rect x="140" y="170" width="20" height="20"/>
+      <rect x="110" y="210" width="20" height="20"/>
+      <rect x="140" y="210" width="20" height="20"/>
+      <rect x="110" y="250" width="20" height="20"/>
+      <rect x="140" y="250" width="20" height="20"/>
+      <rect x="110" y="290" width="20" height="20"/>
+      <rect x="140" y="290" width="20" height="20"/>
+      
+      <!-- More windows for other buildings -->
+      <rect x="230" y="120" width="15" height="15"/>
+      <rect x="255" y="120" width="15" height="15"/>
+      <rect x="230" y="150" width="15" height="15"/>
+      <rect x="255" y="150" width="15" height="15"/>
+      <rect x="230" y="180" width="15" height="15"/>
+      <rect x="255" y="180" width="15" height="15"/>
+      <rect x="230" y="210" width="15" height="15"/>
+      <rect x="255" y="210" width="15" height="15"/>
+    </g>
+  </g>
+  
+  <!-- Urban culture elements -->
+  <g>
+    <!-- Stylized text "URBAN" -->
+    <text x="300" y="80" font-family="Arial" font-size="40" font-weight="bold" text-anchor="middle" fill="#1a237e">URBAN</text>
+    
+    <!-- Music note symbol -->
+    <path d="M150,100 Q170,80 190,100 T230,100 V150 H220 V100 H150 Z" fill="#3f51b5" opacity="0.8"/>
+    
+    <!-- Headphones icon -->
+    <circle cx="400" cy="100" r="25" fill="none" stroke="#3f51b5" stroke-width="5"/>
+    <path d="M375,100 V80 A25,25 0 0,1 425,80 V100" fill="none" stroke="#3f51b5" stroke-width="5"/>
+    <rect x="370" y="100" width="10" height="20" rx="5" fill="#3f51b5"/>
+    <rect x="420" y="100" width="10" height="20" rx="5" fill="#3f51b5"/>
+  </g>
+</svg>
