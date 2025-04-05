@@ -14,10 +14,8 @@ import {
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { motion } from 'framer-motion';
-// import { appStore } from '../../store/appStore';
 import { addToCart } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
-// import { useStore } from '@tanstack/react-store';
 
 interface ProductCardProps {
   product: Product;
@@ -26,9 +24,7 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const theme = useTheme();
   const [isHovered, setIsHovered] = useState(false);
-  // const addToCart = useStore(appStore ,(state) => state.addToCart);
 
-  // Animation variants
   const cardVariants = {
     initial: { scale: 1 },
     hover: { scale: 1.03, transition: { duration: 0.3 } },
@@ -61,6 +57,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <Card
         sx={{
           height: '100%',
+          width: '100%',
+          minWidth: '240px',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',

@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 // Define theme types
 type ThemeMode = 'light' | 'dark';
-type CultureTheme = 'urban' | 'streetwear' | 'hiphop' | 'indie' | 'punk';
+export type CultureTheme = 'urban' | 'streetwear' | 'hiphop' | 'indie' | 'punk';
 
 // Define theme context type
 interface ThemeContextType {
@@ -92,7 +92,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Get stored theme preferences or use defaults
   const [mode, setMode] = useState<ThemeMode>(() => {
     const storedMode = localStorage.getItem('themeMode');
-    return (storedMode as ThemeMode) || 'light';
+    return (storedMode as ThemeMode) || 'dark';
   });
   
   const [culture, setCulture] = useState<CultureTheme>(() => {

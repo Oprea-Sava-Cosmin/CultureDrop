@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Box, Typography, Container, Grid, useTheme } from '@mui/material';
+import { Box, Typography, Container, Grid } from '@mui/material';
 import { motion } from 'framer-motion';
 import Layout from '../components/layout/Layout';
 import ProductGrid from '../components/products/ProductGrid';
@@ -8,22 +8,25 @@ import FilterBar from '../components/products/FilterBar';
 import { useStore } from '@tanstack/react-store';
 import { appStore, setProducts, filterProducts } from '../store/appStore';
 import { mockProducts } from '../data/mockData';
+import { useTheme, type CultureTheme } from '../context/ThemeContext';
 
 export const Route = createFileRoute('/shop')({ 
   component: ShopPage,
 });
 
 function ShopPage() {
-  const theme = useTheme();
   const [loading, setLoading] = useState(true);
   
-  // Access state and actions using useStore
   const filteredProducts = useStore(appStore, (state) => state.filteredProducts);
-  // const setProducts = useStore(appStore, (state) => state.setProducts);
-  // const filterProducts = useStore(appStore, (state) => state.filterProducts);
   const productFilter = useStore(appStore, (state) => state.productFilter);
   
-  // Animation variants
+  const { search } = window.location;
+  const searchParams = new URLSearchParams(search);
+  const categoryParam = searchParams.get('category');
+  const cultureParam = searchParams.get('culture');
+  
+  const { setCulture } = useTheme();
+  
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
@@ -38,13 +41,24 @@ function ShopPage() {
     },
   };
   
-  // Load products on component mount
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
       try {
         if (mockProducts.length > 0) {
           setProducts(mockProducts);
+          
+          if (categoryParam || cultureParam) {
+            filterProducts(
+              categoryParam, 
+              cultureParam, 
+              productFilter.searchQuery
+            );
+            
+            if (cultureParam && ['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(cultureParam)) {
+              setCulture(cultureParam as CultureTheme);
+            }
+          }
         }
       } catch (error) {
         console.error('Error loading products:', error);
@@ -54,11 +68,21 @@ function ShopPage() {
     };
     
     loadProducts();
-  }, [setProducts]);
+  }, [setProducts, categoryParam, cultureParam, productFilter.searchQuery, setCulture]);
   
-  // Handle filter changes
   const handleFilterChange = (category: string | null, culture: string | null, searchQuery: string) => {
     filterProducts(category, culture, searchQuery);
+    
+    if (culture && ['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(culture)) {
+      setCulture(culture as CultureTheme);
+    }
+    
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    if (culture) params.set('culture', culture);
+    
+    const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
+    window.history.replaceState({}, '', newUrl);
   };
   
   return (
@@ -99,7 +123,7 @@ function ShopPage() {
           </Box>
           
           <Grid container spacing={3}>
-            <Grid size={{xs:12, md:3}}>
+            <Grid sx={{xs:12}}>
               <FilterBar 
                 onFilterChange={handleFilterChange}
                 activeCategory={productFilter.category}
@@ -107,7 +131,7 @@ function ShopPage() {
                 searchQuery={productFilter.searchQuery}
               />
             </Grid>
-            <Grid size={{xs:12, md:9}}>
+            <Grid sx={{xs:12}}>
               <ProductGrid 
                 products={filteredProducts} 
                 loading={loading}
