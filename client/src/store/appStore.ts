@@ -243,7 +243,7 @@ export const clearChatMessages = () => {
 export const login = async (credentials: AdminCredentials) => {
   try {
     const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
-    const token = response.data;
+    const {token} = response.data;
 
     if(token) {
       localStorage.setItem('adminToken', token);
@@ -253,6 +253,7 @@ export const login = async (credentials: AdminCredentials) => {
         ...state,
         isAuthenticated: true,
         adminToken: token,
+        // userRole: user.isAdmin ? 'admin' : 'user'
       }));
   
       return true;
@@ -339,8 +340,10 @@ export const addProduct = async (product: Omit<Product, 'id'>) => {
   // return newProduct;
 
   try {
+    const token = appStore.state.adminToken || localStorage.getItem('adminToken');
+
     const response = await axios.post('http://localhost:5000/api/products/create', product, {
-      headers: {'Authorization': `Bearer ${appStore.state.adminToken}`}
+      headers: {'Authorization': `Bearer ${token}`}
     });
 
     const newProduct = response.data.product;
@@ -393,3 +396,27 @@ export const deleteProduct = (productId: string) => {
   });
 };
 
+export const fetchProducts = async () => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    const response = await axios.get('http://localhost:5000/api/products', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const products = response.data;
+    appStore.setState((state) => ({
+      ...state,
+      products,
+      featuredProducts: products.filter((p: Product) => p.featured),
+      filteredProducts: products
+    }));
+
+    return products;
+  } catch (error) {
+    console.error('Error fetching products: ', error);
+    throw error;
+  }
+};
