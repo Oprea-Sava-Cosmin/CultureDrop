@@ -64,9 +64,8 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ onCarouselEnd }) => {
       {images.map((image, index) => (
         <motion.div
           key={image}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: index === currentImageIndex ? 1 : 0 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           style={{
             position: 'absolute',
             width: '100%',
