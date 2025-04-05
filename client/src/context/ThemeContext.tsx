@@ -129,7 +129,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       },
       background: {
         default: cultureThemes[culture][mode].background,
-        paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
+        paper: mode === 'light' ? '0xffffff' : '0x1e1e1e',
       },
     },
     typography: {
