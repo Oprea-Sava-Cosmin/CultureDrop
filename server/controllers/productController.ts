@@ -17,6 +17,8 @@ export const createProduct = async (req: Request, res: Response) => {
             featured
         } = req.body;
 
+        console.log(culture);
+
         if(!name || !category || !price || !stock || !image || !description || !tags || !culture) {
             return res.status(400).json({message: 'All fields are required'});
         }
@@ -30,10 +32,11 @@ export const createProduct = async (req: Request, res: Response) => {
             stock,
             image,
             description,
-            culture,
+            culture: culture,
             tags,
             featured: featured || false
         });
+        console.log(product);
 
         await product.save();
 

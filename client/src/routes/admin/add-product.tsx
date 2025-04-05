@@ -22,7 +22,6 @@ import {
 import { motion } from 'framer-motion';
 
 import Layout from '../../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
 import { appStore, addProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 
@@ -119,21 +118,6 @@ function AddProductPage() {
     }
   };
   
-  // Handle tags input
-  const handleTagsChange = (event: React.ChangeEvent<{}>, newTags: string[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: newTags,
-    }));
-    
-    // Clear error
-    if (formErrors.tags) {
-      setFormErrors((prev) => ({
-        ...prev,
-        tags: '',
-      }));
-    }
-  };
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -326,9 +310,9 @@ function AddProductPage() {
                     label="Category"
                     onChange={(event) => handleChange(event as any)}
                   >
-                    <MenuItem value="clothing">Clothing</MenuItem>
-                    <MenuItem value="music">Music</MenuItem>
-                    <MenuItem value="accessories">Accessories</MenuItem>
+                    <MenuItem value="Clothing">Clothing</MenuItem>
+                    <MenuItem value="Music">Music</MenuItem>
+                    <MenuItem value="Accessories">Accessories</MenuItem>
                   </Select>
                   {formErrors.category && (
                     <FormHelperText>{formErrors.category}</FormHelperText>
@@ -345,22 +329,22 @@ function AddProductPage() {
                       label="Sub-Category"
                       onChange={(event) => handleChange(event as any)}
                     >
-                      {formData.category === 'clothing' && [
-                        <MenuItem key="shirts" value="shirts">Shirts</MenuItem>,
-                        <MenuItem key="pants" value="pants">Pants</MenuItem>,
-                        <MenuItem key="dresses" value="dresses">Dresses</MenuItem>,
-                        <MenuItem key="jackets" value="jackets">Jackets</MenuItem>,
+                      {formData.category === 'Clothing' && [
+                        <MenuItem key="Shirts" value="shirts">Shirts</MenuItem>,
+                        <MenuItem key="Pants" value="pants">Pants</MenuItem>,
+                        <MenuItem key="Dresses" value="dresses">Dresses</MenuItem>,
+                        <MenuItem key="Jackets" value="jackets">Jackets</MenuItem>,
                       ]}
-                      {formData.category === 'music' && [
-                        <MenuItem key="instruments" value="instruments">Instruments</MenuItem>,
-                        <MenuItem key="albums" value="albums">Albums</MenuItem>,
-                        <MenuItem key="accessories" value="accessories">Accessories</MenuItem>,
+                      {formData.category === 'Music' && [
+                        <MenuItem key="Instruments" value="instruments">Instruments</MenuItem>,
+                        <MenuItem key="Albums" value="albums">Albums</MenuItem>,
+                        <MenuItem key="Accessories" value="accessories">Accessories</MenuItem>,
                       ]}
-                      {formData.category === 'accessories' && [
-                        <MenuItem key="jewelry" value="jewelry">Jewelry</MenuItem>,
-                        <MenuItem key="bags" value="bags">Bags</MenuItem>,
-                        <MenuItem key="hats" value="hats">Hats</MenuItem>,
-                        <MenuItem key="other" value="other">Other</MenuItem>,
+                      {formData.category === 'Accessories' && [
+                        <MenuItem key="Jewelry" value="jewelry">Jewelry</MenuItem>,
+                        <MenuItem key="Bags" value="bags">Bags</MenuItem>,
+                        <MenuItem key="Hats" value="hats">Hats</MenuItem>,
+                        <MenuItem key="Other" value="other">Other</MenuItem>,
                       ]}
                     </Select>
                     {formErrors.subCategory && (

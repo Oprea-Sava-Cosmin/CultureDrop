@@ -36,11 +36,9 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { motion } from 'framer-motion';
 
 import Layout from '../../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
 import { appStore, updateProduct, deleteProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 import axios from 'axios';
-import { useLoaderData } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
@@ -67,7 +65,6 @@ function ProductsManagementPage() {
   const navigate = useNavigate();
   // const products = useStore(appStore, (state) => state.products);
   const products = Route.useLoaderData() as Product[];
-  console.log(products);
   
   // Pagination state
   const [page, setPage] = useState(0);
@@ -374,9 +371,9 @@ function ProductsManagementPage() {
                     label="Category"
                     onChange={(event) => handleEditFormChange(event as any)}
                   >
-                    <MenuItem value="clothing">Clothing</MenuItem>
-                    <MenuItem value="music">Music</MenuItem>
-                    <MenuItem value="accessories">Accessories</MenuItem>
+                    <MenuItem value="Clothing">Clothing</MenuItem>
+                    <MenuItem value="Music">Music</MenuItem>
+                    <MenuItem value="Accessories">Accessories</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
