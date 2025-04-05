@@ -28,6 +28,14 @@ export interface AdminCredentials {
   password: string;
 }
 
+// Define chat message type
+export interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+}
+
 // Define app store state
 interface AppState {
   products: Product[];
@@ -45,6 +53,9 @@ interface AppState {
   isAuthenticated: boolean;
   isAdminPanelOpen: boolean;
   adminToken: string | null;
+  // Chat state
+  isChatOpen: boolean;
+  chatMessages: ChatMessage[];
 }
 
 // Check if admin is already authenticated from localStorage
@@ -68,6 +79,9 @@ export const appStore = new Store<AppState>({
   isAuthenticated: storedIsAuthenticated || false,
   isAdminPanelOpen: false,
   adminToken: storedToken || null,
+  // Chat state
+  isChatOpen: false,
+  chatMessages: [],
 });
 
 // Define store actions
@@ -178,6 +192,35 @@ export const toggleMobileMenu = () => {
   appStore.setState((state) => ({
     ...state,
     isMobileMenuOpen: !state.isMobileMenuOpen,
+  }));
+};
+
+// Chat actions
+export const toggleChat = () => {
+  appStore.setState((state) => ({
+    ...state,
+    isChatOpen: !state.isChatOpen,
+  }));
+};
+
+export const addChatMessage = (message: Omit<ChatMessage, 'id'>) => {
+  const newMessage: ChatMessage = {
+    ...message,
+    id: Date.now().toString(),
+  };
+  
+  appStore.setState((state) => ({
+    ...state,
+    chatMessages: [...state.chatMessages, newMessage],
+  }));
+  
+  return newMessage;
+};
+
+export const clearChatMessages = () => {
+  appStore.setState((state) => ({
+    ...state,
+    chatMessages: [],
   }));
 };
 

@@ -3,6 +3,7 @@ import { Box, Container } from '@mui/material';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
+import ChatBot from '../chat/ChatBot';
 
 interface LayoutProps {
   children: ReactNode;
@@ -46,6 +47,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Container maxWidth="lg">{children}</Container>
       </Box>
       <Footer />
+      <ChatBot />
     </Box>
   );
 };
