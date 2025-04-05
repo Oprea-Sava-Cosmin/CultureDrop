@@ -5,6 +5,7 @@ import ImageCarousel from '../components/home/ImageCarousel';
 import TextReveal from '../components/home/TextReveal';
 import ScrollPhotos from '../components/home/ScrollPhotos';
 import Hero from '../components/home/Hero';
+import Carousel from '@/components/home/Carousel';
 
 export const Route = createFileRoute('/')({ 
   component: HomePage,
@@ -70,6 +71,9 @@ function HomePage() {
       </section>
       <section style={sectionStyle}>
         <Hero />
+      </section>
+      <section style={sectionStyle}>
+        <Carousel/>
       </section>
       {/* Hide scrollbar for WebKit browsers */}
       <style>

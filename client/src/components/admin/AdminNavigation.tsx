@@ -36,7 +36,6 @@ const AdminNav = () => {
   const handleToggleAdminPanel = () => {
     toggleAdminPanel();
   };
-  console.log(isAuthenticated, adminToken)
 
   // If not authenticated at all, don't show anything
   if (!isAuthenticated) {

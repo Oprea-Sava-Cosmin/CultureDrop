@@ -53,3 +53,23 @@ export const getProducts = async (req: Request, res: Response) => {
         res.status(500).json({message: 'Error fetchign products'});
     }
 };
+
+export const getFilteredProducts = async (req: Request, res: Response) => {
+    try {
+        const {category, culture} = req.query;
+        let query = {};
+
+        if(category) {
+            query = {...query, category};
+        }
+        if(culture) {
+            query = {...query, culture};
+        }
+
+        const products = await Product.find(query);
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching filtered products: ', error);
+        res.status(500).json({message: 'Error fetching filtered products'});
+    }
+};

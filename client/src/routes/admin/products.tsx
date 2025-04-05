@@ -39,9 +39,17 @@ import Layout from '../../components/layout/Layout';
 import { useStore } from '@tanstack/react-store';
 import { appStore, updateProduct, deleteProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
+import axios from 'axios';
+import { useLoaderData } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
+  loader: async () => {
+    const response = await axios.get('http://localhost:5000/api/products', { headers: {
+      'Content-Type': 'application/json'
+    }});
+    return response.data;
+  },
   beforeLoad: () => {
     // Check if user is authenticated and is an admin
     const isAuthenticated = appStore.state.isAuthenticated;
@@ -57,7 +65,9 @@ export const Route = createFileRoute('/admin/products')({
 
 function ProductsManagementPage() {
   const navigate = useNavigate();
-  const products = useStore(appStore, (state) => state.products);
+  // const products = useStore(appStore, (state) => state.products);
+  const products = Route.useLoaderData() as Product[];
+  console.log(products);
   
   // Pagination state
   const [page, setPage] = useState(0);
