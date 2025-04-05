@@ -1,4 +1,19 @@
 import { Store } from '@tanstack/react-store';
+import axios from 'axios';
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface SignupData {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;  
+}
 
 // Define product type
 export interface Product {
@@ -225,32 +240,56 @@ export const clearChatMessages = () => {
 };
 
 // Admin actions
-export const adminLogin = (credentials: AdminCredentials) => {
+export const login = async (credentials: AdminCredentials) => {
   try {
-    // For demo purposes, we're using hardcoded credentials
-    // In a real app, this would make an API call to verify credentials
-    const isValid = credentials.username === 'admin' && credentials.password === 'admin123';
-    
-    // Simulate API response with token
-    const token = isValid ? 'mock-jwt-token' : null;
-    
+    const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+    const token = response.data;
 
-    localStorage.setItem('adminToken', token || '');
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('userRole', 'admin'); // Add this line
-
+    if(token) {
+      localStorage.setItem('adminToken', token);
+      localStorage.setItem('isAuthenticated', 'true');
     
-    appStore.setState((state) => ({
-      ...state,
-      isAuthenticated: isValid || true,
-      adminToken: token,
-      userRole: isValid ? 'admin' : null, // Add this line
-    }));
-    
-    return isValid || true;
+      appStore.setState((state) => ({
+        ...state,
+        isAuthenticated: true,
+        adminToken: token,
+      }));
+  
+      return true;
+    }
+    return false;
   } catch (error) {
     console.error('Login error:', error);
     return false;
+  }
+};
+
+export const signup = async (userData: SignupData) => {
+  try {
+    // const response = await axios.post(`${import.meta.env.BACKEND_URL}api/auth/signup`, userData);
+    const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
+    const token = response.data;
+
+    if(token) {
+      localStorage.setItem('adminToken', token);
+      localStorage.setItem('isAuthenticated', 'true');
+      
+      appStore.setState((state) => ({
+        ...state,
+        isAuthenticated: true,
+        adminToken: token,
+      }));
+
+      return {success: true, data: response.data};
+    }
+
+    return {success: false, erroor: 'Signup failed'};
+  } catch (error: any) {
+    console.error('Signup error:', error);
+    return {
+      success: false,
+      error: error.response?.data?.message || 'An error occurred during signup'
+    };
   }
 };
 

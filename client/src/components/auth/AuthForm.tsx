@@ -16,7 +16,7 @@ import {
 import { motion } from 'framer-motion';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { adminLogin } from '../../store/appStore';
+import { login, signup } from '../../store/appStore';
 
 type AuthMode = 'login' | 'signup';
 
@@ -98,9 +98,7 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
     
     try {
       if (mode === 'login') {
-        // For now, we're using the adminLogin function from appStore
-        // In a real app, this would be replaced with a proper user authentication API call
-        const success = adminLogin({
+        const success = await login({
           username: formData.username,
           password: formData.password,
         });
@@ -111,16 +109,21 @@ const AuthForm = ({ mode, onToggleMode }: AuthFormProps) => {
           setError('Invalid username or password');
         }
       } else {
-        // Signup logic would be implemented here
-        // For now, we'll just simulate a successful signup
-        setTimeout(() => {
-          // After signup, automatically log the user in
-          adminLogin({
-            username: formData.username,
-            password: formData.password,
-          });
-          navigate({ to: '/' });
-        }, 1000);
+        const result = await signup({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword
+        });
+
+        if(result.success) {
+          navigate({to: '/'});
+        }
+        else {
+          setError(result.error || 'Signup failed');
+        }
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
