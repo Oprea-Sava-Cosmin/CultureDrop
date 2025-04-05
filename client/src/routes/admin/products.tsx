@@ -65,6 +65,7 @@ function ProductsManagementPage() {
   const navigate = useNavigate();
   // const products = useStore(appStore, (state) => state.products);
   const products = Route.useLoaderData() as Product[];
+  console.log(products);
   
   // Pagination state
   const [page, setPage] = useState(0);
@@ -102,6 +103,7 @@ function ProductsManagementPage() {
 
   // Open delete confirmation dialog
   const handleOpenDeleteDialog = (productId: string) => {
+    console.log(productId);
     setProductToDelete(productId);
     setDeleteDialogOpen(true);
   };
@@ -113,16 +115,34 @@ function ProductsManagementPage() {
   };
 
   // Confirm product deletion
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (productToDelete) {
-      deleteProduct(productToDelete);
-      setAlert({ type: 'success', message: 'Product deleted successfully' });
-      handleCloseDeleteDialog();
-      
-      // Clear alert after 3 seconds
-      setTimeout(() => {
-        setAlert(null);
-      }, 3000);
+      try {
+        await deleteProduct(productToDelete);
+        
+        // Fetch fresh data after deletion
+        const response = await axios.get('http://localhost:5000/api/products', {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        // Update the products data with the fresh data
+        navigate({ to: '/admin/products' });
+        
+        setAlert({ type: 'success', message: 'Product deleted successfully' });
+        handleCloseDeleteDialog();
+        setPage(0);
+        
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      } catch (error) {
+        setAlert({ type: 'error', message: 'Failed to delete product' });
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      }
     }
   };
 
@@ -166,26 +186,43 @@ function ProductsManagementPage() {
   };
 
   // Save edited product
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (editingProduct) {
-      const updatedProduct: Partial<Product> = {
-        name: editFormData.name,
-        category: editFormData.category as 'clothing' | 'music' | 'accessories',
-        price: parseFloat(editFormData.price),
-        image: editFormData.image,
-        description: editFormData.description,
-        culture: editFormData.culture,
-        featured: editFormData.featured,
-      };
-      
-      updateProduct(editingProduct.id, updatedProduct);
-      setAlert({ type: 'success', message: 'Product updated successfully' });
-      handleCloseEditDialog();
-      
-      // Clear alert after 3 seconds
-      setTimeout(() => {
-        setAlert(null);
-      }, 3000);
+      try {
+        const updatedProduct: Partial<Product> = {
+          name: editFormData.name,
+          category: editFormData.category as 'clothing' | 'music' | 'accessories',
+          price: parseFloat(editFormData.price),
+          image: editFormData.image,
+          description: editFormData.description,
+          culture: editFormData.culture,
+          featured: editFormData.featured,
+        };
+        
+        await updateProduct(editingProduct._id, updatedProduct);
+        
+        // Fetch fresh data after update
+        const response = await axios.get('http://localhost:5000/api/products', {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        // Update the products data with the fresh data
+        navigate({ to: '/admin/products' });
+        
+        setAlert({ type: 'success', message: 'Product updated successfully' });
+        handleCloseEditDialog();
+        
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      } catch (error) {
+        setAlert({ type: 'error', message: 'Failed to update product' });
+        setTimeout(() => {
+          setAlert(null);
+        }, 3000);
+      }
     }
   };
 
@@ -248,7 +285,7 @@ function ProductsManagementPage() {
                     {products
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((product) => (
-                        <TableRow key={product.id} hover>
+                        <TableRow key={product._id} hover>
                           <TableCell>
                             <Box
                               component="img"
@@ -281,7 +318,7 @@ function ProductsManagementPage() {
                             </IconButton>
                             <IconButton
                               color="error"
-                              onClick={() => handleOpenDeleteDialog(product.id)}
+                              onClick={() => handleOpenDeleteDialog(product._id)}
                               size="small"
                             >
                               <DeleteIcon />

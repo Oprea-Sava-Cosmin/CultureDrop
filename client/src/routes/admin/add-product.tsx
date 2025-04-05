@@ -204,7 +204,7 @@ function AddProductPage() {
     
     try {
       // Create the product object
-      const productData: Omit<Product, 'id'> = {
+      const productData: Omit<Product, '_id'> = {
         name: formData.name,
         category: formData.category as 'clothing' | 'music' | 'accessories',
         subCategory: formData.subCategory,

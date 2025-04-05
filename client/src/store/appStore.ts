@@ -17,7 +17,7 @@ export interface SignupData {
 
 // Define product type
 export interface Product {
-  id: string;
+  _id: string;
   name: string;
   category: 'clothing' | 'music' | 'accessories';
   subCategory: string;
@@ -144,15 +144,38 @@ export const filterProducts = (category?: string | null, culture?: string | null
   });
 };
 
+export const updateProduct = async (productId: string, updates: Partial<Product>) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    const response = await axios.put(`http://localhost:5000/api/products/${productId}`,updates, { headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }});
+
+    const updatedProduct = response.data.product;
+    appStore.setState((state) => ({
+      ...state,
+      products: state.products.map(p => p._id === productId ? updatedProduct : p),
+      featuredProducts: state.products.filter(p => p.featured)
+    }));
+
+    return updatedProduct;
+  } catch (error) {
+    console.error('Error updating product: ', error);
+    throw error;
+  }
+};
+
+
 export const addToCart = (product: Product, quantity: number = 1) => {
   appStore.setState((state) => {
-    const existingItem = state.cart.find((item) => item.product.id === product.id);
+    const existingItem = state.cart.find((item) => item.product._id === product._id);
     // console.log(existingItem);
     if (existingItem) {
       return {
         ...state,
         cart: state.cart.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          item.product._id === product._id ? { ...item, quantity: item.quantity + quantity } : item
         ),
       };
     } else {
@@ -167,7 +190,7 @@ export const addToCart = (product: Product, quantity: number = 1) => {
 export const removeFromCart = (productId: string) => {
   appStore.setState((state) => ({
     ...state,
-    cart: state.cart.filter((item) => item.product.id !== productId),
+    cart: state.cart.filter((item) => item.product._id !== productId),
   }));
 };
 
@@ -176,14 +199,14 @@ export const updateCartItemQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
       return {
         ...state,
-        cart: state.cart.filter((item) => item.product.id !== productId),
+        cart: state.cart.filter((item) => item.product._id !== productId),
       };
     }
 
     return {
       ...state,
       cart: state.cart.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
+        item.product._id === productId ? { ...item, quantity } : item
       ),
     };
   });
@@ -316,7 +339,7 @@ export const toggleAdminPanel = () => {
   }));
 };
 
-export const addProduct = async (product: Omit<Product, 'id'>) => {
+export const addProduct = async (product: Omit<Product, '_id'>) => {
   try {
     const token = appStore.state.adminToken || localStorage.getItem('adminToken');
 
@@ -342,37 +365,70 @@ export const addProduct = async (product: Omit<Product, 'id'>) => {
   }
 };
 
-export const updateProduct = (productId: string, updates: Partial<Product>) => {
-  appStore.setState((state) => {
-    const updatedProducts = state.products.map((product) =>
-      product.id === productId ? { ...product, ...updates } : product
-    );
-    
-    return {
-      ...state,
-      products: updatedProducts,
-      featuredProducts: updatedProducts.filter((p) => p.featured),
-      filteredProducts: state.filteredProducts.map((product) =>
-        product.id === productId ? { ...product, ...updates } : product
-      ),
-    };
-  });
+export const deleteProduct = async (productId: string) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    await axios.delete(`http://localhost:5000/api/products/${productId}`, { 
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    // Immediately update the state after successful deletion
+    appStore.setState((state) => {
+      // Create new arrays instead of modifying existing ones
+      const updatedProducts = state.products.filter(p => p._id !== productId);
+      const updatedFeatured = updatedProducts.filter(p => p.featured);
+      const updatedFiltered = state.filteredProducts.filter(p => p._id !== productId);
+      const updatedCart = state.cart.filter(item => item.product._id !== productId);
+
+      return {
+        ...state,
+        products: updatedProducts,
+        featuredProducts: updatedFeatured,
+        filteredProducts: updatedFiltered,
+        cart: updatedCart
+      };
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    throw error;
+  }
 };
 
-export const deleteProduct = (productId: string) => {
-  appStore.setState((state) => {
-    const updatedProducts = state.products.filter((product) => product.id !== productId);
+// export const updateProduct = (productId: string, updates: Partial<Product>) => {
+//   appStore.setState((state) => {
+//     const updatedProducts = state.products.map((product) =>
+//       product.id === productId ? { ...product, ...updates } : product
+//     );
     
-    return {
-      ...state,
-      products: updatedProducts,
-      featuredProducts: updatedProducts.filter((p) => p.featured),
-      filteredProducts: state.filteredProducts.filter((product) => product.id !== productId),
-      // Also remove from cart if present
-      cart: state.cart.filter((item) => item.product.id !== productId),
-    };
-  });
-};
+//     return {
+//       ...state,
+//       products: updatedProducts,
+//       featuredProducts: updatedProducts.filter((p) => p.featured),
+//       filteredProducts: state.filteredProducts.map((product) =>
+//         product.id === productId ? { ...product, ...updates } : product
+//       ),
+//     };
+//   });
+// };
+
+// export const deleteProduct = (productId: string) => {
+//   appStore.setState((state) => {
+//     const updatedProducts = state.products.filter((product) => product.id !== productId);
+    
+//     return {
+//       ...state,
+//       products: updatedProducts,
+//       featuredProducts: updatedProducts.filter((p) => p.featured),
+//       filteredProducts: state.filteredProducts.filter((product) => product.id !== productId),
+//       // Also remove from cart if present
+//       cart: state.cart.filter((item) => item.product.id !== productId),
+//     };
+//   });
+// };
 
 export const fetchProducts = async () => {
   try {
