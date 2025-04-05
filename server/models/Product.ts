@@ -56,11 +56,12 @@ const productSchema = new mongoose.Schema({
     featured: {
         type: Boolean,
         default: false
-    },
-    releaseDate: {
-        type: Date,
-        default: Date.now
     }
+        // },
+    // releaseDate: {
+    //     type: Date,
+    //     default: Date.now
+    // }
 }, {
     timestamps: true
 });
