@@ -42,10 +42,12 @@ import type { Product } from '../../store/appStore';
 
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
-  beforeLoad: ({ context }) => {
-    // Check if user is authenticated
+  beforeLoad: () => {
+    // Check if user is authenticated and is an admin
     const isAuthenticated = appStore.state.isAuthenticated;
-    if (!isAuthenticated) {
+    const isAdmin = appStore.state.adminToken != null
+    
+    if (!isAuthenticated || !isAdmin) {
       throw redirect({
         to: '/auth',
       });

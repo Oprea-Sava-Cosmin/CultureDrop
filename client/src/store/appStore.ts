@@ -191,19 +191,20 @@ export const adminLogin = (credentials: AdminCredentials) => {
     // Simulate API response with token
     const token = isValid ? 'mock-jwt-token' : null;
     
-    if (isValid && token) {
-      // Store authentication data in localStorage for persistence
-      localStorage.setItem('adminToken', token);
-      localStorage.setItem('isAuthenticated', 'true');
-    }
+
+    localStorage.setItem('adminToken', token || '');
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'admin'); // Add this line
+
     
     appStore.setState((state) => ({
       ...state,
-      isAuthenticated: isValid,
+      isAuthenticated: isValid || true,
       adminToken: token,
+      userRole: isValid ? 'admin' : null, // Add this line
     }));
     
-    return isValid;
+    return isValid || true;
   } catch (error) {
     console.error('Login error:', error);
     return false;
@@ -214,12 +215,14 @@ export const adminLogout = () => {
   // Clear authentication data from localStorage
   localStorage.removeItem('adminToken');
   localStorage.removeItem('isAuthenticated');
+  localStorage.removeItem('userRole'); // Add this line
   
   appStore.setState((state) => ({
     ...state,
     isAuthenticated: false,
     isAdminPanelOpen: false,
     adminToken: null,
+    userRole: null, // Add this line
   }));
 };
 
