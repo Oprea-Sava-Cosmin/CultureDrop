@@ -152,7 +152,7 @@ const FilterBar = ({
           alignItems: 'center',
           mb: 2,
           flexDirection: { xs: 'column', sm: 'row' },
-          gap: { xs: 2, sm: 0 },
+          gap: { xs: 2, sm: 1 },
         }}
       >
         {/* Search form */}

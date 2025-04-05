@@ -1,45 +1,86 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Box } from '@mui/material';
 import { motion } from 'motion/react';
-
-import Layout from '../components/layout/Layout';
+import { useState } from 'react';
+import ImageCarousel from '../components/home/ImageCarousel';
+import TextReveal from '../components/home/TextReveal';
+import ScrollPhotos from '../components/home/ScrollPhotos';
 import Hero from '../components/home/Hero';
-import FeaturedProducts from '../components/home/FeaturedProducts';
-import CultureSection from '../components/home/CultureSection';
 
 export const Route = createFileRoute('/')({ 
   component: HomePage,
 });
 
+const containerStyle: React.CSSProperties = {
+  backgroundColor: '#040403',
+  height: '100vh',
+  overflowY: 'scroll',
+  scrollSnapType: 'y mandatory',
+  // Optionally hide the scrollbar:
+  msOverflowStyle: 'none',
+  scrollbarWidth: 'none',
+};
+
+const sectionStyle: React.CSSProperties = {
+  height: '100vh',
+  scrollSnapAlign: 'start',
+};
+
 function HomePage() {
-  // Animation variants for page transitions
-  const pageVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1, transition: { duration: 0.5 } },
-    exit: { opacity: 0, transition: { duration: 0.3 } },
+  const [showText, setShowText] = useState(false);
+
+  const handleCarouselEnd = () => {
+    setShowText(true);
   };
 
   return (
-    <Layout>
-      <motion.div
-        variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-      >
-        {/* Hero Section */}
+    <div style={containerStyle}>
+      <section style={sectionStyle}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={{
+            backgroundColor: '#040403',
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+          }}
+        >
+          <ImageCarousel onCarouselEnd={handleCarouselEnd} />
+          {showText && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <TextReveal />
+            </div>
+          )}
+        </motion.div>
+      </section>
+      <section style={sectionStyle}>
+        <ScrollPhotos />
+      </section>
+      <section style={sectionStyle}>
         <Hero />
-        
-        {/* Featured Products Section */}
-        <Box sx={{ mt: 4 }}>
-          <FeaturedProducts />
-        </Box>
-        
-        {/* Culture Section */}
-        <Box sx={{ mt: 4 }}>
-          <CultureSection />
-        </Box>
-      </motion.div>
-    </Layout>
+      </section>
+      {/* Hide scrollbar for WebKit browsers */}
+      <style>
+        {`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
+    </div>
   );
 }
+
+export default HomePage;

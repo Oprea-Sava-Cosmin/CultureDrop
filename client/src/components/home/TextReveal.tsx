@@ -1,4 +1,4 @@
-import BlurText from "../ui/BlurText";
+// import BlurText from "../ui/BlurText";
 
 const TextReveal = () => {
   return (
@@ -8,12 +8,12 @@ const TextReveal = () => {
       width: '100%',
       textAlign: 'center'
     }}>
-      <BlurText
+      {/* <BlurText
           text="Fortnite asdasdasdasd asdasdasdas"
           delay={150}
           animateBy="words"
           direction="top"
-      />
+      /> */}
     </div>
   );
 };
