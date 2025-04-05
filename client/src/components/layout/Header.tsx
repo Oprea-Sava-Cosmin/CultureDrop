@@ -93,7 +93,7 @@ const Header = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Vogue&Rythm
+        Culture Drop
       </Typography>
       <List>
         {pages.map((page, index) => (
@@ -142,7 +142,7 @@ const Header = () => {
                   textDecoration: 'none',
                 }}
               >
-                Vogue&Rythm
+                Culture Drop
               </Typography>
             </motion.div>
   
@@ -154,7 +154,9 @@ const Header = () => {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleDrawerToggle}
-                color="inherit"
+                sx={{
+                  color: (theme) => theme.palette.mode === 'light' ? '#000000' : '#ffffff'
+                }}
               >
                 <MenuIcon />
               </IconButton>
@@ -163,11 +165,15 @@ const Header = () => {
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 ModalProps={{
-                  keepMounted: true, // Better mobile performance
+                  keepMounted: true,
                 }}
                 sx={{
                   display: { xs: 'block', md: 'none' },
-                  '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+                  '& .MuiDrawer-paper': {
+                    boxSizing: 'border-box',
+                    width: 240,
+                    backgroundColor: (theme) => theme.palette.background.default,
+                  },
                 }}
               >
                 {drawer}
@@ -190,7 +196,7 @@ const Header = () => {
                 textDecoration: 'none',
               }}
             >
-              Vogue&Rythm
+              Culture Drop
             </Typography>
   
             {/* Desktop Navigation */}
@@ -215,7 +221,12 @@ const Header = () => {
             </Box>
   
             {/* Theme & Controls */}
-            <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ 
+              flexGrow: 0, 
+              display: isCartOpen ? 'none' : 'flex', 
+              alignItems: 'center',
+              transition: 'all 0.3s ease'
+            }}>
               {/* Theme Toggle */}
               <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
                 <IconButton onClick={toggleMode} color="inherit" sx={{ ml: 1 }}>
@@ -227,8 +238,10 @@ const Header = () => {
               <Tooltip title="Shopping cart">
                 <IconButton 
                   onClick={toggleCart} 
-                  color="inherit" 
-                  sx={{ ml: 1 }}
+                  sx={{ 
+                    ml: 1,
+                    color: (theme) => theme.palette.mode === 'light' ? '#000000' : '#ffffff'
+                  }}
                   component={motion.button}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
