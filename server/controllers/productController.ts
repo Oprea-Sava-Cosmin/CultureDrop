@@ -21,8 +21,35 @@ export const createProduct = async (req: Request, res: Response) => {
             return res.status(400).json({message: 'All fields are required'});
         }
 
-        
-    } catch (error) {
+        const product = new Product({
+            name,
+            category,
+            subCategory: subCategory || null,
+            price,
+            size: size || null,
+            stock,
+            image,
+            description,
+            culture,
+            tags,
+            featured: featured || false
+        });
 
+        await product.save();
+
+        res.status(201).json({message: 'Product created successfully', product});
+    } catch (error) {
+        console.error('Error creating product: ', error);
+        res.status(500).json({message: 'Error creating product'});
     }
-}
+};
+
+export const getProducts = async (req: Request, res: Response) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching products: ', error);
+        res.status(500).json({message: 'Error fetchign products'});
+    }
+};
