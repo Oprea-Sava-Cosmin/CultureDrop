@@ -31,6 +31,7 @@ import { getProductRecommendations } from '../../services/deepseekService';
 import ChatProductCard from './ChatProductCard';
 import { Link } from '@tanstack/react-router';
 import type { Product, ChatMessage } from '../../store/appStore';
+import ReactMarkdown from 'react-markdown';
 
 // Use the ChatMessage type from appStore
 
@@ -126,7 +127,6 @@ const ChatBot = () => {
       }
     } catch (error) {
       console.error('Error generating response:', error);
-      
       // Fallback response in case of error
       addChatMessage({
         text: 'Sorry, I encountered an issue while processing your request. Please try again.',
@@ -251,7 +251,13 @@ const ChatBot = () => {
                         }}
                       >
                         <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-                          {message.text}
+                          <ReactMarkdown
+                            components={{
+                              p: ({ node, ...props }) => <Typography variant="body1" {...props} />,
+                            }}
+                          >
+                            {message.text}
+                          </ReactMarkdown>
                         </Typography>
                         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
                           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
