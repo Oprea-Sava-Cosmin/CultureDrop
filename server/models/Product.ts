@@ -6,15 +6,6 @@ const productSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    description: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true,
-        min: 0
-    },
     category: {
         type: String,
         required: true,
@@ -25,10 +16,11 @@ const productSchema = new mongoose.Schema({
         required: true,
         enum: ['T-Shirts', 'Hoodies', 'Pants', 'Jackets', 'Vinyl', 'Digital', 'Caps', 'Bags', 'Other']
     },
-    images: [{
-        type: String,
-        required: true
-    }],
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
     size: [{
         type: String,
         enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size']
@@ -38,6 +30,14 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
+    images: [{
+        type: String,
+        required: true
+    }],
+    description: {
+        type: String,
+        required: true
+    }, 
     tags: [{
         type: String,
         enum: [
@@ -57,17 +57,11 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-        // },
-    // releaseDate: {
-    //     type: Date,
-    //     default: Date.now
-    // }
 }, {
     timestamps: true
 });
 
-productSchema.index({name: 'text', description: 'text', tags: 'text'});
+// productSchema.index({name: 'text', description: 'text', tags: 'text'});
 
 const Product = mongoose.model('Product', productSchema);
-
 export default Product;
