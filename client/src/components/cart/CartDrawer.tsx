@@ -56,11 +56,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
       anchor="right"
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
+      sx={{
+        '& .MuiDrawer-paper': {
           width: { xs: '100%', sm: 400 },
           padding: 2,
-          bgcolor: theme.palette.background.paper,
+          backgroundColor: theme.palette.background.default,
         },
       }}
     >
