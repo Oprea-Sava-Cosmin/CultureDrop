@@ -321,6 +321,8 @@ export const addProduct = (product: Omit<Product, 'id'>) => {
     ...product,
     id: Math.random().toString(36).substring(2, 15),
   };
+
+  console.log(newProduct);
   
   appStore.setState((state) => {
     const updatedProducts = [...state.products, newProduct];

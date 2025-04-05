@@ -88,6 +88,7 @@ function AddProductPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = e.target as { name: string; value: unknown };
+    console.log({name, value});
     setFormData((prev) => ({
       ...prev,
       [name]: value,
