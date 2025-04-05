@@ -30,7 +30,7 @@ const Footer = () => {
           {/* Brand Section */}
           <Grid size={{xs:12, sm:4}}>
             <Typography variant="h6" color="text.primary" gutterBottom>
-              CultureDrop
+              Vogue&Rythm
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Music and Fashion Concept Shop blending streetwear and music, inspired by urban culture.
@@ -125,7 +125,7 @@ const Footer = () => {
         <Typography variant="body2" color="text.secondary" align="center">
           {'© '}
           {new Date().getFullYear()}
-          {' CultureDrop. All rights reserved.'}
+          {' Vogue&Rythm. All rights reserved.'}
         </Typography>
       </Container>
     </Box>

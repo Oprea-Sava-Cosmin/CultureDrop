@@ -89,7 +89,7 @@ const Header = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        CultureDrop
+        Vogue&Rythm
       </Typography>
       <List>
         {pages.map((page, index) => (
@@ -112,7 +112,6 @@ const Header = () => {
       <AppBar position="sticky" color="default" elevation={1}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* Desktop Logo */}
             <motion.div variants={logoVariants} whileHover="hover">
               <Typography
                 variant="h6"
@@ -128,7 +127,7 @@ const Header = () => {
                   textDecoration: 'none',
                 }}
               >
-                CultureDrop
+                Vogue&Rythm
               </Typography>
             </motion.div>
   
@@ -176,18 +175,24 @@ const Header = () => {
                 textDecoration: 'none',
               }}
             >
-              CultureDrop
+              Vogue&Rythm
             </Typography>
   
             {/* Desktop Navigation */}
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'start' }}>
               {pages.map((page, index) => (
                 <Button
                   key={page}
                   component={Link}
                   to={routes[index]}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'inherit', display: 'block' }}
+                  sx={{ 
+                    my: 2, 
+                    color: 'inherit', 
+                    display: 'block',
+                    textAlign: 'center',
+                    px: 2
+                  }}
                 >
                   {page}
                 </Button>
