@@ -305,7 +305,7 @@ const ChatBot = () => {
               </Typography>
               <Grid container spacing={2}>
                 {recommendedProducts.map((product) => (
-                  <Grid size= {{xs:12}} key={product.id}>
+                  <Grid size= {{xs:12}} key={product._id}>
                     <ChatProductCard 
                       product={product} 
                       onProductClick={() => {
