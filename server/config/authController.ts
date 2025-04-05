@@ -4,14 +4,14 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
 export const signup = async (req: Request, res: Response) => {
-    const {firstName, lastName, username, email, password, passwordConfirm} = req.body;
-    if(!firstName || !lastName || !username || !email || !password || !passwordConfirm) {
+    const {firstName, lastName, username, email, password, confirmPassword} = req.body;
+    if(!firstName || !lastName || !username || !email || !password || !confirmPassword) {
         return res.status(400).json({message: 'All fields are required'});
     }
     if(password.length < 6) {
         return res.status(400).json({message: 'Password must be at least 6 characters long'});
     }
-    if(password == passwordConfirm) {
+    if(password == confirmPassword) {
         try {
             const existingEmail = await User.findOne({email});
             const existingUsername = await User.findOne({username});
