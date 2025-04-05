@@ -12,3 +12,32 @@
 .circular-gallery:active {
   cursor: grabbing;
 }
+
+/* Media queries to adjust photo sizes at different breakpoints */
+@media (max-width: 1200px) {
+  .circular-gallery .media {
+    width: 90% !important;
+    height: 90% !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .circular-gallery .media {
+    width: 80% !important;
+    height: 80% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .circular-gallery .media {
+    width: 70% !important;
+    height: 70% !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .circular-gallery .media {
+    width: 60% !important;
+    height: 60% !important;
+  }
+}
