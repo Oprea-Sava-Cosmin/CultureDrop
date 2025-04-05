@@ -21,6 +21,7 @@
         "@tanstack/react-store": "^0.7.0",
         "@tanstack/router-plugin": "^1.114.3",
         "axios": "^1.8.4",
+        "framer-motion": "^11.18.2",
         "motion": "^12.6.3",
         "postprocessing": "^6.37.2",
         "react": "^19.0.0",
