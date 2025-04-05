@@ -7,6 +7,7 @@ import Header from '../layout/Header';
 import { useRef, useEffect, useState } from 'react';
 import Hyperspeed from '../ui/Backgrounds/Hyperspeed/Hyperspeed';
 import TrueFocus from '../ui/TextAnimations/TrueFocus/TrueFocus';
+import Threads from '../ui/Backgrounds/Threads/Threads';
 
 const Hero = () => {
   const muiTheme = useMuiTheme();
@@ -60,54 +61,32 @@ const Hero = () => {
       <Box
         sx={{
           position: 'relative',
-          height: heroHeight, // Dynamic height based on header
+          height: heroHeight,
           maxWidth: '100%',
           display: 'flex',
           alignItems: 'center',
           overflow: 'hidden',
           backgroundColor: mode === 'dark' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
-          flexGrow: 1, // Take up remaining space
+          flexGrow: 1,
         }}
-      ><Hyperspeed
-      effectOptions={{
-        onSpeedUp: () => { },
-        onSlowDown: () => { },
-        distortion: 'turbulentDistortion',
-        length: 400,
-        roadWidth: 10,
-        islandWidth: 2,
-        lanesPerRoad: 4,
-        fov: 90,
-        fovSpeedUp: 150,
-        speedUp: 2,
-        carLightsFade: 0.4,
-        totalSideLightSticks: 20,
-        lightPairsPerRoadWay: 40,
-        shoulderLinesWidthPercentage: 0.05,
-        brokenLinesWidthPercentage: 0.1,
-        brokenLinesLengthPercentage: 0.5,
-        lightStickWidth: [0.12, 0.5],
-        lightStickHeight: [1.3, 1.7],
-        movingAwaySpeed: [60, 80],
-        movingCloserSpeed: [-120, -160],
-        carLightsLength: [400 * 0.03, 400 * 0.2],
-        carLightsRadius: [0.05, 0.14],
-        carWidthPercentage: [0.3, 0.5],
-        carShiftX: [-0.8, 0.8],
-        carFloorSeparation: [0, 5],
-        colors: {
-          roadColor: 0x080808,
-          islandColor: 0x0a0a0a,
-          background: 0x000000,
-          shoulderLines: 0xFFFFFF,
-          brokenLines: 0xFFFFFF,
-          leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
-          rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
-          sticks: 0x03B3C3,
-        }
-      }}
-      />
-        
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 0,
+          }}
+        >
+          <Threads
+            amplitude={2}
+            distance={0.13}
+            enableMouseInteraction={true}
+          />
+        </Box>
+
         {/* Background image with parallax effect */}
         <Box
           component={motion.div}
@@ -162,22 +141,6 @@ const Hero = () => {
               </motion.div>
 
               <motion.div variants={itemVariants}>
-                {/* <Typography
-                  variant="h1"
-                  component="h1"
-                  sx={{
-                    fontWeight: 800,
-                    fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                    mb: 2,
-                    background: `linear-gradient(45deg, ${muiTheme.palette.primary.main}, ${muiTheme.palette.secondary.main})`,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    textFillColor: 'transparent',
-                  }}
-                >
-                  Vogue&Rythm
-                </Typography> */}
                 <TrueFocus 
                   sentence="Culture Drop"
                   manualMode={false}
