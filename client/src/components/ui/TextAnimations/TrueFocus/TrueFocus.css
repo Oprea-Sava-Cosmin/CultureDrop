@@ -11,6 +11,13 @@
   flex-wrap: wrap;
 }
 
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .focus-container {
+    justify-content: center;
+  }
+}
+
 /* Words */
 .focus-word {
   position: relative;

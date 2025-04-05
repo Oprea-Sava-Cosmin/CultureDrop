@@ -17,8 +17,10 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
   Badge,
   useMediaQuery,
+  Divider,
 } from '@mui/material';
 import { useTheme as useMuiTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -27,6 +29,11 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
+import CloseIcon from '@mui/icons-material/Close';
+import HomeIcon from '@mui/icons-material/Home';
+import StoreIcon from '@mui/icons-material/Store';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import InfoIcon from '@mui/icons-material/Info';
 import { motion } from 'framer-motion';
 
 import { useTheme } from '../../context/ThemeContext';
@@ -38,6 +45,7 @@ import AdminNav from '../admin/AdminNavigation';
 
 const pages = ['Home', 'Shop', 'Music', 'About'];
 const routes = ['/', '/shop', '/music', '/about'];
+const pageIcons = [<HomeIcon />, <StoreIcon />, <MusicNoteIcon />, <InfoIcon />];
 
 const Header = () => {
   const muiTheme = useMuiTheme();
@@ -91,23 +99,108 @@ const Header = () => {
 
   // Mobile drawer content
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Culture Drop
-      </Typography>
-      <List>
+    <Box sx={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      p: 2
+    }}>
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        mb: 3
+      }}>
+        <Typography 
+          variant="h6" 
+          component={Link}
+          to="/"
+          sx={{ 
+            fontWeight: 700, 
+            letterSpacing: '.1rem',
+            color: 'inherit',
+            textDecoration: 'none'
+          }}
+        >
+          Culture Drop
+        </Typography>
+        <IconButton onClick={handleDrawerToggle}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      
+      <Divider sx={{ mb: 2 }} />
+      
+      <List sx={{ flexGrow: 1 }}>
         {pages.map((page, index) => (
-          <ListItem key={page} disablePadding>
+          <ListItem key={page} disablePadding sx={{ mb: 1 }}>
             <ListItemButton 
               component={Link} 
               to={routes[index]} 
-              sx={{ textAlign: 'center' }}
+              sx={{ 
+                borderRadius: 2,
+                py: 1,
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                }
+              }}
             >
-              <ListItemText primary={page} />
+              <ListItemIcon>
+                {pageIcons[index]}
+              </ListItemIcon>
+              <ListItemText 
+                primary={page} 
+                primaryTypographyProps={{ 
+                  fontWeight: 500 
+                }} 
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+      
+      <Divider sx={{ my: 2 }} />
+      
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Button 
+          startIcon={mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+          onClick={toggleMode}
+          variant="outlined"
+          size="small"
+          sx={{ borderRadius: 2 }}
+        >
+          {mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
+        </Button>
+        
+        <Button 
+          startIcon={<ShoppingCartIcon />}
+          onClick={() => {
+            toggleCart();
+            handleDrawerToggle();
+          }}
+          variant="outlined"
+          size="small"
+          sx={{ borderRadius: 2 }}
+        >
+          Cart ({cartItemCount})
+        </Button>
+      </Box>
+      
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/auth"
+        startIcon={<LoginIcon />}
+        sx={{ 
+          mt: 1, 
+          borderRadius: 2,
+          py: 1
+        }}
+      >
+        {isAuthenticated ? 'Dashboard' : 'Login / Sign Up'}
+      </Button>
     </Box>
   );
 
@@ -171,8 +264,10 @@ const Header = () => {
                   display: { xs: 'block', md: 'none' },
                   '& .MuiDrawer-paper': {
                     boxSizing: 'border-box',
-                    width: 240,
+                    width: 280,
                     backgroundColor: (theme) => theme.palette.background.default,
+                    borderTopRightRadius: 16,
+                    borderBottomRightRadius: 16,
                   },
                 }}
               >
@@ -227,20 +322,28 @@ const Header = () => {
               alignItems: 'center',
               transition: 'all 0.3s ease'
             }}>
-              {/* Theme Toggle */}
+              {/* Theme Toggle - Hidden on mobile */}
               <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
-                <IconButton onClick={toggleMode} color="inherit" sx={{ ml: 1 }}>
+                <IconButton 
+                  onClick={toggleMode} 
+                  color="inherit" 
+                  sx={{ 
+                    ml: 1,
+                    display: { xs: 'none', md: 'flex' }
+                  }}
+                >
                   {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
                 </IconButton>
               </Tooltip>
   
-              {/* Cart Button */}
+              {/* Cart Button - Hidden on mobile */}
               <Tooltip title="Shopping cart">
                 <IconButton 
                   onClick={toggleCart} 
                   sx={{ 
                     ml: 1,
-                    color: (theme) => theme.palette.mode === 'light' ? '#000000' : '#ffffff'
+                    color: (theme) => theme.palette.mode === 'light' ? '#000000' : '#ffffff',
+                    display: { xs: 'none', md: 'flex' }
                   }}
                   component={motion.button}
                   whileHover={{ scale: 1.1 }}
@@ -252,7 +355,7 @@ const Header = () => {
                 </IconButton>
               </Tooltip>
               
-              {/* Authentication/Admin */}
+              {/* Authentication/Admin - Visible on all devices */}
               {isAuthenticated ? (
                 <AdminNav />
               ) : (
@@ -277,4 +380,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

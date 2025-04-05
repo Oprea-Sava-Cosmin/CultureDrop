@@ -16,7 +16,6 @@ const containerStyle: React.CSSProperties = {
   height: '100vh',
   overflowY: 'scroll',
   scrollSnapType: 'y mandatory',
-  // Optionally hide the scrollbar:
   msOverflowStyle: 'none',
   scrollbarWidth: 'none',
 };
@@ -75,7 +74,6 @@ function HomePage() {
       <section style={sectionStyle}>
         <Carousel/>
       </section>
-      {/* Hide scrollbar for WebKit browsers */}
       <style>
         {`
           div::-webkit-scrollbar {
