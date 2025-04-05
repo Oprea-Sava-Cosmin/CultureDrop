@@ -67,7 +67,6 @@ function ProductsManagementPage() {
   const navigate = useNavigate();
   // const products = useStore(appStore, (state) => state.products);
   const products = Route.useLoaderData() as Product[];
-  console.log(products);
   
   // Pagination state
   const [page, setPage] = useState(0);
@@ -374,9 +373,9 @@ function ProductsManagementPage() {
                     label="Category"
                     onChange={(event) => handleEditFormChange(event as any)}
                   >
-                    <MenuItem value="clothing">Clothing</MenuItem>
-                    <MenuItem value="music">Music</MenuItem>
-                    <MenuItem value="accessories">Accessories</MenuItem>
+                    <MenuItem value="Clothing">Clothing</MenuItem>
+                    <MenuItem value="Music">Music</MenuItem>
+                    <MenuItem value="Accessories">Accessories</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

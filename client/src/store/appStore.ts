@@ -147,7 +147,7 @@ export const filterProducts = (category?: string | null, culture?: string | null
 export const addToCart = (product: Product, quantity: number = 1) => {
   appStore.setState((state) => {
     const existingItem = state.cart.find((item) => item.product.id === product.id);
-    console.log(existingItem);
+    // console.log(existingItem);
     if (existingItem) {
       return {
         ...state,
@@ -317,28 +317,6 @@ export const toggleAdminPanel = () => {
 };
 
 export const addProduct = async (product: Omit<Product, 'id'>) => {
-  // Generate a unique ID (in a real app, this would be done by the backend)
-  // const newProduct: Product = {
-  //   ...product,
-  //   id: Math.random().toString(36).substring(2, 15),
-  // };
-
-  // console.log(newProduct);
-  
-  // appStore.setState((state) => {
-  //   const updatedProducts = [...state.products, newProduct];
-  //   return {
-  //     ...state,
-  //     products: updatedProducts,
-  //     featuredProducts: updatedProducts.filter((p) => p.featured),
-  //     filteredProducts: state.productFilter.category || state.productFilter.culture || state.productFilter.searchQuery
-  //       ? state.filteredProducts
-  //       : updatedProducts,
-  //   };
-  // });
-  
-  // return newProduct;
-
   try {
     const token = appStore.state.adminToken || localStorage.getItem('adminToken');
 
