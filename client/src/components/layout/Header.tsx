@@ -113,7 +113,18 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="sticky" color="default" elevation={1}>
+      <AppBar 
+        position="sticky" 
+        color="default" 
+        elevation={0}
+        sx={{ 
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          backdropFilter: 'blur(8px)',
+          background: (theme) => theme.palette.mode === 'dark' 
+            ? 'rgba(18, 18, 18, 0.8)' 
+            : 'rgba(255, 255, 255, 0.8)'
+        }}
+      >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <motion.div variants={logoVariants} whileHover="hover">
@@ -203,43 +214,8 @@ const Header = () => {
               ))}
             </Box>
   
-            {/* Theme & Culture Controls */}
+            {/* Theme & Controls */}
             <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
-              {/* Culture Selector */}
-              <Tooltip title="Change culture theme">
-                <IconButton onClick={handleOpenCultureMenu} sx={{ p: 1, mr: 1 }}>
-                  <Avatar 
-                    alt={culture} 
-                    src={`/images/${culture}-icon.png`} 
-                    sx={{ width: 32, height: 32 }}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="culture-menu"
-                anchorEl={anchorElCulture}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElCulture)}
-                onClose={handleCloseCultureMenu}
-              >
-                {culturalThemes.map((theme) => (
-                  <MenuItem key={theme} onClick={() => handleCultureChange(theme)}>
-                    <Typography textAlign="center" sx={{ textTransform: 'capitalize' }}>
-                      {theme}
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-  
               {/* Theme Toggle */}
               <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
                 <IconButton onClick={toggleMode} color="inherit" sx={{ ml: 1 }}>
