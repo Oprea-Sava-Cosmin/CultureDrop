@@ -202,148 +202,91 @@ function AboutPage() {
             </Box>
             
             <motion.div 
-              variants={staggerContainerVariants}
-              initial="initial"
-              animate="animate"
+  variants={staggerContainerVariants}
+  initial="initial"
+  animate="animate"
+>
+  <Grid container spacing={4}>
+    {[
+      {
+        id: 1,
+        icon: <StoreIcon fontSize="large" />,
+        title: 'Authenticity',
+        description:
+          'We ensure all our products authentically represent the cultures they come from, working directly with communities and creators.',
+        color: 'primary.main',
+      },
+      {
+        id: 2,
+        icon: <MusicNoteIcon fontSize="large" />,
+        title: 'Cultural Appreciation',
+        description:
+          'We celebrate diverse cultural expressions through music and fashion, promoting understanding and appreciation.',
+        color: 'secondary.main',
+      },
+      {
+        id: 3,
+        icon: <StyleIcon fontSize="large" />,
+        title: 'Quality',
+        description:
+          'We never compromise on the quality of our products, ensuring each item meets our high standards of craftsmanship.',
+        color: 'primary.main',
+      },
+      {
+        id: 4,
+        icon: <GroupIcon fontSize="large" />,
+        title: 'Community',
+        description:
+          'We foster a community of like-minded individuals who share a passion for music, fashion, and cultural expression.',
+        color: 'secondary.main',
+      },
+    ].map((member) => (
+      <Grid size={{ xs: 12, sm: 6, md: 3 }} key={member.id}>
+        <motion.div variants={itemVariants}>
+          <Paper 
+            elevation={2} 
+            sx={{ 
+              p: 3, 
+              height: '100%', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              textAlign: 'center',
+              borderRadius: 4,
+            }}
+          >
+            <Avatar 
+              sx={{ 
+                width: 70, 
+                height: 70,
+                mb: 2,
+                boxShadow: 2,
+                bgcolor: member.color,
+              }}
             >
-              <Grid container spacing={4}>
-                <Grid size={{xs:12, sm:6, md:3}}>
-                  <motion.div variants={itemVariants}>
-                    <Paper 
-                      elevation={2} 
-                      sx={{ 
-                        p: 4, 
-                        height: '100%', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Avatar 
-                        sx={{ 
-                          bgcolor: 'primary.main', 
-                          width: 70, 
-                          height: 70,
-                          mb: 2,
-                        }}
-                      >
-                        <StoreIcon fontSize="large" />
-                      </Avatar>
-                      <Typography variant="h5" component="h3" gutterBottom>
-                        Authenticity
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        We ensure all our products authentically represent the cultures they come from, working directly with communities and creators.
-                      </Typography>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-                
-                <Grid size={{xs:12, sm:6, md:3}}>
-                  <motion.div variants={itemVariants}>
-                    <Paper 
-                      elevation={2} 
-                      sx={{ 
-                        p: 4, 
-                        height: '100%', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Avatar 
-                        sx={{ 
-                          bgcolor: 'secondary.main', 
-                          width: 70, 
-                          height: 70,
-                          mb: 2,
-                        }}
-                      >
-                        <MusicNoteIcon fontSize="large" />
-                      </Avatar>
-                      <Typography variant="h5" component="h3" gutterBottom>
-                        Cultural Appreciation
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        We celebrate diverse cultural expressions through music and fashion, promoting understanding and appreciation.
-                      </Typography>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-                
-                <Grid size={{xs:12, sm:6, md:3}}>
-                  <motion.div variants={itemVariants}>
-                    <Paper 
-                      elevation={2} 
-                      sx={{ 
-                        p: 4, 
-                        height: '100%', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Avatar 
-                        sx={{ 
-                          bgcolor: 'primary.main', 
-                          width: 70, 
-                          height: 70,
-                          mb: 2,
-                        }}
-                      >
-                        <StyleIcon fontSize="large" />
-                      </Avatar>
-                      <Typography variant="h5" component="h3" gutterBottom>
-                        Quality
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        We never compromise on the quality of our products, ensuring each item meets our high standards of craftsmanship.
-                      </Typography>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-                
-                <Grid size={{xs:12, sm:6, md:3}}>
-                  <motion.div variants={itemVariants}>
-                    <Paper 
-                      elevation={2} 
-                      sx={{ 
-                        p: 4, 
-                        height: '100%', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Avatar 
-                        sx={{ 
-                          bgcolor: 'secondary.main', 
-                          width: 70, 
-                          height: 70,
-                          mb: 2,
-                        }}
-                      >
-                        <GroupIcon fontSize="large" />
-                      </Avatar>
-                      <Typography variant="h5" component="h3" gutterBottom>
-                        Community
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        We foster a community of like-minded individuals who share a passion for music, fashion, and cultural expression.
-                      </Typography>
-                    </Paper>
-                  </motion.div>
-                </Grid>
-              </Grid>
-            </motion.div>
+              {member.icon}
+            </Avatar>
+            <Typography variant="h6" component="h3" gutterBottom>
+              {member.title}
+            </Typography>
+            <Typography 
+              variant="body2" 
+              color="text.secondary"
+              sx={{ 
+                flexGrow: 1,
+                height: 120,
+                overflow: 'auto'
+              }}
+            >
+              {member.description}
+            </Typography>
+          </Paper>
+        </motion.div>
+      </Grid>
+    ))}
+  </Grid>
+</motion.div>
+
           </Container>
         </Box>
         
@@ -395,7 +338,15 @@ function AboutPage() {
                       <Typography variant="subtitle2" color="primary" gutterBottom>
                         {member.role}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary"
+                        sx={{ 
+                          flexGrow: 1,
+                          height: 120,
+                          overflow: 'auto'
+                        }}
+                      >
                         {member.bio}
                       </Typography>
                     </Paper>

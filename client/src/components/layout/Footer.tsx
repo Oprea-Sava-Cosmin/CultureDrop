@@ -4,8 +4,10 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { useTheme } from '../../context/ThemeContext';
 
 const Footer = () => {
+  const {mode} = useTheme();
   // Animation for social media icons
   const iconVariants = {
     hover: {
@@ -21,8 +23,7 @@ const Footer = () => {
         py: 6,
         px: 2,
         mt: 'auto',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
+        backgroundColor: mode === 'dark' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
       }}
     >
       <Container maxWidth="lg">
