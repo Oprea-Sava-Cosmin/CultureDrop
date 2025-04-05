@@ -17,8 +17,9 @@ import { motion } from 'framer-motion';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import AlbumIcon from '@mui/icons-material/Album';
-
+import {useTheme as useMuiTheme} from '@mui/material';
 import Layout from '../components/layout/Layout';
+import Aurora from '@/components/ui/Backgrounds/Aurora/Aurora';
 
 export const Route = createFileRoute('/music')({ 
   component: MusicPage,
@@ -74,7 +75,7 @@ const musicReleases = [
 ];
 
 function MusicPage() {
-  const theme = useTheme();
+  const muiTheme = useMuiTheme();
   const [playingId, setPlayingId] = useState<string | null>(null);
   
   // Animation variants
@@ -105,6 +106,23 @@ function MusicPage() {
   
   return (
     <Layout>
+      <Box sx={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: -1,
+        opacity: 0.6
+      }}>
+        <Aurora
+          colorStops={[muiTheme.palette.primary.main, muiTheme.palette.secondary.main, muiTheme.palette.primary.main]}
+          blend={0.5}
+          amplitude={0}
+          speed={0.5}
+        />
+      </Box>
+
       <motion.div
         variants={pageVariants}
         initial="initial"

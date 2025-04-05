@@ -7,7 +7,7 @@ import {
   Paper,
   Avatar,
   Button,
-  useTheme,
+  useTheme as useMuiTheme,
   IconButton,
 } from '@mui/material';
 import { motion } from 'framer-motion';
@@ -21,8 +21,9 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
-
+import { useTheme } from '../context/ThemeContext';
 import Layout from '../components/layout/Layout';
+import Iridescence from '@/components/ui/Backgrounds/Iridescence/Iridescence';
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -60,8 +61,33 @@ const teamMembers = [
   },
 ];
 
+const cultureBackgroundRGB = {
+  urban: {
+    light: [0.2, 0.8, 0.9],  // #F5F5F5
+    dark:  [0, 0.1, 0.2],  // #121212
+  },
+  streetwear: {
+    light: [0.97, 0.97, 0.97],  // #F8F8F8
+    dark:  [0.04, 0.04, 0.04],  // #0A0A0A
+  },
+  hiphop: {
+    light: [0.94, 0.94, 0.94],  // #F0F0F0
+    dark:  [0.07, 0.07, 0.07],  // #111111
+  },
+  indie: {
+    light: [0.98, 0.98, 0.98],  // #F9F9F9
+    dark:  [0.05, 0.05, 0.05],  // #0D0D0D
+  },
+  punk: {
+    light: [0.93, 0.93, 0.93],  // #EEEEEE
+    dark:  [0.00, 0.00, 0.00],  // #000000
+  },
+};
+
+
 function AboutPage() {
-  const theme = useTheme();
+  const theme = useMuiTheme();
+  const {culture} = useTheme();
 
   // Animation variants
   const pageVariants = {
@@ -85,6 +111,19 @@ function AboutPage() {
 
   return (
     <Layout>
+      <Box sx={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: -1,
+        opacity: 0.6
+      }}>
+        <Iridescence
+          color= {cultureBackgroundRGB[culture][theme.palette.mode] as [number, number, number] }
+        />
+      </Box>
       <motion.div
         variants={pageVariants}
         initial="initial"
