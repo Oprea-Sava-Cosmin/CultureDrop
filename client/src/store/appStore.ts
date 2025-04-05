@@ -315,28 +315,50 @@ export const toggleAdminPanel = () => {
   }));
 };
 
-export const addProduct = (product: Omit<Product, 'id'>) => {
+export const addProduct = async (product: Omit<Product, 'id'>) => {
   // Generate a unique ID (in a real app, this would be done by the backend)
-  const newProduct: Product = {
-    ...product,
-    id: Math.random().toString(36).substring(2, 15),
-  };
+  // const newProduct: Product = {
+  //   ...product,
+  //   id: Math.random().toString(36).substring(2, 15),
+  // };
 
-  console.log(newProduct);
+  // console.log(newProduct);
   
-  appStore.setState((state) => {
-    const updatedProducts = [...state.products, newProduct];
-    return {
-      ...state,
-      products: updatedProducts,
-      featuredProducts: updatedProducts.filter((p) => p.featured),
-      filteredProducts: state.productFilter.category || state.productFilter.culture || state.productFilter.searchQuery
-        ? state.filteredProducts
-        : updatedProducts,
-    };
-  });
+  // appStore.setState((state) => {
+  //   const updatedProducts = [...state.products, newProduct];
+  //   return {
+  //     ...state,
+  //     products: updatedProducts,
+  //     featuredProducts: updatedProducts.filter((p) => p.featured),
+  //     filteredProducts: state.productFilter.category || state.productFilter.culture || state.productFilter.searchQuery
+  //       ? state.filteredProducts
+  //       : updatedProducts,
+  //   };
+  // });
   
-  return newProduct;
+  // return newProduct;
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/products/create', product, {
+      headers: {'Authorization': `Bearer ${appStore.state.adminToken}`}
+    });
+
+    const newProduct = response.data.product;
+
+    appStore.setState((state) => {
+      const updatedProducts = [...state.products, newProduct];
+      return {
+        ...state,
+        products: updatedProducts,
+        featuredProducts: updatedProducts.filter((p) => p.featured),
+        filteredProducts: state.productFilter.category  || state.productFilter.culture || state.productFilter.searchQuery ? state.filteredProducts : updatedProducts,
+      };
+    });
+    return newProduct;
+  } catch (error) {
+    console.error('Error adding product: ', error);
+    throw error;
+  }
 };
 
 export const updateProduct = (productId: string, updates: Partial<Product>) => {
