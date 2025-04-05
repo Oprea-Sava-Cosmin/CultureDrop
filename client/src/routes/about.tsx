@@ -252,7 +252,7 @@ function AboutPage() {
                     color: 'secondary.main',
                   },
                 ].map((member) => (
-                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={member.id}>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={member.id} sx={{display: 'flex'}}>
                     <motion.div variants={itemVariants}>
                       <Paper
                         elevation={2}
@@ -319,8 +319,8 @@ function AboutPage() {
           >
             <Grid container spacing={4}>
               {teamMembers.map((member) => (
-                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={member.id}>
-                  <motion.div variants={itemVariants}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={member.id} sx={{ display: 'flex' }}>
+                  <motion.div variants={itemVariants} style={{ width: '100%' }}>
                     <Paper
                       elevation={2}
                       sx={{
@@ -353,9 +353,7 @@ function AboutPage() {
                         variant="body2"
                         color="text.secondary"
                         sx={{
-                          flexGrow: 1,
-                          height: 120,
-                          overflow: 'auto'
+                          flexGrow: 1
                         }}
                       >
                         {member.bio}
