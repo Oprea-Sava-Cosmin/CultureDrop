@@ -36,11 +36,9 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { motion } from 'framer-motion';
 
 import Layout from '../../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
 import { appStore, updateProduct, deleteProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 import axios from 'axios';
-import { useLoaderData } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,

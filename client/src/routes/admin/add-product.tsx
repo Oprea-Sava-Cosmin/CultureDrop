@@ -22,7 +22,6 @@ import {
 import { motion } from 'framer-motion';
 
 import Layout from '../../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
 import { appStore, addProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 
@@ -119,21 +118,6 @@ function AddProductPage() {
     }
   };
   
-  // Handle tags input
-  const handleTagsChange = (event: React.ChangeEvent<{}>, newTags: string[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: newTags,
-    }));
-    
-    // Clear error
-    if (formErrors.tags) {
-      setFormErrors((prev) => ({
-        ...prev,
-        tags: '',
-      }));
-    }
-  };
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
