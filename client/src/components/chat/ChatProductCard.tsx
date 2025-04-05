@@ -54,7 +54,7 @@ const ChatProductCard = ({ product, onProductClick }: ChatProductCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
       onClick={onProductClick}
     >
-      <CardActionArea component={Link} to={`/product/${product.id}`}>
+      <CardActionArea component={Link} to={`/product/${product._id}`}>
         <Box sx={{ position: 'relative', paddingTop: '100%' }}>
           <CardMedia
             component="img"

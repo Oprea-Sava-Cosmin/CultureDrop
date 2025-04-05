@@ -35,7 +35,7 @@ const OrderSummary = ({ cartItems, subtotal, tax, shipping, total }: OrderSummar
         
         <List sx={{ mb: 2 }}>
           {cartItems.map((item) => (
-            <ListItem key={item.product.id} alignItems="flex-start" sx={{ px: 0 }}>
+            <ListItem key={item.product._id} alignItems="flex-start" sx={{ px: 0 }}>
               <ListItemAvatar>
                 <Avatar 
                   alt={item.product.name} 

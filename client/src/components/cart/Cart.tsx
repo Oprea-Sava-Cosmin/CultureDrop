@@ -91,7 +91,7 @@ const Cart = () => {
             <AnimatePresence initial={false}>
               {cart.map((item) => (
                 <motion.div
-                  key={item.product.id}
+                  key={item.product._id}
                   variants={cartItemVariants}
                   initial="hidden"
                   animate="visible"
@@ -104,7 +104,7 @@ const Cart = () => {
                       <IconButton 
                         edge="end" 
                         aria-label="delete"
-                        onClick={() => removeFromCart(item.product.id)}
+                        onClick={() => removeFromCart(item.product._id)}
                       >
                         <DeleteOutlineIcon />
                       </IconButton>
@@ -133,7 +133,7 @@ const Cart = () => {
                           <Box sx={{ mt: 1, display: 'flex', alignItems: 'center' }}>
                             <IconButton 
                               size="small"
-                              onClick={() => updateCartItemQuantity(item.product.id, item.quantity - 1)}
+                              onClick={() => updateCartItemQuantity(item.product._id, item.quantity - 1)}
                               disabled={item.quantity <= 1}
                             >
                               <RemoveIcon fontSize="small" />
@@ -149,13 +149,13 @@ const Cart = () => {
                               onChange={(e) => {
                                 const value = parseInt(e.target.value);
                                 if (!isNaN(value) && value > 0) {
-                                  updateCartItemQuantity(item.product.id, value);
+                                  updateCartItemQuantity(item.product._id, value);
                                 }
                               }}
                             />
                             <IconButton 
                               size="small"
-                              onClick={() => updateCartItemQuantity(item.product.id, item.quantity + 1)}
+                              onClick={() => updateCartItemQuantity(item.product._id, item.quantity + 1)}
                             >
                               <AddIcon fontSize="small" />
                             </IconButton>

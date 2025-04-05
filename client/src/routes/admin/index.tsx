@@ -184,7 +184,7 @@ function AdminDashboard() {
               {products.length > 0 ? (
                 <Grid container spacing={2}>
                   {products.slice(0, 4).map((product) => (
-                    <Grid size = {{xs:12, sm:6, md:3}} key={product.id}>
+                    <Grid size = {{xs:12, sm:6, md:3}} key={product._id}>
                       <Card>
                         <Box sx={{ height: 140, overflow: 'hidden' }}>
                           <img 

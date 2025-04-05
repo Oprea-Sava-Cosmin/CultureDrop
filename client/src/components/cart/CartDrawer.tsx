@@ -36,14 +36,14 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   
   // Handle quantity changes
   const handleIncreaseQuantity = (itemId: string) => {
-    const item = cart.find(item => item.product.id === itemId);
+    const item = cart.find(item => item.product._id === itemId);
     if (item) {
       updateCartItemQuantity(itemId, item.quantity + 1);
     }
   };
   
   const handleDecreaseQuantity = (itemId: string) => {
-    const item = cart.find(item => item.product.id === itemId);
+    const item = cart.find(item => item.product._id === itemId);
     if (item && item.quantity > 1) {
       updateCartItemQuantity(itemId, item.quantity - 1);
     } else if (item) {
@@ -96,9 +96,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
           <List sx={{ flexGrow: 1, overflow: 'auto' }}>
             {cart.map((item) => (
               <ListItem 
-                key={item.product.id}
+                key={item.product._id}
                 secondaryAction={
-                  <IconButton edge="end" onClick={() => removeFromCart(item.product.id)}>
+                  <IconButton edge="end" onClick={() => removeFromCart(item.product._id)}>
                     <DeleteOutlineIcon />
                   </IconButton>
                 }
@@ -126,14 +126,14 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                         <IconButton 
                           size="small" 
-                          onClick={() => handleDecreaseQuantity(item.product.id)}
+                          onClick={() => handleDecreaseQuantity(item.product._id)}
                         >
                           <RemoveIcon fontSize="small" />
                         </IconButton>
                         <Typography sx={{ mx: 1 }}>{item.quantity}</Typography>
                         <IconButton 
                           size="small" 
-                          onClick={() => handleIncreaseQuantity(item.product.id)}
+                          onClick={() => handleIncreaseQuantity(item.product._id)}
                         >
                           <AddIcon fontSize="small" />
                         </IconButton>

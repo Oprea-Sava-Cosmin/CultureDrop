@@ -68,7 +68,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         }}
       >
         <Box sx={{ position: 'relative', overflow: 'hidden', pt: '100%' }}>
-          <CardActionArea component={Link} to={`/product/${product.id}`}>
+          <CardActionArea component={Link} to={`/product/${product._id}`}>
             <motion.div variants={imageVariants}>
               <CardMedia
                 component="img"
@@ -153,7 +153,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 size="small"
                 variant="outlined"
                 component={Link}
-                to={`/product/${product.id}`}
+                to={`/product/${product._id}`}
               >
                 Details
               </Button>
