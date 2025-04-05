@@ -22,9 +22,11 @@
         "@tanstack/router-plugin": "^1.114.3",
         "axios": "^1.8.4",
         "motion": "^12.6.3",
+        "postprocessing": "^6.37.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-    "react-markdown": "^10.1.0"
+        "react-markdown": "^10.1.0",
+        "three": "^0.167.1"
     },
     "devDependencies": {
         "@testing-library/dom": "^10.4.0",

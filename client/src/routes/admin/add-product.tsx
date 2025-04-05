@@ -88,7 +88,8 @@ function AddProductPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = e.target as { name: string; value: unknown };
-    console.log({name, value});
+    console.log('Value:', value); // Log the value to the console
+    console.log('Name:', name); // Log the name to the console
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -338,44 +339,37 @@ function AddProductPage() {
               </Grid>
               
               <Grid size = {{xs:12, sm:6}}>
-                <FormControl fullWidth error={!!formErrors.subCategory} required disabled={!formData.category}>
-                  <InputLabel>Sub-Category</InputLabel>
-                  <Select
-                    name="subCategory"
-                    value={formData.subCategory}
-                    label="Sub-Category"
-                    onChange={(event) => handleChange(event as any)}
-                  >
-                    {formData.category === 'clothing' && (
-                      <>
-                        <MenuItem value="shirts">Shirts</MenuItem>
-                        <MenuItem value="pants">Pants</MenuItem>
-                        <MenuItem value="dresses">Dresses</MenuItem>
-                        <MenuItem value="jackets">Jackets</MenuItem>
-                      </>
+                  <FormControl fullWidth error={!!formErrors.subCategory} required disabled={!formData.category}>
+                    <InputLabel>Sub-Category</InputLabel>
+                    <Select
+                      name="subCategory"
+                      value={formData.subCategory}
+                      label="Sub-Category"
+                      onChange={(event) => handleChange(event as any)}
+                    >
+                      {formData.category === 'clothing' && [
+                        <MenuItem key="shirts" value="shirts">Shirts</MenuItem>,
+                        <MenuItem key="pants" value="pants">Pants</MenuItem>,
+                        <MenuItem key="dresses" value="dresses">Dresses</MenuItem>,
+                        <MenuItem key="jackets" value="jackets">Jackets</MenuItem>,
+                      ]}
+                      {formData.category === 'music' && [
+                        <MenuItem key="instruments" value="instruments">Instruments</MenuItem>,
+                        <MenuItem key="albums" value="albums">Albums</MenuItem>,
+                        <MenuItem key="accessories" value="accessories">Accessories</MenuItem>,
+                      ]}
+                      {formData.category === 'accessories' && [
+                        <MenuItem key="jewelry" value="jewelry">Jewelry</MenuItem>,
+                        <MenuItem key="bags" value="bags">Bags</MenuItem>,
+                        <MenuItem key="hats" value="hats">Hats</MenuItem>,
+                        <MenuItem key="other" value="other">Other</MenuItem>,
+                      ]}
+                    </Select>
+                    {formErrors.subCategory && (
+                      <FormHelperText>{formErrors.subCategory}</FormHelperText>
                     )}
-                    {formData.category === 'music' && (
-                      <>
-                        <MenuItem value="instruments">Instruments</MenuItem>
-                        <MenuItem value="albums">Albums</MenuItem>
-                        <MenuItem value="accessories">Accessories</MenuItem>
-                      </>
-                    )}
-                    {formData.category === 'accessories' && (
-                      <>
-                        <MenuItem value="jewelry">Jewelry</MenuItem>
-                        <MenuItem value="bags">Bags</MenuItem>
-                        <MenuItem value="hats">Hats</MenuItem>
-                        <MenuItem value="other">Other</MenuItem>
-                      </>
-                    )}
-                  </Select>
-                  {formErrors.subCategory && (
-                    <FormHelperText>{formErrors.subCategory}</FormHelperText>
-                  )}
-                </FormControl>
+                  </FormControl>
               </Grid>
-              
               <Grid size = {{xs:12, sm:6}}>
                 <TextField
                   fullWidth
