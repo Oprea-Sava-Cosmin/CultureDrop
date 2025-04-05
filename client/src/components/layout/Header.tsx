@@ -25,13 +25,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import PersonIcon from '@mui/icons-material/Person';
+import LoginIcon from '@mui/icons-material/Login';
 import { motion } from 'framer-motion';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useStore } from '@tanstack/react-store';
-import { appStore, toggleCart } from '../../store/appStore';
+import { appStore, toggleCart, adminLogout } from '../../store/appStore';
 import { culturalThemes } from '../../data/mockData';
 import CartDrawer from '../cart/CartDrawer';
+import AdminNav from '../admin/AdminNavigation';
 
 const pages = ['Home', 'Shop', 'Music', 'About'];
 const routes = ['/', '/shop', '/music', '/about'];
@@ -41,6 +44,7 @@ const Header = () => {
   const { mode, toggleMode, culture, setCulture } = useTheme();
   const cart = useStore(appStore, (state) => state.cart);
   const isCartOpen = useStore(appStore, (state) => state.isCartOpen);
+  const isAuthenticated = useStore(appStore, (state) => state.isAuthenticated);
   // const toggleCart = useAppStore((state) => state.toggleCart);
   
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -253,6 +257,21 @@ const Header = () => {
                   </Badge>
                 </IconButton>
               </Tooltip>
+              
+              {/* Authentication/Admin */}
+              {isAuthenticated ? (
+                <AdminNav />
+              ) : (
+                <Tooltip title="Login or Sign Up">
+                  <IconButton 
+                    color="inherit" 
+                    component={Link} 
+                    to="/auth"
+                  >
+                    <LoginIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </Box>
           </Toolbar>
         </Container>
