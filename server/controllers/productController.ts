@@ -17,7 +17,6 @@ export const createProduct = async (req: Request, res: Response) => {
             featured
         } = req.body;
 
-        console.log(culture);
 
         if(!name || !category || !price || !stock || !image || !description || !tags || !culture) {
             return res.status(400).json({message: 'All fields are required'});
@@ -36,7 +35,6 @@ export const createProduct = async (req: Request, res: Response) => {
             tags,
             featured: featured || false
         });
-        console.log(product);
 
         await product.save();
 
@@ -76,3 +74,40 @@ export const getFilteredProducts = async (req: Request, res: Response) => {
         res.status(500).json({message: 'Error fetching filtered products'});
     }
 };
+
+export const updateProduct = async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        const updates = req.body;
+
+        const product = await Product.findByIdAndUpdate(
+            id,
+            updates,
+            {new: true, runValidators: true}
+        );
+        if(!product) {
+            return res.status(404).json({message: 'Product not found'});
+        }
+
+        res.json({message: 'Product updated successfully', product});
+    } catch (error) {
+        console.error('Error updating product: ', error);
+        res.status(500).json({message: 'Error updating product'});
+    }
+};
+
+export const deleteProduct = async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        const product = await Product.findByIdAndDelete(id);
+
+        if(!product) {
+            return res.status(404).json({message: 'Product not found'});
+        }
+
+        res.json({message: 'Product deleted successfully'});
+    } catch (error) {
+        console.error('Error deleting product: ', error);
+        res.status(500).json({message: 'Error deleting product'});
+    }
+}

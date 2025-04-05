@@ -6,6 +6,7 @@ import deepseekRoutes from './routes/deepseek';
 import {connectDB} from './config/database';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
+import  {uploadPhotos} from './config/cloudinary';
 
 const PORT = process.env.PORT || 5000;
 
@@ -19,6 +20,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 
 connectDB();
+
+// uploadPhotos();
+
 console.log(typeof deepseekRoutes);
 // API Routes
 app.use('/api/deepseek', deepseekRoutes);
