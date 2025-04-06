@@ -1,6 +1,8 @@
 import { Store } from '@tanstack/react-store';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'localhost:5000';
+
 export interface LoginCredentials {
   username: string;
   password: string;
@@ -158,10 +160,12 @@ export const filterProducts = (category?: string | null, culture?: string | null
 export const updateProduct = async (productId: string, updates: Partial<Product>) => {
   try {
     const token = localStorage.getItem('adminToken');
-    const response = await axios.put(`http://localhost:5000/api/products/${productId}`,updates, { headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }});
+    const response = await axios.put(`http://${API_URL}/api/products/${productId}`, updates, { 
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
     const updatedProduct = response.data.product;
     appStore.setState((state) => ({
@@ -276,7 +280,7 @@ export const clearChatMessages = () => {
 // Admin actions
 export const login = async (credentials: AdminCredentials) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+    const response = await axios.post(`http://${API_URL}/api/auth/login`, credentials);
     const {token, user} = response.data;
 
     if(token) {
@@ -306,8 +310,7 @@ export const login = async (credentials: AdminCredentials) => {
 
 export const signup = async (userData: SignupData) => {
   try {
-    // const response = await axios.post(`${import.meta.env.BACKEND_URL}api/auth/signup`, userData);
-    const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
+    const response = await axios.post(`http://${API_URL}/api/auth/signup`, userData);
     const token = response.data;
 
     if(token) {
@@ -358,7 +361,7 @@ export const addProduct = async (product: Omit<Product, '_id'>) => {
   try {
     const token = appStore.state.adminToken || localStorage.getItem('adminToken');
 
-    const response = await axios.post('http://localhost:5000/api/products/create', product, {
+    const response = await axios.post(`http://${API_URL}/api/products/create`, product, {
       headers: {'Authorization': `Bearer ${token}`}
     });
 
@@ -383,7 +386,7 @@ export const addProduct = async (product: Omit<Product, '_id'>) => {
 export const deleteProduct = async (productId: string) => {
   try {
     const token = localStorage.getItem('adminToken');
-    await axios.delete(`http://localhost:5000/api/products/${productId}`, { 
+    await axios.delete(`http://${API_URL}/api/products/${productId}`, { 
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -413,42 +416,10 @@ export const deleteProduct = async (productId: string) => {
   }
 };
 
-// export const updateProduct = (productId: string, updates: Partial<Product>) => {
-//   appStore.setState((state) => {
-//     const updatedProducts = state.products.map((product) =>
-//       product.id === productId ? { ...product, ...updates } : product
-//     );
-    
-//     return {
-//       ...state,
-//       products: updatedProducts,
-//       featuredProducts: updatedProducts.filter((p) => p.featured),
-//       filteredProducts: state.filteredProducts.map((product) =>
-//         product.id === productId ? { ...product, ...updates } : product
-//       ),
-//     };
-//   });
-// };
-
-// export const deleteProduct = (productId: string) => {
-//   appStore.setState((state) => {
-//     const updatedProducts = state.products.filter((product) => product.id !== productId);
-    
-//     return {
-//       ...state,
-//       products: updatedProducts,
-//       featuredProducts: updatedProducts.filter((p) => p.featured),
-//       filteredProducts: state.filteredProducts.filter((product) => product.id !== productId),
-//       // Also remove from cart if present
-//       cart: state.cart.filter((item) => item.product.id !== productId),
-//     };
-//   });
-// };
-
 export const fetchProducts = async () => {
   try {
     const token = localStorage.getItem('adminToken');
-    const response = await axios.get('http://localhost:5000/api/products', {
+    const response = await axios.get(`http://${API_URL}/api/products`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

@@ -12,11 +12,11 @@ import { useTheme, type CultureTheme } from '../context/ThemeContext';
 import Particles from '@/components/ui/Backgrounds/Particles/Particles';
 import axios from 'axios';
 
-
+const URL = import.meta.env.VITE_DATABASE_URL;
 export const Route = createFileRoute('/shop')({ 
   component: ShopPage,
   loader: async () => {
-    const response = await axios.get('http://localhost:5000/api/products', { headers: {
+    const response = await axios.get(`http://${URL}/api/products`, { headers: {
       'Content-Type': 'application/json'
     }});
 

@@ -7,8 +7,12 @@
 
 import type { Product } from '../store/appStore';
 
-// API base URL - would be configured based on environment in production
-const API_BASE_URL = 'http://localhost:5000/api/deepseek';
+// Remove dotenv import and config
+// Use Vite's environment variables instead
+const API_URL = import.meta.env.VITE_DATABASE_URL || 'localhost:5000';
+console.log('API_URL:', API_URL);
+const API_BASE_URL = `https://${API_URL}/api/deepseek`;
+console.log('API_BASE_URL:', API_BASE_URL);
 
 /**
  * Interface for chat response from server

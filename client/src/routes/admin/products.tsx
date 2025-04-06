@@ -34,16 +34,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { motion } from 'framer-motion';
-
 import Layout from '../../components/layout/Layout';
 import { appStore, updateProduct, deleteProduct } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 import axios from 'axios';
 
+const URL = import.meta.env.VITE_DATABASE_URL;
+
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
   loader: async () => {
-    const response = await axios.get('http://localhost:5000/api/products', { headers: {
+    const response = await axios.get(`http://${URL}/api/products`, { headers: {
       'Content-Type': 'application/json'
     }});
     return response.data;
@@ -121,7 +122,7 @@ function ProductsManagementPage() {
         await deleteProduct(productToDelete);
         
         // Fetch fresh data after deletion
-        await axios.get('http://localhost:5000/api/products', {
+        await axios.get(`http://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -202,7 +203,7 @@ function ProductsManagementPage() {
         await updateProduct(editingProduct._id, updatedProduct);
         
         // Fetch fresh data after update
-        await axios.get('http://localhost:5000/api/products', {
+        await axios.get(`http://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }

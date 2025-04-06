@@ -6,6 +6,8 @@ import Footer from '../layout/Footer';
 import BounceCards from '../ui/Components/BounceCards/BounceCards';
 import axios from 'axios';
 
+const URL = import.meta.env.VITE_DATABASE_URL;
+
 interface Product {
   _id: string;
   name: string;
@@ -26,7 +28,7 @@ const Carousel = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products?featured=true');
+        const response = await axios.get(`http://${URL}/api/products?featured=true`);
         setFeaturedProducts(response.data);
       } catch (error) {
         console.error('Error fetching featured products:', error);
