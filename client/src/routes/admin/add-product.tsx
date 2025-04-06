@@ -25,7 +25,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import Layout from '../../components/layout/Layout';
 import { appStore, addProduct } from '../../store/appStore';
-import type { Product } from '../../store/appStore';
+// import type { Product } from '../../store/appStore';
 
 
 export const Route = createFileRoute('/admin/add-product')({ 
@@ -258,7 +258,11 @@ interface FormData {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setIsLoading(true);
+    
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setError(null);
 
     try {
       if(!formData.imageFile) {
@@ -289,12 +293,16 @@ interface FormData {
 
       await addProduct(productData);
       
+      setSuccess(true);
+
       setTimeout(() => {
         navigate({ to: '/admin/products' });
       }, 2000);
     } catch (error) {
       console.error('Error: ', error);
-      // setAlert({type: 'error', message: 'Failed to add product'});
+      setError('An error occurred while adding the product. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
