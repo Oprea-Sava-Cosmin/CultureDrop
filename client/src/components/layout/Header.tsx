@@ -6,12 +6,9 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Menu,
   Container,
-  Avatar,
   Button,
   Tooltip,
-  MenuItem,
   Drawer,
   List,
   ListItem,
@@ -19,15 +16,12 @@ import {
   ListItemText,
   ListItemIcon,
   Badge,
-  useMediaQuery,
   Divider,
 } from '@mui/material';
-import { useTheme as useMuiTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import HomeIcon from '@mui/icons-material/Home';
@@ -38,8 +32,7 @@ import { motion } from 'framer-motion';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useStore } from '@tanstack/react-store';
-import { appStore, toggleCart, adminLogout } from '../../store/appStore';
-import { culturalThemes } from '../../data/mockData';
+import { appStore, toggleCart} from '../../store/appStore';
 import CartDrawer from '../cart/CartDrawer';
 import AdminNav from '../admin/AdminNavigation';
 
@@ -48,42 +41,19 @@ const routes = ['/', '/shop', '/music', '/about'];
 const pageIcons = [<HomeIcon />, <StoreIcon />, <MusicNoteIcon />, <InfoIcon />];
 
 const Header = () => {
-  const muiTheme = useMuiTheme();
-  const { mode, toggleMode, culture, setCulture } = useTheme();
+  // const muiTheme = useMuiTheme();
+  const { mode, toggleMode} = useTheme();
   const cart = useStore(appStore, (state) => state.cart);
   const isCartOpen = useStore(appStore, (state) => state.isCartOpen);
   const isAuthenticated = useStore(appStore, (state) => state.isAuthenticated);
   // const toggleCart = useAppStore((state) => state.toggleCart);
   
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElCulture, setAnchorElCulture] = useState<null | HTMLElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  
-  const handleOpenCultureMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElCulture(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-  
-  const handleCloseCultureMenu = () => {
-    setAnchorElCulture(null);
-  };
+  // const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  };
-  
-  const handleCultureChange = (newCulture: any) => {
-    setCulture(newCulture);
-    handleCloseCultureMenu();
   };
   
   // Calculate total items in cart
@@ -301,7 +271,6 @@ const Header = () => {
                   key={page}
                   component={Link}
                   to={routes[index]}
-                  onClick={handleCloseNavMenu}
                   sx={{ 
                     my: 2, 
                     color: 'inherit', 

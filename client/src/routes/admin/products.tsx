@@ -93,6 +93,7 @@ function ProductsManagementPage() {
 
   // Handle pagination changes
   const handleChangePage = (event: unknown, newPage: number) => {
+    event; // add this to bypass build error
     setPage(newPage);
   };
 
@@ -103,7 +104,6 @@ function ProductsManagementPage() {
 
   // Open delete confirmation dialog
   const handleOpenDeleteDialog = (productId: string) => {
-    console.log(productId);
     setProductToDelete(productId);
     setDeleteDialogOpen(true);
   };
@@ -121,7 +121,7 @@ function ProductsManagementPage() {
         await deleteProduct(productToDelete);
         
         // Fetch fresh data after deletion
-        const response = await axios.get('http://localhost:5000/api/products', {
+        await axios.get('http://localhost:5000/api/products', {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -202,7 +202,7 @@ function ProductsManagementPage() {
         await updateProduct(editingProduct._id, updatedProduct);
         
         // Fetch fresh data after update
-        const response = await axios.get('http://localhost:5000/api/products', {
+        await axios.get('http://localhost:5000/api/products', {
           headers: {
             'Content-Type': 'application/json'
           }

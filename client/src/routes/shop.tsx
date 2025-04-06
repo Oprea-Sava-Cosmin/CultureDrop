@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Box, Typography, Container, Grid, rgbToHex } from '@mui/material';
+import { Box, Typography, Container, Grid } from '@mui/material';
 import { motion } from 'framer-motion';
 import Layout from '../components/layout/Layout';
 import ProductGrid from '../components/products/ProductGrid';

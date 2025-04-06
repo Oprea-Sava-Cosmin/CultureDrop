@@ -5,7 +5,6 @@ import { Link } from '@tanstack/react-router';
 import { useTheme } from '../../context/ThemeContext';
 import Header from '../layout/Header';
 import { useRef, useEffect, useState } from 'react';
-import Hyperspeed from '../ui/Backgrounds/Hyperspeed/Hyperspeed';
 import TrueFocus from '../ui/TextAnimations/TrueFocus/TrueFocus';
 import Threads from '../ui/Backgrounds/Threads/Threads';
 

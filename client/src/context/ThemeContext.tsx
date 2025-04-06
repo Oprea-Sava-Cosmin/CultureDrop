@@ -27,65 +27,66 @@ const ThemeContext = createContext<ThemeContextType>({
 const cultureThemes = {
   urban: {
     light: {
-      primary: '#3f51b5',
-      secondary: '#f50057',
-      background: '#f5f5f5',
+      primary: '#2C3E50',     // Dark Slate Blue
+      secondary: '#E67E22',   // Soft Orange
+      background: '#F5F5F5',  // Light Gray
     },
     dark: {
-      primary: '#5c6bc0',
-      secondary: '#ff4081',
-      background: '#121212',
+      primary: '#ECF0F1',     // Off-White
+      secondary: '#F39C12',   // Vibrant Amber
+      background: '#121212',  // Deep Black
     },
   },
   streetwear: {
     light: {
-      primary: '#ff9800',
-      secondary: '#2196f3',
-      background: '#f8f8f8',
+      primary: '#1A1A1A',     // Charcoal Black
+      secondary: '#FF3B3F',   // Hype Red
+      background: '#F8F8F8',  // Light Gray
     },
     dark: {
-      primary: '#ffa726',
-      secondary: '#42a5f5',
-      background: '#0a0a0a',
+      primary: '#EFEFEF',     // Almost White
+      secondary: '#FF6B6B',   // Electric Coral
+      background: '#0A0A0A',  // Near Black
     },
   },
   hiphop: {
     light: {
-      primary: '#9c27b0',
-      secondary: '#ffeb3b',
-      background: '#f0f0f0',
+      primary: '#2D132C',     // Deep Burgundy
+      secondary: '#FFD700',   // Gold
+      background: '#F0F0F0',  // Soft Gray
     },
     dark: {
-      primary: '#ba68c8',
-      secondary: '#fff176',
-      background: '#111111',
+      primary: '#F5F5F5',     // Warm Light Grey
+      secondary: '#C28800',   // Golden Bronze
+      background: '#111111',  // Dark Gray
     },
   },
   indie: {
     light: {
-      primary: '#4caf50',
-      secondary: '#e91e63',
-      background: '#f9f9f9',
+      primary: '#8D99AE',     // Cool Gray Blue
+      secondary: '#EF8354',   // Muted Orange
+      background: '#F9F9F9',  // Very Light Gray
     },
     dark: {
-      primary: '#66bb6a',
-      secondary: '#ec407a',
-      background: '#0d0d0d',
+      primary: '#2B2D42',     // Slate Blue-Black
+      secondary: '#F1D302',   // Soft Mustard
+      background: '#0D0D0D',  // Dark Slate
     },
   },
   punk: {
     light: {
-      primary: '#f44336',
-      secondary: '#212121',
-      background: '#eeeeee',
+      primary: '#D72638',     // Crimson Red
+      secondary: '#1B1B1E',   // True Black
+      background: '#EEEEEE',  // Light Gray
     },
     dark: {
-      primary: '#ef5350',
-      secondary: '#424242',
-      background: '#000000',
+      primary: '#E5E5E5',     // Dirty White
+      secondary: '#FF2E63',   // Hot Pink/Red Hybrid
+      background: '#000000',  // Absolute Black
     },
   },
 };
+
 
 // Theme provider component
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
