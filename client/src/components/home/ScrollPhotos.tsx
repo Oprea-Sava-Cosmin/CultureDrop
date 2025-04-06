@@ -3,16 +3,16 @@ import React, { useRef, useEffect, useState } from 'react';
 
 const images = [
   {
-    background: '/images/landing_page/Indie Style - final - background.png',
-    subject: '/images/landing_page/Indie Style - final - subject.png'
+    background: '/images/landing_page/Indie Style - final - background.webp',
+    subject: '/images/landing_page/Indie Style - final - subject.webp'
   },
   {
-    background: '/images/landing_page/Streetwear Style - final - background.png',
-    subject: '/images/landing_page/Streetwear Style - final - subject.png'
+    background: '/images/landing_page/Streetwear Style - final - background.webp',
+    subject: '/images/landing_page/Streetwear Style - final - subject.webp'
   },
   {
-    background: '/images/landing_page/Urban Style - final - background.png',
-    subject: '/images/landing_page/Urban Style - final - subject.png'
+    background: '/images/landing_page/Urban Style - final - background.webp',
+    subject: '/images/landing_page/Urban Style - final - subject.webp'
   },
 ];
 
