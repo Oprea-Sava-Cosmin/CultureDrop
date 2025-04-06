@@ -71,6 +71,7 @@ interface AppState {
   // Chat state
   isChatOpen: boolean;
   chatMessages: ChatMessage[];
+  recommendedProducts: Product[];
 }
 
 // Check if admin is already authenticated from localStorage
@@ -97,9 +98,16 @@ export const appStore = new Store<AppState>({
   // Chat state
   isChatOpen: false,
   chatMessages: [],
+  recommendedProducts: [],
 });
 
-// Define store actions
+export const setRecommendedProducts = (products: Product[]) => {
+  appStore.setState((state) => ({
+    ...state,
+    recommendedProducts: products,
+  }));
+};
+
 export const setProducts = (products: Product[]) => {
   appStore.setState((state) => ({
     ...state,

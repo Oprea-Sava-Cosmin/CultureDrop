@@ -100,7 +100,8 @@ export const getRecommendations = async (req: Request, res: Response) => {
       systemPrompt += `The user has expressed interest in the following: ${allUserPreferences.join(', ')}. `;
     }
     
-    systemPrompt += 'Provide thoughtful recommendations with a brief explanation why each product might suit them.';
+    systemPrompt += 'Provide thoughtful recommendations with a brief explanation why each product might suit them. ';
+    systemPrompt += 'IMPORTANT: For each product you recommend, include its ID in a special format at the end of your response like this: [PRODUCT_ID:the_actual_id]. This will not be shown to the user.';
 
     // Call DeepSeek API (via OpenAI client)
     const completion = await openai.chat.completions.create({
@@ -115,25 +116,53 @@ export const getRecommendations = async (req: Request, res: Response) => {
 
     // Extract recommended product IDs from the response
     const aiResponse = completion.choices[0].message.content;
+    console.log('AI Response:', aiResponse);
     
-    // Use regex to find product IDs in the AI response
-    const productIdRegex = /"id":\s*"([^"]+)"/g;
+    // Extract product IDs using the special format
+    const productIdRegex = /\[PRODUCT_ID:([^\]]+)\]/g;
     const recommendedIds = [];
     let match;
     
     while ((match = productIdRegex.exec(aiResponse as string)) !== null) {
       recommendedIds.push(match[1]);
     }
+    
+    console.log('Extracted product IDs:', recommendedIds);
+    
+    // If no IDs found with the special format, try the original regex
+    if (recommendedIds.length === 0) {
+      const originalRegex = /"id":\s*"([^"]+)"/g;
+      while ((match = originalRegex.exec(aiResponse as string)) !== null) {
+        recommendedIds.push(match[1]);
+      }
+      
+      // If still no IDs, try to extract by product name
+      if (recommendedIds.length === 0) {
+        for (const product of products) {
+          if ((aiResponse as string).includes(product.name)) {
+            recommendedIds.push(product._id.toString());
+          }
+        }
+      }
+    }
+    
+    // Remove the special format from the response that will be sent to the user
+    const cleanedResponse = (aiResponse as string).replace(/\[PRODUCT_ID:[^\]]+\]/g, '');
 
     // Get full product details for recommended products
     const recommendedProducts = recommendedIds.length > 0 
       ? await Product.find({ _id: { $in: recommendedIds } })
       : [];
+      
+    // If still no recommendations, provide some default products
+    const finalRecommendedProducts = recommendedProducts.length > 0 
+      ? recommendedProducts 
+      : await Product.aggregate([{ $sample: { size: 3 } }]);
 
     return res.status(200).json({
-      message: aiResponse,
-      recommendedProducts,
-      confidence: 0.85 // Placeholder confidence score
+      message: cleanedResponse,
+      recommendedProducts: finalRecommendedProducts,
+      confidence: recommendedProducts.length > 0 ? 0.85 : 0.5
     });
 
   } catch (error) {
