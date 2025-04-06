@@ -17,7 +17,6 @@ const ProductGrid = ({
   title,
   emptyMessage = 'No products found',
 }: ProductGridProps) => {
-  // Animation variants for grid items
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

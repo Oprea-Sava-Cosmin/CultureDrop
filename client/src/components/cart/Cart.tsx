@@ -30,17 +30,12 @@ const Cart = () => {
   
   const cart = useStore(appStore, (state) => state.cart);
   const isCartOpen = useStore(appStore, (state) => state.isCartOpen);
-  // const toggleCart = useStore(appStore, (state) => state.toggleCart);
-  // const removeFromCart = useStore(appStore, (state) => state.removeFromCart);
-  // const updateCartItemQuantity = useStore(appStore, (state) => state.updateCartItemQuantity);
-  // const clearCart = useStore(appStore, (state) => state.clearCart);
   
   // Calculate cart totals
   const subtotal = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
   
-  // Animation variants
   const cartItemVariants = {
     hidden: { opacity: 0, x: 20 },
     visible: { opacity: 1, x: 0 },

@@ -89,7 +89,6 @@ function AdminDashboard() {
       try {
         const response = await axios.get(`https://${URL}/api/products/`);
         const allProducts = response.data;
-        // console.log(response.data);
         setRecentProducts(allProducts.slice(0, 4));
       } catch (error) {
         console.error('Error fetching recent products: ', error);
