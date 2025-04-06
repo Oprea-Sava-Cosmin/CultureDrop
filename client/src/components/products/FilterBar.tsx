@@ -7,7 +7,7 @@ import {
   TextField,
   InputAdornment,
   useMediaQuery,
-  useTheme,
+  useTheme as useMuiTheme,
   IconButton,
   Drawer,
   Button,
@@ -23,6 +23,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../context/ThemeContext';
 
 import { productCategories, culturalThemes } from '../../data/mockData';
 
@@ -39,8 +40,9 @@ const FilterBar = ({
   activeCulture,
   searchQuery,
 }: FilterBarProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const muiTheme = useMuiTheme();
+  const { setCulture } = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
 
@@ -75,6 +77,11 @@ const FilterBar = ({
     onFilterChange(null, null, '');
     setLocalSearchQuery('');
     setMobileFilterOpen(false);
+    
+    // Reset culture theme to default 'urban'
+    if (activeCulture) {
+      setCulture('urban');
+    }
   };
 
   // Animation variants
