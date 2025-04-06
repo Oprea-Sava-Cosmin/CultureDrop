@@ -18,8 +18,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Layout from '../../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
-import { appStore } from '../../store/appStore';
+import { appStore, type Product } from '../../store/appStore';
 
 export const Route = createFileRoute('/admin/')({ 
   component: AdminDashboard,
@@ -46,8 +45,7 @@ function AdminDashboard() {
   const [userCount, setUserCount] = useState(0);
   const [transactionCount, setTransactionCount] = useState(0);
   const [transactionValue, setTransactionValue] = useState(0);
-
-  const products = useStore(appStore, (state) => state.products);
+  const [recentProducts, setRecentProducts] = useState([]);
   
   useEffect(() => {
     const fetchProductCount = async () => {
@@ -87,11 +85,24 @@ function AdminDashboard() {
       }
     };
 
+    const fetchRecentProducts = async () => {
+      try {
+        const response = await axios.get(`http://${URL}/api/products/`);
+        const allProducts = response.data;
+        // console.log(response.data);
+        setRecentProducts(allProducts.slice(0, 4));
+      } catch (error) {
+        console.error('Error fetching recent products: ', error);
+      }
+    };
+
+
 
     fetchProductCount();
     fetchUserCount();
     fetchTransactionCout();
     fetchTransactionValue();
+    fetchRecentProducts();
   }, []);
 
   // Animation variants for dashboard elements
@@ -234,28 +245,33 @@ function AdminDashboard() {
           
           {/* Recent Products */}
           <motion.div variants={itemVariants}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
+            <Paper elevation={3} sx={{ p: 4, minHeight: '300px' }}>
+              <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
                 Recent Products
               </Typography>
               
-              {products.length > 0 ? (
-                <Grid container spacing={2}>
-                  {products.slice(0, 4).map((product) => (
+              {recentProducts.length > 0 ? (
+                <Grid container spacing={3}>
+                  {recentProducts.map((product : Product) => (
                     <Grid size = {{xs:12, sm:6, md:3}} key={product._id}>
-                      <Card>
-                        <Box sx={{ height: 140, overflow: 'hidden' }}>
+                      <Card sx={{ height: '250px' }}>
+                        <Box sx={{ height: 150, overflow: 'hidden' }}>
                           <img 
                             src={product.image} 
                             alt={product.name} 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            style={{ 
+                              width: '100%', 
+                              height: '100%', 
+                              objectFit: 'contain',
+                              padding: '8px'
+                            }}
                           />
                         </Box>
-                        <CardContent>
-                          <Typography variant="subtitle1" noWrap>
+                        <CardContent sx={{ p: 3 }}>
+                          <Typography variant="h6" sx={{ mb: 2 }}>
                             {product.name}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                             ${product.price.toFixed(2)}
                           </Typography>
                         </CardContent>
@@ -269,16 +285,14 @@ function AdminDashboard() {
                 </Typography>
               )}
               
-              {products.length > 4 && (
-                <Box sx={{ mt: 2, textAlign: 'right' }}>
-                  <Button 
-                    variant="text" 
-                    href="/admin/products"
-                  >
-                    View All Products
-                  </Button>
-                </Box>
-              )}
+              <Box sx={{ mt: 1, textAlign: 'right' }}>
+                <Button 
+                  variant="text" 
+                  href="/admin/products"
+                >
+                  View All Products
+                </Button>
+              </Box>
             </Paper>
           </motion.div>
         </motion.div>
