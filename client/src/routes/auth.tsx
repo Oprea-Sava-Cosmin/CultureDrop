@@ -2,12 +2,23 @@ import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { Box, Container } from '@mui/material';
 import { motion } from 'framer-motion';
+import { appStore } from '@/store/appStore';
+import { redirect } from '@tanstack/react-router';
 
 import Layout from '../components/layout/Layout';
 import AuthForm from '../components/auth/AuthForm';
 
 export const Route = createFileRoute('/auth')({ 
   component: AuthPage,
+  beforeLoad: () => {
+    // Check if user is authenticated
+    const isAuthenticated = appStore.state.isAuthenticated;
+    if (isAuthenticated) {
+      throw redirect({
+        to: '/',
+      });
+    }
+  }
 });
 
 function AuthPage() {

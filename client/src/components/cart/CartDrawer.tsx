@@ -109,15 +109,52 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar 
-                    alt={item.product.name} 
-                    src={item.product.image} 
-                    variant="rounded"
-                    sx={{ width: 60, height: 60, mr: 1 }}
-                  />
+                  <Box 
+                    component={Link}
+                    to={`/product/${item.product._id}`}
+                    onClick={onClose}
+                    sx={{ 
+                      textDecoration: 'none',
+                      display: 'block'
+                    }}
+                  >
+                    <Avatar 
+                      alt={item.product.name} 
+                      src={item.product.image} 
+                      variant="rounded"
+                      sx={{ 
+                        width: 60, 
+                        height: 60, 
+                        mr: 1,
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s',
+                        '&:hover': {
+                          transform: 'scale(1.05)'
+                        }
+                      }}
+                    />
+                  </Box>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={item.product.name}
+                  primary={
+                    <Typography 
+                      component={Link}
+                      to={`/product/${item.product._id}`}
+                      onClick={onClose}
+                      sx={{ 
+                        color: 'text.primary',
+                        textDecoration: 'none',
+                        fontWeight: 'medium',
+                        '&:hover': {
+                          color: 'primary.main',
+                          textDecoration: 'underline'
+                        },
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {item.product.name}
+                    </Typography>
+                  }
                   secondary={
                     <React.Fragment>
                       <Typography component="span" variant="body2" color="text.primary">

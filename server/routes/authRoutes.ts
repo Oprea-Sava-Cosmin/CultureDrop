@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { signup, login, checkAdminStatus } from '../config/authController';
+import { signup, login, checkAdminStatus, getUserCount } from '../config/authController';
 import {verifyAdmin} from '../config/auth';
 
 const router = Router();
+
+router.get('/count', getUserCount);
 
 router.post('/signup', async (req: Request, res: Response) => {
     await signup(req, res);
