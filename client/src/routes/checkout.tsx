@@ -110,7 +110,8 @@ function CheckoutPage() {
   const handlePlaceOrder = async () => {
     try {
       const userToken = localStorage.getItem('userToken');
-      if(!userToken) {
+      const adminToken = localStorage.getItem('adminToken');
+      if(!userToken && !adminToken) {
         navigate({to: '/auth'});
         return;
       }
@@ -119,7 +120,7 @@ function CheckoutPage() {
         amount: total
       }, {
         headers: {
-          'Authorization': `Bearer ${userToken}`,
+          'Authorization': `Bearer ${userToken !== null? userToken : adminToken}`,
           'Content-Type': 'application/json'
         }
       });
