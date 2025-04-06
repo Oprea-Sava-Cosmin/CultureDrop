@@ -57,7 +57,7 @@ function ProductDetailPage() {
   const { product: loadedProduct, error: loadError } = Route.useLoaderData() as LoaderData;
   const [quantity, setQuantity] = useState(1);
   const theme = useTheme();
-  const { culture, setCulture } = useAppTheme();
+  const { setCulture } = useAppTheme();
 
   // Set culture theme based on product
   useEffect(() => {
