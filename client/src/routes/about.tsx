@@ -32,31 +32,31 @@ export const Route = createFileRoute('/about')({
 const teamMembers = [
   {
     id: 1,
-    name: 'Alex Johnson',
-    role: 'Founder & Creative Director',
+    name: 'Cosmin Murariu',
+    role: 'Backend & database',
     avatar: '/images/team-1.jpg',
-    bio: 'Alex founded CultureDrop with 15+ years of experience in fashion and music to connect cultural movements with consumer products.',
+    bio: 'A true team player, with the skills necessary to complete the task in no time',
   },
   {
     id: 2,
-    name: 'Maya Rodriguez',
-    role: 'Head of Music Curation',
+    name: 'Sergiu Sava',
+    role: 'Frontend & Design',
     avatar: '/images/team-2.jpg',
-    bio: 'Former DJ and music producer, Maya brings her expertise in music trends to curate our authentic product selection.',
+    bio: 'Talented and hard-working, he masters the in\'s adn out\'s of the codes',
   },
   {
     id: 3,
-    name: 'Jamal Williams',
-    role: 'Fashion Director',
+    name: 'Tudor Oprea',
+    role: 'React Developer',
     avatar: '/images/team-3.jpg',
-    bio: 'With a background in streetwear design, Jamal ensures our clothing authentically represents each cultural movement.',
+    bio: 'With knowledge acorss multiple field, cand help in any part of the project',
   },
   {
     id: 4,
-    name: 'Sarah Chen',
+    name: 'Deepseek',
     role: 'Community Manager',
     avatar: '/images/team-4.jpg',
-    bio: 'Sarah builds connections with artists and creators to ensure our products remain authentic and culturally relevant.',
+    bio: 'In the hardest moments as a programmer, he comes in everybody\'s help. A proffesional chinese developer.',
   },
 ];
 
