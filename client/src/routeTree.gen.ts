@@ -19,9 +19,9 @@ import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as ProductIdImport } from './routes/product.$id'
+import { Route as AdminTransactionsImport } from './routes/admin/transactions'
 import { Route as AdminProductsImport } from './routes/admin/products'
 import { Route as AdminAddProductImport } from './routes/admin/add-product'
-
 
 // Create/Update Routes
 
@@ -70,6 +70,12 @@ const AdminIndexRoute = AdminIndexImport.update({
 const ProductIdRoute = ProductIdImport.update({
   id: '/product/$id',
   path: '/product/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminTransactionsRoute = AdminTransactionsImport.update({
+  id: '/admin/transactions',
+  path: '/admin/transactions',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -145,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsImport
       parentRoute: typeof rootRoute
     }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/admin/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsImport
+      parentRoute: typeof rootRoute
+    }
     '/product/$id': {
       id: '/product/$id'
       path: '/product/$id'
@@ -173,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/admin/add-product': typeof AdminAddProductRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/product/$id': typeof ProductIdRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -186,6 +200,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/admin/add-product': typeof AdminAddProductRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/product/$id': typeof ProductIdRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -200,6 +215,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/admin/add-product': typeof AdminAddProductRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/product/$id': typeof ProductIdRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -215,6 +231,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/admin/add-product'
     | '/admin/products'
+    | '/admin/transactions'
     | '/product/$id'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
@@ -227,6 +244,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/admin/add-product'
     | '/admin/products'
+    | '/admin/transactions'
     | '/product/$id'
     | '/admin'
   id:
@@ -239,6 +257,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/admin/add-product'
     | '/admin/products'
+    | '/admin/transactions'
     | '/product/$id'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -253,6 +272,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   AdminAddProductRoute: typeof AdminAddProductRoute
   AdminProductsRoute: typeof AdminProductsRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
   ProductIdRoute: typeof ProductIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   AdminAddProductRoute: AdminAddProductRoute,
   AdminProductsRoute: AdminProductsRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
   ProductIdRoute: ProductIdRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -288,6 +309,7 @@ export const routeTree = rootRoute
         "/shop",
         "/admin/add-product",
         "/admin/products",
+        "/admin/transactions",
         "/product/$id",
         "/admin/"
       ]
@@ -315,6 +337,9 @@ export const routeTree = rootRoute
     },
     "/admin/products": {
       "filePath": "admin/products.tsx"
+    },
+    "/admin/transactions": {
+      "filePath": "admin/transactions.tsx"
     },
     "/product/$id": {
       "filePath": "product.$id.tsx"

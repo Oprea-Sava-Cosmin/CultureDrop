@@ -238,6 +238,19 @@ function AdminDashboard() {
                     Manage Products
                   </Button>
                 </Grid>
+                <Grid size = {{xs:12, sm:6, md:3}}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<ShoppingCartIcon />}
+                    component={motion.a}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    href="/admin/transactions"
+                  >
+                    Transaction History
+                  </Button>
+                </Grid>
               </Grid>
             </Paper>
           </motion.div>
@@ -253,8 +266,8 @@ function AdminDashboard() {
                 <Grid container spacing={3}>
                   {recentProducts.map((product : Product) => (
                     <Grid size = {{xs:12, sm:6, md:3}} key={product._id}>
-                      <Card sx={{ height: '250px' }}>
-                        <Box sx={{ height: 150, overflow: 'hidden' }}>
+                      <Card sx={{ height: '320px' }}>
+                        <Box sx={{ height: 200, overflow: 'hidden' }}>
                           <img 
                             src={product.image} 
                             alt={product.name} 
@@ -267,7 +280,18 @@ function AdminDashboard() {
                           />
                         </Box>
                         <CardContent sx={{ p: 3 }}>
-                          <Typography variant="h6" sx={{ mb: 2 }}>
+                          <Typography 
+                            variant="h6" 
+                            sx={{ 
+                              mb: 2,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              height: '3rem'
+                            }}
+                          >
                             {product.name}
                           </Typography>
                           <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>

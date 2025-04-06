@@ -48,4 +48,20 @@ export const getTransactionCount = async (req: Request, res: Response) => {
         console.error('Error counting transactions: ', error);
         res.status(500).json({message: 'Error counting transactions'});
     }
-}
+};
+
+// Add this new function to your existing transactionController.ts file
+
+export const getAllTransactions = async (req: Request, res: Response) => {
+    try {
+        // Populate the userId field to get user details
+        const transactions = await Transaction.find()
+            .populate('userId', 'firstName lastName email')
+            .sort({ timestamp: -1 }); // Sort by newest first
+        
+        res.json(transactions);
+    } catch (error) {
+        console.error('Error fetching transactions: ', error);
+        res.status(500).json({message: 'Error fetching transactions'});
+    }
+};

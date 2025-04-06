@@ -17,6 +17,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 import { useStore } from '@tanstack/react-store';
 import { appStore, adminLogout, toggleAdminPanel } from '../../store/appStore';
@@ -146,6 +147,15 @@ const AdminNav = () => {
                   <AddCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText primary="Add New Product" />
+              </ListItemButton>
+            </ListItem>
+            
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/admin/transactions" onClick={handleToggleAdminPanel}>
+                <ListItemIcon>
+                  <ReceiptLongIcon />
+                </ListItemIcon>
+                <ListItemText primary="Transaction History" />
               </ListItemButton>
             </ListItem>
           </List>
