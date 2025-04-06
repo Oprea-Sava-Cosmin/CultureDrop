@@ -310,16 +310,21 @@ export const login = async (credentials: AdminCredentials) => {
 export const signup = async (userData: SignupData) => {
   try {
     const response = await axios.post(`https://${API_URL}/api/auth/signup`, userData);
-    const token = response.data;
+    const {token, user} = response.data;
 
     if(token) {
-      localStorage.setItem('adminToken', token);
+      if(user.isAdmin) {
+        localStorage.setItem('adminToken', token);
+      } else{
+        localStorage.setItem('userToken', token);
+      }
       localStorage.setItem('isAuthenticated', 'true');
       
       appStore.setState((state) => ({
         ...state,
         isAuthenticated: true,
-        adminToken: token,
+        userToken: token,
+        adminToken: user.isAdmin ? token : null,
       }));
 
       return {success: true, data: response.data};
@@ -338,6 +343,7 @@ export const signup = async (userData: SignupData) => {
 export const adminLogout = () => {
   // Clear authentication data from localStorage
   localStorage.removeItem('adminToken');
+  localStorage.removeItem('userToken');
   localStorage.removeItem('isAuthenticated');
   localStorage.removeItem('userRole');
   
@@ -346,6 +352,7 @@ export const adminLogout = () => {
     isAuthenticated: false,
     isAdminPanelOpen: false,
     adminToken: null,
+    userToken: null,
   }));
 };
 
