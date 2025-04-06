@@ -11,7 +11,6 @@ import {
   Divider,
   Typography,
   Button,
-  useTheme,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -23,7 +22,6 @@ import { useStore } from '@tanstack/react-store';
 import { appStore, adminLogout, toggleAdminPanel } from '../../store/appStore';
 
 const AdminNav = () => {
-  const theme = useTheme();
   const isAuthenticated = useStore(appStore, (state) => state.isAuthenticated);
   const adminToken = useStore(appStore, (state) => state.adminToken);
   const isAdminPanelOpen = useStore(appStore, (state) => state.isAdminPanelOpen);
@@ -64,7 +62,11 @@ const AdminNav = () => {
             sx={{ width: 280 }}
             role="presentation"
           >
-            <Box sx={{ p: 2, bgcolor: theme.palette.primary.main, color: 'white' }}>
+            <Box sx={{ 
+              p: 2, 
+              bgcolor: 'primary.main', 
+              color: 'primary.contrastText' 
+            }}>
               <Typography variant="h6">User Options</Typography>
             </Box>
             
@@ -109,7 +111,11 @@ const AdminNav = () => {
           sx={{ width: 280 }}
           role="presentation"
         >
-          <Box sx={{ p: 2, bgcolor: theme.palette.primary.main, color: 'white' }}>
+          <Box sx={{ 
+            p: 2, 
+            bgcolor: 'primary.main', 
+            color: 'primary.contrastText' 
+          }}>
             <Typography variant="h6">Admin Dashboard</Typography>
           </Box>
           
