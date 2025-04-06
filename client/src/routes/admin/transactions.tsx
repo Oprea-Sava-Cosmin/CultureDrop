@@ -18,7 +18,6 @@ import {
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { format } from 'date-fns';
 
 import Layout from '../../components/layout/Layout';
 import { appStore } from '../../store/appStore';
@@ -36,6 +35,19 @@ interface Transaction {
   orderNumber: number;
   timestamp: string;
 }
+
+// Helper function to format date without date-fns
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+  return `${month} ${day}, ${year} ${hours}:${minutes}`;
+};
 
 export const Route = createFileRoute('/admin/transactions')({
   component: TransactionsPage,
@@ -159,7 +171,7 @@ function TransactionsPage() {
                               />
                             </TableCell>
                             <TableCell>
-                              {format(new Date(transaction.timestamp), 'MMM dd, yyyy HH:mm')}
+                              {formatDate(transaction.timestamp)}
                             </TableCell>
                             <TableCell>
                               {transaction.userId ? 
