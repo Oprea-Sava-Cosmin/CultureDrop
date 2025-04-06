@@ -118,7 +118,7 @@ const ChatBot = () => {
         sender: 'bot',
         timestamp: new Date(),
       });
-
+      console.log('Response:', response);
       // Update recommended products if any
       if (response.recommendedProducts && response.recommendedProducts.length > 0) {
         setRecommendedProducts(response.recommendedProducts);

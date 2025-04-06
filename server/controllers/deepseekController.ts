@@ -30,7 +30,6 @@ export const getRecommendations = async (req: Request, res: Response) => {
 
     // Get all products from database
     const products = await Product.find();
-    console.log('Products:', products);
     // If userId is provided, save the search query to user's history
     if (userId) {
       try {
