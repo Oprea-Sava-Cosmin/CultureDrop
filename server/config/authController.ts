@@ -121,3 +121,13 @@ export const checkAdminStatus = async (req: Request, res: Response) => {
         return res.json({isAdmin: false, adminToken: null});
     }
 }
+
+export const getUserCount = async (req: Request, res: Response) => {
+    try {
+        const count = await User.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        console.error('Error counting users: ', error);
+        res.status(500).json({ message: 'Error counting users' });
+    }
+};

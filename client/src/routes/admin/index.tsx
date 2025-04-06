@@ -14,6 +14,8 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import PeopleIcon from '@mui/icons-material/People';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 import Layout from '../../components/layout/Layout';
 import { useStore } from '@tanstack/react-store';
@@ -24,17 +26,49 @@ export const Route = createFileRoute('/admin/')({
   beforeLoad: () => {
     // Check if user is authenticated
     const isAuthenticated = appStore.state.isAuthenticated;
+    const token = localStorage.getItem('adminToken');
     if (!isAuthenticated) {
       throw redirect({
         to: '/auth',
       });
     }
+    else if(!token) {
+      throw redirect({
+        to: '/'
+      })
+    }
   },
 });
 
 function AdminDashboard() {
+  const [productCount, setProductCount] = useState(0);
+  const [userCount, setUserCount] = useState(0);
+
   const products = useStore(appStore, (state) => state.products);
   
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/products/count');
+        setProductCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching product count:', error);
+      }
+    };
+    
+    const fetchUserCount = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/count');
+        setUserCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching product count:', error);
+      }
+    };
+
+    fetchProductCount();
+    fetchUserCount();
+  }, []);
+
   // Animation variants for dashboard elements
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -77,7 +111,7 @@ function AdminDashboard() {
                   <CardContent sx={{ textAlign: 'center' }}>
                     <InventoryIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
                     <Typography variant="h5" component="div">
-                      {products.length}
+                      {productCount}
                     </Typography>
                     <Typography color="text.secondary">
                       Total Products
@@ -93,7 +127,7 @@ function AdminDashboard() {
                   <CardContent sx={{ textAlign: 'center' }}>
                     <PeopleIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
                     <Typography variant="h5" component="div">
-                      0
+                      {userCount}
                     </Typography>
                     <Typography color="text.secondary">
                       Registered Users

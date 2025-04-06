@@ -266,16 +266,18 @@ export const clearChatMessages = () => {
 export const login = async (credentials: AdminCredentials) => {
   try {
     const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
-    const {token} = response.data;
+    const {token, user} = response.data;
 
     if(token) {
-      localStorage.setItem('adminToken', token);
+      if(user.isAdmin) {
+        localStorage.setItem('adminToken', token);
+      }
       localStorage.setItem('isAuthenticated', 'true');
     
       appStore.setState((state) => ({
         ...state,
         isAuthenticated: true,
-        adminToken: token,
+        adminToken: user.isAdmin ? token : null,
         // userRole: user.isAdmin ? 'admin' : 'user'
       }));
   
@@ -328,7 +330,6 @@ export const adminLogout = () => {
     isAuthenticated: false,
     isAdminPanelOpen: false,
     adminToken: null,
-    userRole: null, // Add this line
   }));
 };
 
