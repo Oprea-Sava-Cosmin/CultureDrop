@@ -87,7 +87,7 @@ function AdminDashboard() {
 
     const fetchRecentProducts = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/products/`);
+        const response = await axios.get(`https://${URL}/api/products/`);
         const allProducts = response.data;
         // console.log(response.data);
         setRecentProducts(allProducts.slice(0, 4));
