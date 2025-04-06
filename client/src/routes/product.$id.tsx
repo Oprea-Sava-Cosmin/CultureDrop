@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Box,
   Typography,
@@ -11,6 +12,8 @@ import {
   IconButton,
   Paper,
   Breadcrumbs,
+  CircularProgress,
+  useTheme,
 } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
@@ -20,24 +23,51 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import Layout from '../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
-import { appStore, addToCart } from '../store/appStore';
+import { addToCart } from '../store/appStore';
 import type { Product } from '../store/appStore';
+import { useTheme as useAppTheme } from '../context/ThemeContext';
+import type { CultureTheme } from '../context/ThemeContext';
+
+interface LoaderData {
+  product: Product | null;
+  error?: string;
+}
 
 export const Route = createFileRoute('/product/$id')({
   component: ProductDetailPage,
+  loader: async ({ params }) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/products/${params.id}`);
+      return { product: response.data };
+    } catch (error) {
+      console.error('Error loading product:', error);
+      return { product: null, error: 'Failed to load product' };
+    }
+  },
+  pendingComponent: () => (
+    <Layout>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    </Layout>
+  ),
 });
 
 function ProductDetailPage() {
-  const { id } = Route.useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const { product: loadedProduct, error: loadError } = Route.useLoaderData() as LoaderData;
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const { setCulture } = useAppTheme();
 
-  // Get products and cart functions from store
-  const products = useStore(appStore, (state) => state.products);
-  // const addToCart = useStore(appStore, (state) => state.addToCart);
+  // Set culture theme based on product
+  useEffect(() => {
+    if (loadedProduct && loadedProduct.culture) {
+      const cultureLower = loadedProduct.culture.toLowerCase();
+      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(cultureLower)) {
+        setCulture(cultureLower as CultureTheme);
+      }
+    }
+  }, [loadedProduct, setCulture]);
 
   // Animation variants
   const pageVariants = {
@@ -56,26 +86,6 @@ function ProductDetailPage() {
     animate: { opacity: 1, x: 0, transition: { duration: 0.5, delay: 0.2 } },
   };
 
-  // Find product by ID
-  useEffect(() => {
-    setLoading(true);
-    try {
-      // In a real app, this would be an API call
-      // For now, we'll find the product in our local data
-      const foundProduct = products.find((p) => p._id === id);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      } else {
-        setError('Product not found');
-      }
-    } catch (err) {
-      setError('Error loading product');
-      console.error('Error loading product:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [id, products]);
-
   // Handle quantity change
   const handleQuantityChange = (value: number) => {
     if (value >= 1) {
@@ -85,30 +95,19 @@ function ProductDetailPage() {
 
   // Handle add to cart
   const handleAddToCart = () => {
-    if (product) {
-      addToCart(product, quantity);
+    if (loadedProduct) {
+      addToCart(loadedProduct, quantity);
       // Reset quantity after adding to cart
       setQuantity(1);
     }
   };
 
-  // Loading state
-  if (loading) {
-    return (
-      <Layout>
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-          <Typography>Loading product...</Typography>
-        </Box>
-      </Layout>
-    );
-  }
-
   // Error state
-  if (error || !product) {
+  if (loadError || !loadedProduct) {
     return (
       <Layout>
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-          <Typography color="error">{error || 'Product not found'}</Typography>
+          <Typography color="error">{loadError || 'Product not found'}</Typography>
         </Box>
       </Layout>
     );
@@ -131,10 +130,7 @@ function ProductDetailPage() {
           >
             <Link to="/">Home</Link>
             <Link to="/shop">Shop</Link>
-            {/* <Link to={`/shop?category=${product.category}`}>
-              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-            </Link> */}
-            <Typography color="text.primary">{product.name}</Typography>
+            <Typography color="text.primary">{loadedProduct.name}</Typography>
           </Breadcrumbs>
 
           <Grid container spacing={4}>
@@ -149,19 +145,29 @@ function ProductDetailPage() {
                     height: 0,
                     paddingTop: '100%',
                     position: 'relative',
+                    backgroundColor: theme.palette.background.paper,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}
                 >
                   <Box
                     component="img"
-                    src={product.image}
-                    alt={product.name}
+                    src={loadedProduct.image}
+                    alt={loadedProduct.name}
                     sx={{
                       position: 'absolute',
                       top: 0,
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      objectFit: 'cover',
+                      objectFit: 'contain',
+                      padding: '2rem',
+                      transition: 'all 0.3s ease-in-out',
+                      // Culture-specific image styling
+                      filter: loadedProduct.culture.toLowerCase() === 'hiphop' ? 'drop-shadow(0 0 10px gold)' : 
+                              loadedProduct.culture.toLowerCase() === 'punk' ? 'contrast(1.1)' :
+                              loadedProduct.culture.toLowerCase() === 'indie' ? 'sepia(0.2)' : 'none',
                     }}
                   />
                 </Paper>
@@ -175,13 +181,13 @@ function ProductDetailPage() {
                   {/* Tags */}
                   <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <Chip 
-                      label={product.culture} 
+                      label={loadedProduct.culture} 
                       color="primary" 
                       size="small"
                       sx={{ textTransform: 'capitalize' }}
                     />
                     <Chip 
-                      label={product.category} 
+                      label={loadedProduct.category} 
                       color="secondary" 
                       size="small"
                       sx={{ textTransform: 'capitalize' }}
@@ -189,20 +195,42 @@ function ProductDetailPage() {
                   </Box>
 
                   {/* Product Name */}
-                  <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-                    {product.name}
+                  <Typography 
+                    variant="h3" 
+                    component="h1" 
+                    gutterBottom 
+                    sx={{ 
+                      fontWeight: loadedProduct.culture.toLowerCase() === 'punk' ? 400 : 700,
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.05em' : 'normal',
+                    }}
+                  >
+                    {loadedProduct.name}
                   </Typography>
 
                   {/* Price */}
-                  <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
-                    ${product.price.toFixed(2)}
+                  <Typography 
+                    variant="h4" 
+                    color="primary" 
+                    sx={{ 
+                      mb: 2,
+                      fontWeight: loadedProduct.culture.toLowerCase() === 'streetwear' ? 700 : 600,
+                    }}
+                  >
+                    ${loadedProduct.price.toFixed(2)}
                   </Typography>
 
                   <Divider sx={{ my: 2 }} />
 
                   {/* Description */}
-                  <Typography variant="body1" sx={{ mb: 4 }}>
-                    {product.description}
+                  <Typography 
+                    variant="body1" 
+                    sx={{ 
+                      mb: 4,
+                      lineHeight: loadedProduct.culture.toLowerCase() === 'hiphop' ? 1.8 : 1.6,
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.03em' : 'normal',
+                    }}
+                  >
+                    {loadedProduct.description}
                   </Typography>
 
                   {/* Quantity Selector */}
@@ -252,6 +280,9 @@ function ProductDetailPage() {
                       mt: 'auto',
                       borderRadius: 2,
                       fontWeight: 600,
+                      // Culture-specific button styling
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.05em' : 'normal',
+                      textTransform: 'none',
                     }}
                   >
                     Add to Cart

@@ -64,12 +64,14 @@ function ShopPage() {
     let filtered = [...products];
     
     if (categoryParam) {
-      filtered = filtered.filter(product => product.category === categoryParam);
+      filtered = filtered.filter(product => product.category.toLowerCase() === categoryParam);
     }
     if (cultureParam) {
-      filtered = filtered.filter(product => product.culture === cultureParam);
-      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(cultureParam)) {
-        setCulture(cultureParam as CultureTheme);
+      filtered = filtered.filter(product => 
+        product.culture.toLowerCase() === cultureParam.toLowerCase()
+      );
+      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(cultureParam.toLowerCase())) {
+        setCulture(cultureParam.toLowerCase() as CultureTheme);
       }
     }
     
@@ -79,14 +81,20 @@ function ShopPage() {
   
   const handleFilterChange = (category: string | null, culture: string | null, searchQuery: string) => {
     let filtered = [...products];
+    console.log(filtered)
+    console.log(category)
+    console.log(culture)
+    console.log(searchQuery)
     
     if (category) {
       filtered = filtered.filter(product => product.category === category);
     }
     if (culture) {
-      filtered = filtered.filter(product => product.culture === culture);
-      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(culture)) {
-        setCulture(culture as CultureTheme);
+      filtered = filtered.filter(product => 
+        product.culture.toLowerCase() === culture.toLowerCase()
+      );
+      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(culture.toLowerCase())) {
+        setCulture(culture.toLowerCase() as CultureTheme);
       }
     }
     if (searchQuery) {

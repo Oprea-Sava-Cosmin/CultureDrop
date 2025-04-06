@@ -29,7 +29,6 @@ export const Route = createFileRoute('/about')({
   component: AboutPage,
 });
 
-// Team members data
 const teamMembers = [
   {
     id: 1,
@@ -63,24 +62,24 @@ const teamMembers = [
 
 const cultureBackgroundRGB = {
   urban: {
-    light: [0.2, 0.8, 0.9],  // #F5F5F5
-    dark:  [0, 0.1, 0.2],  // #121212
+    light: [0.2, 0.8, 0.9],
+    dark:  [0.05, 0.15, 0.25],
   },
   streetwear: {
-    light: [0.97, 0.97, 0.97],  // #F8F8F8
-    dark:  [0.04, 0.04, 0.04],  // #0A0A0A
+    light: [1.5, 0.65, 0.85],
+    dark:  [0.25, 0.05, 0.05],
   },
   hiphop: {
-    light: [0.94, 0.94, 0.94],  // #F0F0F0
-    dark:  [0.07, 0.07, 0.07],  // #111111
+    light: [1, 0.9, 0.2],
+    dark:  [0.15, 0.15, 0],
   },
   indie: {
-    light: [0.98, 0.98, 0.98],  // #F9F9F9
-    dark:  [0.05, 0.05, 0.05],  // #0D0D0D
+    light: [1.2, 0.87, 0.55],
+    dark:  [0.25, 0.25, 0], 
   },
   punk: {
-    light: [0.93, 0.93, 0.93],  // #EEEEEE
-    dark:  [0.00, 0.00, 0.00],  // #000000
+    light: [0.92, 0.85, 0.85],
+    dark:  [0.2, 0.12, 0.12],
   },
 };
 
@@ -89,7 +88,6 @@ function AboutPage() {
   const theme = useMuiTheme();
   const {culture} = useTheme();
 
-  // Animation variants
   const pageVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1, transition: { duration: 0.5 } },
@@ -133,7 +131,6 @@ function AboutPage() {
         {/* Hero Section */}
         <Box
           sx={{
-            bgcolor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
             py: 10,
             position: 'relative',
             overflow: 'hidden',
@@ -158,7 +155,7 @@ function AboutPage() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.75)',
               },
             }}
           />
@@ -303,6 +300,8 @@ function AboutPage() {
                           alignItems: 'center',
                           textAlign: 'center',
                           borderRadius: 4,
+                          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30,30,30,0.7)' : 'rgba(255,255,255,0.75)',
+                          backdropFilter: 'blur(5px)',
                         }}
                       >
                         <Avatar
@@ -370,6 +369,8 @@ function AboutPage() {
                         alignItems: 'center',
                         textAlign: 'center',
                         borderRadius: 4,
+                        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(30,30,30,0.7)' : 'rgba(255,255,255,0.75)',
+                        backdropFilter: 'blur(5px)',
                       }}
                     >
                       <Avatar
@@ -502,7 +503,8 @@ function AboutPage() {
                     sx={{
                       p: 4,
                       borderRadius: 4,
-                      bgcolor: theme.palette.background.paper,
+                      bgcolor: theme.palette.mode === 'dark' ? 'rgba(30,30,30,0.7)' : 'rgba(255,255,255,0.75)',
+                      backdropFilter: 'blur(5px)',
                       maxWidth: { xs: '100%', sm: '450px' },
                       width: '100%',
                       mt: { xs: 4, md: 0 }

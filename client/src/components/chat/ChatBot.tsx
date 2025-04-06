@@ -10,7 +10,6 @@ import {
   List,
   ListItem,
   Avatar,
-  Divider,
   Button,
   CircularProgress,
   Chip,
@@ -25,10 +24,9 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import PersonIcon from '@mui/icons-material/Person';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@tanstack/react-store';
-import { appStore, toggleChat as toggleChatStore, addChatMessage } from '../../store/appStore';
+import { appStore, toggleChat as toggleChatStore, addChatMessage, setRecommendedProducts as setStoreRecommendedProducts } from '../../store/appStore';
 import { getProductRecommendations } from '../../services/deepseekService';
 import ChatProductCard from './ChatProductCard';
-import type { Product } from '../../store/appStore';
 import ReactMarkdown from 'react-markdown';
 
 // Use the ChatMessage type from appStore
@@ -43,10 +41,11 @@ const ChatBot = () => {
   // Get state from store
   const isOpen = useStore(appStore, (state) => state.isChatOpen);
   const messages = useStore(appStore, (state) => state.chatMessages);
-  // const products = useStore(appStore, (state) => state.products);
+  const recommendedProducts = useStore(appStore, (state) => state.recommendedProducts);
   
   // Sample product tags for quick selection
   const suggestedTags = ['hip-hop', 'streetwear', 'vinyl', 'urban', 'indie', 'accessories'];
+  
   
   // Scroll to bottom of messages
   const scrollToBottom = () => {
@@ -103,9 +102,6 @@ const ChatBot = () => {
     }
   };
   
-  // State for recommended products
-  const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
-
   // Generate AI response based on user input using DeepSeek service
   const generateResponse = async (userInput: string) => {
     try {
@@ -118,24 +114,21 @@ const ChatBot = () => {
         sender: 'bot',
         timestamp: new Date(),
       });
-
-      // Update recommended products if any
+      
+      // Set recommended products if available
       if (response.recommendedProducts && response.recommendedProducts.length > 0) {
-        setRecommendedProducts(response.recommendedProducts);
+        setStoreRecommendedProducts(response.recommendedProducts);
       }
+      
     } catch (error) {
       console.error('Error generating response:', error);
-      // Fallback response in case of error
       addChatMessage({
-        text: 'Sorry, I encountered an issue while processing your request. Please try again.',
+        text: 'Sorry, I encountered an error while processing your request. Please try again.',
         sender: 'bot',
         timestamp: new Date(),
       });
     }
   };
-  
-  // We're now using the DeepSeek service for product recommendations
-  // The recommendation logic has been moved to deepseekService.ts
   
   // Handle clicking on a suggested tag
   const handleTagClick = (tag: string) => {
@@ -146,18 +139,15 @@ const ChatBot = () => {
     <>
       {/* Chat button */}
       <Fab
-        component={motion.button}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
         color="primary"
         aria-label="chat"
-        onClick={toggleChat}
         sx={{
           position: 'fixed',
           bottom: 20,
           right: 20,
           zIndex: 1000,
         }}
+        onClick={toggleChat}
       >
         <ChatIcon />
       </Fab>
@@ -167,108 +157,136 @@ const ChatBot = () => {
         anchor="right"
         open={isOpen}
         onClose={toggleChat}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: isMobile ? '100%' : 380,
-            height: isMobile ? '100%' : 'calc(100% - 100px)',
-            bottom: isMobile ? 0 : 20,
-            right: isMobile ? 0 : 20,
-            top: isMobile ? 0 : 'auto',
-            borderRadius: isMobile ? 0 : 2,
-            boxShadow: 3,
+        PaperProps={{
+          sx: {
+            width: isMobile ? '100%' : '800px', // Increased width from typical 400px
+            maxWidth: '100%',
+            borderRadius: isMobile ? 0 : '12px 0 0 12px',
+            overflow: 'hidden',
           },
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          {/* Chat header */}
-          <Box
-            sx={{
-              p: 2,
-              bgcolor: theme.palette.primary.main,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <SmartToyIcon sx={{ mr: 1 }} />
-              <Typography variant="h6">DeepSeek Assistant</Typography>
-            </Box>
-            <IconButton onClick={toggleChat} edge="end" aria-label="close" sx={{ color: 'white' }}>
-              <CloseIcon />
-            </IconButton>
+        {/* Chat header */}
+        <Box
+          sx={{
+            p: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: 1,
+            borderColor: 'divider',
+            backgroundColor: theme.palette.primary.main,
+            color: 'white',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <SmartToyIcon sx={{ mr: 1 }} />
+            <Typography variant="h6">Shopping Assistant</Typography>
           </Box>
+          <IconButton onClick={toggleChat} color="inherit">
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        
+        {/* Chat content */}
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: isMobile ? 'column' : 'row',
+          height: 'calc(100% - 64px)' 
+        }}>
+          {/* Product recommendations panel - desktop version */}
+          {!isMobile && (
+            <Box 
+              sx={{ 
+                width: '600px', 
+                borderRight: 1, 
+                borderColor: 'divider',
+                display: recommendedProducts.length > 0 ? 'block' : 'none',
+                overflow: 'auto',
+                p: 2
+              }}
+            >
+              <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                Recommended Products
+              </Typography>
+              
+              <Grid container spacing={2}>
+                {recommendedProducts.map((product) => (
+                  <Grid size={{xs:12}} key={product._id}>
+                    <ChatProductCard 
+                      product={product} 
+                      onProductClick={() => toggleChat()} 
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          )}
           
-          <Divider />
-          
-          {/* Chat messages */}
-          <Box
-            sx={{
-              flexGrow: 1,
-              overflow: 'auto',
-              p: 2,
-              bgcolor: theme.palette.background.default,
-            }}
-          >
-            <List>
-              <AnimatePresence initial={false}>
-                {messages.map((message) => (
+          {/* Chat messages area */}
+          <Box sx={{ 
+            flexGrow: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            height: isMobile ? '100%' : '100%',
+            justifyContent: 'space-between'
+          }}>
+            {/* Messages list */}
+            <List 
+              sx={{ 
+                flexGrow: 1, 
+                overflow: 'auto', 
+                p: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.02)',
+                maxHeight: isMobile ? 'calc(100vh - 200px)' : 'auto'
+              }}
+            >
+              <AnimatePresence>
+                {messages.map((msg, index) => (
                   <motion.div
-                    key={message.id}
-                    initial={{ opacity: 0, y: 20 }}
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
                     <ListItem
-                      alignItems="flex-start"
                       sx={{
-                        flexDirection: message.sender === 'user' ? 'row-reverse' : 'row',
+                        flexDirection: msg.sender === 'user' ? 'row-reverse' : 'row',
+                        alignItems: 'flex-start',
                         mb: 2,
                       }}
                     >
                       <Avatar
                         sx={{
-                          bgcolor: message.sender === 'user' ? theme.palette.secondary.main : theme.palette.primary.main,
-                          ml: message.sender === 'user' ? 1 : 0,
-                          mr: message.sender === 'user' ? 0 : 1,
+                          bgcolor: msg.sender === 'user' ? 'primary.main' : 'secondary.main',
+                          ml: msg.sender === 'user' ? 1 : 0,
+                          mr: msg.sender === 'user' ? 0 : 1,
                         }}
                       >
-                        {message.sender === 'user' ? <PersonIcon /> : <SmartToyIcon />}
+                        {msg.sender === 'user' ? <PersonIcon /> : <SmartToyIcon />}
                       </Avatar>
                       <Paper
                         elevation={1}
                         sx={{
                           p: 2,
                           maxWidth: '70%',
-                          bgcolor: message.sender === 'user' ? theme.palette.secondary.light : theme.palette.background.paper,
+                          backgroundColor: msg.sender === 'user' ? 'primary.light' : 'background.paper',
+                          color: msg.sender === 'user' ? 'primary.contrastText' : 'text.primary',
                           borderRadius: 2,
-                          borderTopLeftRadius: message.sender === 'user' ? 2 : 0,
-                          borderTopRightRadius: message.sender === 'user' ? 0 : 2,
                         }}
                       >
-                        <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-                          <ReactMarkdown
-                            components={{
-                              p: ({ node, ...props }) => <Typography variant="body1" {...props} />,
-                            }}
-                          >
-                            {message.text}
-                          </ReactMarkdown>
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </Typography>
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
                       </Paper>
                     </ListItem>
                   </motion.div>
                 ))}
               </AnimatePresence>
               
+              {/* Typing indicator */}
               {isTyping && (
-                <ListItem alignItems="flex-start">
-                  <Avatar sx={{ bgcolor: theme.palette.primary.main, mr: 1 }}>
+                <ListItem sx={{ mb: 2 }}>
+                  <Avatar sx={{ bgcolor: 'secondary.main', mr: 1 }}>
                     <SmartToyIcon />
                   </Avatar>
                   <Paper
@@ -276,13 +294,12 @@ const ChatBot = () => {
                     sx={{
                       p: 2,
                       maxWidth: '70%',
-                      bgcolor: theme.palette.background.paper,
+                      backgroundColor: 'background.paper',
                       borderRadius: 2,
-                      borderTopLeftRadius: 0,
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CircularProgress size={20} thickness={5} sx={{ mr: 1 }} />
+                      <CircularProgress size={16} sx={{ mr: 1 }} />
                       <Typography variant="body2">Thinking...</Typography>
                     </Box>
                   </Paper>
@@ -291,72 +308,89 @@ const ChatBot = () => {
               
               <div ref={messagesEndRef} />
             </List>
-          </Box>
-          
-          <Divider />
-          
-          {/* Product recommendations */}
-          {recommendedProducts.length > 0 && (
-            <Box sx={{ p: 2, bgcolor: theme.palette.background.paper }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Recommended Products:
-              </Typography>
-              <Grid container spacing={2}>
-                {recommendedProducts.map((product) => (
-                  <Grid size= {{xs:12}} key={product._id}>
-                    <ChatProductCard 
-                      product={product} 
-                      onProductClick={() => {
-                        toggleChat();
-                        // Navigate to product page
+            
+            {/* Bottom section with recommendations, tags and input */}
+            <Box sx={{ 
+              display: 'flex',
+              flexDirection: 'column',
+              borderTop: 1,
+              borderColor: 'divider',
+              backgroundColor: theme.palette.background.paper,
+            }}>
+              {/* Mobile recommendations panel */}
+              {isMobile && recommendedProducts.length > 0 && (
+                <Box 
+                  sx={{ 
+                    p: 1.5,
+                    maxHeight: '30vh',
+                    overflow: 'auto',
+                    borderBottom: 1,
+                    borderColor: 'divider',
+                  }}
+                >
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                    Recommended Products
+                  </Typography>
+                  
+                  <Grid container spacing={1}>
+                    {recommendedProducts.map((product) => (
+                      <Grid size={{xs:6}} key={product._id}>
+                        <ChatProductCard 
+                          product={product} 
+                          onProductClick={() => toggleChat()} 
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              )}
+              
+              {/* Quick tags */}
+              <Box sx={{ p: 1, borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                  {suggestedTags.map((tag) => (
+                    <Chip
+                      key={tag}
+                      label={tag}
+                      size="small"
+                      onClick={() => handleTagClick(tag)}
+                      sx={{ 
+                        '&:hover': { 
+                          backgroundColor: theme.palette.primary.light,
+                          color: theme.palette.primary.contrastText
+                        } 
                       }}
                     />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          )}
-          
-          <Divider />
-          
-          {/* Suggested tags */}
-          <Box sx={{ p: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {suggestedTags.map((tag) => (
-              <Chip
-                key={tag}
-                label={tag}
-                size="small"
-                onClick={() => handleTagClick(tag)}
-                sx={{ m: 0.5 }}
-              />
-            ))}
-          </Box>
-          
-          <Divider />
-          
-          {/* Chat input */}
-          <Box sx={{ p: 2, bgcolor: theme.palette.background.paper }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <TextField
-                fullWidth
-                placeholder="Ask about products or styles..."
-                variant="outlined"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                multiline
-                maxRows={3}
-                sx={{ mr: 1 }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                endIcon={<SendIcon />}
-                onClick={handleSendMessage}
-                disabled={input.trim() === ''}
-              >
-                Send
-              </Button>
+                  ))}
+                </Box>
+              </Box>
+              
+              {/* Input area */}
+              <Box sx={{ p: 2, backgroundColor: 'background.paper' }}>
+                <Box sx={{ display: 'flex' }}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Ask about products..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    size="small"
+                    multiline
+                    maxRows={3}
+                    sx={{ mr: 1 }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSendMessage}
+                    disabled={isTyping || input.trim() === ''}
+                    sx={{ minWidth: 'auto' }}
+                  >
+                    <SendIcon />
+                  </Button>
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Box>

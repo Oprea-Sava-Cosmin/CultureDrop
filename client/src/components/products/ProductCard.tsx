@@ -82,8 +82,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 image={product.image}
                 alt={product.name}
                 sx={{
-                  width: '80%',
-                  height: '80%',
+                  width: 'auto',
+                  aspectRatio: '2 / 1',
                   objectFit: 'contain',
                   objectPosition: 'center'
                 }}
