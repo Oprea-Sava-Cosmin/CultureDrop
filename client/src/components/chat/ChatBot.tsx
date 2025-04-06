@@ -176,7 +176,7 @@ const ChatBot = () => {
             borderBottom: 1,
             borderColor: 'divider',
             backgroundColor: theme.palette.primary.main,
-            color: 'white',
+            color: theme.palette.primary.contrastText,
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
