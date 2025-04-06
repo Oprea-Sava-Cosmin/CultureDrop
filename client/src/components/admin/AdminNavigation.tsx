@@ -64,7 +64,11 @@ const AdminNav = () => {
             sx={{ width: 280 }}
             role="presentation"
           >
-            <Box sx={{ p: 2, bgcolor: theme.palette.primary.main, color: 'white' }}>
+            <Box sx={{ 
+              p: 2, 
+              bgcolor: 'primary.main', 
+              color: 'primary.contrastText' 
+            }}>
               <Typography variant="h6">User Options</Typography>
             </Box>
             
@@ -109,7 +113,11 @@ const AdminNav = () => {
           sx={{ width: 280 }}
           role="presentation"
         >
-          <Box sx={{ p: 2, bgcolor: theme.palette.primary.main, color: 'white' }}>
+          <Box sx={{ 
+            p: 2, 
+            bgcolor: 'primary.main', 
+            color: 'primary.contrastText' 
+          }}>
             <Typography variant="h6">Admin Dashboard</Typography>
           </Box>
           
