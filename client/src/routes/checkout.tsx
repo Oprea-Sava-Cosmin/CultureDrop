@@ -120,7 +120,7 @@ function CheckoutPage() {
         amount: total
       }, {
         headers: {
-          'Authorization': `Bearer ${userToken || adminToken}`,
+          'Authorization': `Bearer ${userToken !== null? userToken : adminToken}`,
           'Content-Type': 'application/json'
         }
       });
