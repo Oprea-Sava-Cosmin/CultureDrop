@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   Paper,
   Breadcrumbs,
   CircularProgress,
+  useTheme,
 } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
@@ -24,6 +25,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Layout from '../components/layout/Layout';
 import { addToCart } from '../store/appStore';
 import type { Product } from '../store/appStore';
+import { useTheme as useAppTheme } from '../context/ThemeContext';
+import type { CultureTheme } from '../context/ThemeContext';
 
 interface LoaderData {
   product: Product | null;
@@ -33,7 +36,6 @@ interface LoaderData {
 export const Route = createFileRoute('/product/$id')({
   component: ProductDetailPage,
   loader: async ({ params }) => {
-    console.log(params)
     try {
       const response = await axios.get(`http://localhost:5000/api/products/${params.id}`);
       return { product: response.data };
@@ -54,6 +56,18 @@ export const Route = createFileRoute('/product/$id')({
 function ProductDetailPage() {
   const { product: loadedProduct, error: loadError } = Route.useLoaderData() as LoaderData;
   const [quantity, setQuantity] = useState(1);
+  const theme = useTheme();
+  const { culture, setCulture } = useAppTheme();
+
+  // Set culture theme based on product
+  useEffect(() => {
+    if (loadedProduct && loadedProduct.culture) {
+      const cultureLower = loadedProduct.culture.toLowerCase();
+      if (['urban', 'streetwear', 'hiphop', 'indie', 'punk'].includes(cultureLower)) {
+        setCulture(cultureLower as CultureTheme);
+      }
+    }
+  }, [loadedProduct, setCulture]);
 
   // Animation variants
   const pageVariants = {
@@ -131,6 +145,10 @@ function ProductDetailPage() {
                     height: 0,
                     paddingTop: '100%',
                     position: 'relative',
+                    backgroundColor: theme.palette.background.paper,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}
                 >
                   <Box
@@ -143,7 +161,13 @@ function ProductDetailPage() {
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      objectFit: 'cover',
+                      objectFit: 'contain',
+                      padding: '2rem',
+                      transition: 'all 0.3s ease-in-out',
+                      // Culture-specific image styling
+                      filter: loadedProduct.culture.toLowerCase() === 'hiphop' ? 'drop-shadow(0 0 10px gold)' : 
+                              loadedProduct.culture.toLowerCase() === 'punk' ? 'contrast(1.1)' :
+                              loadedProduct.culture.toLowerCase() === 'indie' ? 'sepia(0.2)' : 'none',
                     }}
                   />
                 </Paper>
@@ -171,19 +195,41 @@ function ProductDetailPage() {
                   </Box>
 
                   {/* Product Name */}
-                  <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
+                  <Typography 
+                    variant="h3" 
+                    component="h1" 
+                    gutterBottom 
+                    sx={{ 
+                      fontWeight: loadedProduct.culture.toLowerCase() === 'punk' ? 400 : 700,
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.05em' : 'normal',
+                    }}
+                  >
                     {loadedProduct.name}
                   </Typography>
 
                   {/* Price */}
-                  <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
+                  <Typography 
+                    variant="h4" 
+                    color="primary" 
+                    sx={{ 
+                      mb: 2,
+                      fontWeight: loadedProduct.culture.toLowerCase() === 'streetwear' ? 700 : 600,
+                    }}
+                  >
                     ${loadedProduct.price.toFixed(2)}
                   </Typography>
 
                   <Divider sx={{ my: 2 }} />
 
                   {/* Description */}
-                  <Typography variant="body1" sx={{ mb: 4 }}>
+                  <Typography 
+                    variant="body1" 
+                    sx={{ 
+                      mb: 4,
+                      lineHeight: loadedProduct.culture.toLowerCase() === 'hiphop' ? 1.8 : 1.6,
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.03em' : 'normal',
+                    }}
+                  >
                     {loadedProduct.description}
                   </Typography>
 
@@ -234,6 +280,9 @@ function ProductDetailPage() {
                       mt: 'auto',
                       borderRadius: 2,
                       fontWeight: 600,
+                      // Culture-specific button styling
+                      letterSpacing: loadedProduct.culture.toLowerCase() === 'hiphop' ? '0.05em' : 'normal',
+                      textTransform: 'none',
                     }}
                   >
                     Add to Cart
