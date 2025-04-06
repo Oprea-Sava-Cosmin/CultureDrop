@@ -49,7 +49,7 @@ const teamMembers = [
     name: 'Tudor Oprea',
     role: 'React Developer',
     avatar: '/images/team-3.jpg',
-    bio: 'With knowledge acorss multiple field, cand help in any part of the project',
+    bio: 'With knowledge across multiple field, he can help in any part of the project',
   },
   {
     id: 4,
