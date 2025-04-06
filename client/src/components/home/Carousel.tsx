@@ -59,7 +59,7 @@ const Carousel = () => {
     return () => window.removeEventListener('resize', updateFooterHeight);
   }, [isMobile]);
 
-  // Extract product images for BounceCards (limit to first 6)
+  // Extract product images for BounceCards (limit to first 5)
   const limitedProducts = featuredProducts.slice(0, 5);
   const productImages = limitedProducts.map(product => product.image);
 
@@ -124,7 +124,7 @@ const Carousel = () => {
   // Add auto-scrolling effect with smoother transitions
   useEffect(() => {
     const interval = setInterval(() => {
-      setAnimationIndex(prev => (prev + 1) % limitedProducts.length);
+      setAnimationIndex(prev => (prev + 1) % Math.max(1, limitedProducts.length));
     }, 5000); // Longer interval for smoother experience (5 seconds)
     
     return () => clearInterval(interval);
@@ -158,26 +158,26 @@ const Carousel = () => {
           padding: 2,
         }}
       >
-        {/* Removed the Featured Products title */}
-        
         <Box 
           sx={{ 
             width: '100%', 
-            height: '85vh', // Increased height since title is removed
+            height: '85vh',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
           }}
         >
-          <BounceCards
-            images={productImages}
-            containerWidth={300}
-            containerHeight={600}
-            enableHover={true}
-            transformStyles={getAnimatedMobileStyles()}
-            className={`bounce-cards-${mode} bounce-cards-vertical`}
-            onCardClick={handleCardClick}
-          />
+          {productImages.length > 0 && (
+            <BounceCards
+              images={productImages}
+              containerWidth={300}
+              containerHeight={600}
+              enableHover={true}
+              transformStyles={getAnimatedMobileStyles()}
+              className={`bounce-cards-${mode} bounce-cards-vertical`}
+              onCardClick={handleCardClick}
+            />
+          )}
         </Box>
       </Box>
     );
@@ -222,15 +222,17 @@ const Carousel = () => {
             position: 'relative'
           }}
         >
-          <BounceCards
-            images={productImages}
-            containerWidth={600}
-            containerHeight={500}
-            enableHover={true}
-            transformStyles={getTransformStyles()}
-            className={`bounce-cards-${mode}`}
-            onCardClick={handleCardClick}
-          />
+          {productImages.length > 0 && (
+            <BounceCards
+              images={productImages}
+              containerWidth={600}
+              containerHeight={500}
+              enableHover={true}
+              transformStyles={getTransformStyles()}
+              className={`bounce-cards-${mode}`}
+              onCardClick={handleCardClick}
+            />
+          )}
         </Box>
       </Box>
       <div ref={footerRef}>
@@ -272,38 +274,6 @@ const Carousel = () => {
           }
         `}
       </style>
-      {`
-        .bounce-cards-dark .card {
-          border-color: #333;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .bounce-cards-light .card {
-          border-color: #fff;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .bounce-cards-vertical .card {
-          margin: 20px 0;
-          transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
-        }
-        
-        .bounce-cards-vertical .card:hover {
-          transform: scale(1.05) translateX(10px) !important;
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes fadeInOut {
-          0% { opacity: 0.7; transform: scale(0.95); }
-          50% { opacity: 1; transform: scale(1); }
-          100% { opacity: 0.7; transform: scale(0.95); }
-        }
-        
-        .bounce-cards-vertical .card {
-          animation: fadeInOut 8s infinite;
-          animation-delay: calc(var(--card-index, 0) * 1.5s);
-        }
-      `}
     </div>
   );
 };
