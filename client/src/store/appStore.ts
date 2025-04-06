@@ -160,7 +160,7 @@ export const filterProducts = (category?: string | null, culture?: string | null
 export const updateProduct = async (productId: string, updates: Partial<Product>) => {
   try {
     const token = localStorage.getItem('adminToken');
-    const response = await axios.put(`httpss://${API_URL}/api/products/${productId}`, updates, { 
+    const response = await axios.put(`https://${API_URL}/api/products/${productId}`, updates, { 
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
