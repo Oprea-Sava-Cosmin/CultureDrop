@@ -64,7 +64,7 @@ function ShopPage() {
     let filtered = [...products];
     
     if (categoryParam) {
-      filtered = filtered.filter(product => product.category === categoryParam);
+      filtered = filtered.filter(product => product.category.toLowerCase() === categoryParam);
     }
     if (cultureParam) {
       filtered = filtered.filter(product => 
