@@ -197,7 +197,9 @@ const Header = () => {
                 component={Link}
                 to="/"
                 sx={{
+                  mb: 0,
                   mr: 2,
+                  lineHeight: 1.6,
                   display: { xs: 'none', md: 'flex' },
                   fontWeight: 700,
                   letterSpacing: '.2rem',
@@ -246,24 +248,30 @@ const Header = () => {
             </Box>
   
             {/* Mobile Logo */}
-            <Typography
-              variant="h6"
-              noWrap
-              component={Link}
-              to="/"
+            <Box
               sx={{
-                mr: 2,
+                height: 48, // Fixed height container
                 display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
-                fontWeight: 700,
-                letterSpacing: '.2rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                alignItems: 'center', // Center vertically
+                justifyContent: 'flex-start' // Align to left
               }}
             >
-              Culture Drop
-            </Typography>
-  
+              <Typography
+                variant="h6"
+                noWrap
+                component={Link}
+                to="/"
+                sx={{
+                  fontWeight: 700,
+                  letterSpacing: '.2rem',
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                Culture Drop
+              </Typography>
+            </Box>
             {/* Desktop Navigation */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'start' }}>
               {pages.map((page, index) => (
