@@ -28,7 +28,7 @@ const Carousel = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/products?featured=true`);
+        const response = await axios.get(`https://${URL}/api/products?featured=true`);
         setFeaturedProducts(response.data);
       } catch (error) {
         console.error('Error fetching featured products:', error);

@@ -44,7 +44,7 @@ const URL = import.meta.env.VITE_DATABASE_URL;
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
   loader: async () => {
-    const response = await axios.get(`http://${URL}/api/products`, { headers: {
+    const response = await axios.get(`https://${URL}/api/products`, { headers: {
       'Content-Type': 'application/json'
     }});
     return response.data;
@@ -122,7 +122,7 @@ function ProductsManagementPage() {
         await deleteProduct(productToDelete);
         
         // Fetch fresh data after deletion
-        await axios.get(`http://${URL}/api/products`, {
+        await axios.get(`https://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -203,7 +203,7 @@ function ProductsManagementPage() {
         await updateProduct(editingProduct._id, updatedProduct);
         
         // Fetch fresh data after update
-        await axios.get(`http://${URL}/api/products`, {
+        await axios.get(`https://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }

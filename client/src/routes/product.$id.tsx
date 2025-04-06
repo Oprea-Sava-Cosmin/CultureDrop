@@ -44,7 +44,7 @@ export const Route = createFileRoute('/product/$id')({
   component: ProductDetailPage,
   loader: async ({ params }) => {
     try {
-      const response = await axios.get(`http://${URL}/api/products/${params.id}`);
+      const response = await axios.get(`https://${URL}/api/products/${params.id}`);
       return { product: response.data };
     } catch (error) {
       console.error('Error loading product:', error);
