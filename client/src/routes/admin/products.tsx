@@ -260,21 +260,21 @@ function ProductsManagementPage() {
         )}
         
         <Paper
-          component={motion.div}
-          variants={tableVariants}
-          initial="hidden"
-          animate="visible"
-          elevation={3}
-          sx={{ width: '100%', overflow: 'hidden' }}
-        >
-          {products.length > 0 ? (
-            <>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Image</TableCell>
-                      <TableCell>Name</TableCell>
+            component={motion.div}
+            variants={tableVariants}
+            initial="hidden"
+            animate="visible"
+            elevation={3}
+            sx={{ width: '100%', overflow: 'hidden' }}
+          >
+            {products.length > 0 ? (
+              <>
+                <TableContainer sx={{ height: '510px' }}>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Image</TableCell>
+                        <TableCell>Name</TableCell>
                       <TableCell>Category</TableCell>
                       <TableCell>Culture</TableCell>
                       <TableCell>Price</TableCell>
