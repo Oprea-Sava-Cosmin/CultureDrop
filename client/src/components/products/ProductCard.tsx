@@ -22,6 +22,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  console.log(product);
   const theme = useTheme();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -67,20 +68,24 @@ const ProductCard = ({ product }: ProductCardProps) => {
           boxShadow: isHovered ? 8 : 2,
         }}
       >
-        <Box sx={{ position: 'relative', overflow: 'hidden', pt: '100%' }}>
-          <CardActionArea component={Link} to={`/product/${product.id}`}>
-            <motion.div variants={imageVariants}>
+        <Box sx={{ position: 'relative', overflow: 'hidden', height: '300px' }}>
+          <CardActionArea component={Link} to={`/product/${product._id}`}>
+            <motion.div variants={imageVariants} style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              height: '100%',
+              padding: '25px'
+            }}>
               <CardMedia
                 component="img"
                 image={product.image}
                 alt={product.name}
                 sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
+                  width: '80%',
+                  height: '80%',
+                  objectFit: 'contain',
+                  objectPosition: 'center'
                 }}
               />
             </motion.div>
@@ -153,7 +158,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 size="small"
                 variant="outlined"
                 component={Link}
-                to={`/product/${product.id}`}
+                to={`/product/${product._id}`}
               >
                 Details
               </Button>

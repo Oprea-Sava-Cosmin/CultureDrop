@@ -10,7 +10,6 @@ import {
   TextField,
   IconButton,
   Paper,
-  useTheme,
   Breadcrumbs,
 } from '@mui/material';
 import { Link } from '@tanstack/react-router';
@@ -31,7 +30,6 @@ export const Route = createFileRoute('/product/$id')({
 
 function ProductDetailPage() {
   const { id } = Route.useParams();
-  const theme = useTheme();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -64,7 +62,7 @@ function ProductDetailPage() {
     try {
       // In a real app, this would be an API call
       // For now, we'll find the product in our local data
-      const foundProduct = products.find((p) => p.id === id);
+      const foundProduct = products.find((p) => p._id === id);
       if (foundProduct) {
         setProduct(foundProduct);
       } else {

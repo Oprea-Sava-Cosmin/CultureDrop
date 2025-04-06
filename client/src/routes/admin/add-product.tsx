@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import axios from 'axios';
 import {
   Box,
   Typography,
@@ -20,10 +21,12 @@ import {
   Chip,
 } from '@mui/material';
 import { motion } from 'framer-motion';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import Layout from '../../components/layout/Layout';
 import { appStore, addProduct } from '../../store/appStore';
-import type { Product } from '../../store/appStore';
+// import type { Product } from '../../store/appStore';
+
 
 export const Route = createFileRoute('/admin/add-product')({ 
   component: AddProductPage,
@@ -46,30 +49,32 @@ function AddProductPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  const [formData, setFormData] = useState<{
-    name: string;
-    category: string;
-    subCategory: string;
-    price: string;
-    size: string[]; // 👈 this fixes the never[] issue
-    stock: string;
-    image: string;
-    description: string;
-    culture: string;
-    tags: string[];
-    featured: boolean;
-  }>({
+interface FormData {
+  name: string;
+  category: string;
+  subCategory: string;
+  price: string;
+  size: string[];
+  stock: string;
+  description: string;
+  culture: string;
+  tags: string[];
+  featured: boolean;
+  imageFile: File | null;
+}
+
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     category: '',
     subCategory: '',
     price: '',
     size: [],
     stock: '',
-    image: '',
     description: '',
     culture: '',
     tags: [],
     featured: false,
+    imageFile: null
   });
   
   const [formErrors, setFormErrors] = useState({
@@ -167,13 +172,13 @@ function AddProductPage() {
       valid = false;
     }
     
-    if (!formData.image.trim()) {
+    /*if (!formData.image.trim()) {
       newErrors.image = 'Image URL is required';
       valid = false;
     } else if (!formData.image.match(/^https?:\/\/.+/)) {
       newErrors.image = 'Please enter a valid URL';
       valid = false;
-    }
+    }*/
     
     if (!formData.description.trim()) {
       newErrors.description = 'Description is required';
@@ -194,62 +199,112 @@ function AddProductPage() {
     return valid;
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+    
+  //   if (!validateForm()) return;
+    
+  //   setIsSubmitting(true);
+  //   setError(null);
+    
+  //   try {
+  //     // Create the product object
+  //     const productData: Omit<Product, '_id'> = {
+  //       name: formData.name,
+  //       category: formData.category as 'clothing' | 'music' | 'accessories',
+  //       subCategory: formData.subCategory,
+  //       price: parseFloat(formData.price),
+  //       size: formData.size,
+  //       stock: parseInt(formData.stock),
+  //       image: formData.image,
+  //       description: formData.description,
+  //       culture: formData.culture,
+  //       tags: formData.tags,
+  //       featured: formData.featured,
+  //     };
+      
+  //     // Add the product to the store
+  //     const newProduct = addProduct(productData);
+      
+  //     // Show success message
+  //     setSuccess(true);
+      
+  //     // Reset form after successful submission
+  //     setFormData({
+  //       name: '',
+  //       category: '',
+  //       subCategory: '',
+  //       price: '',
+  //       size: [],
+  //       stock: '',
+  //       image: '',
+  //       description: '',
+  //       culture: '',
+  //       tags: [],
+  //       featured: false,
+  //     });
+      
+  //     // Redirect to product management after a short delay
+  //     setTimeout(() => {
+  //       navigate({ to: '/admin/products' });
+  //     }, 2000);
+  //   } catch (err) {
+  //     console.error('Error adding product:', err);
+  //     setError('An error occurred while adding the product. Please try again.');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
     setError(null);
-    
+
     try {
-      // Create the product object
-      const productData: Omit<Product, '_id'> = {
+      if(!formData.imageFile) {
+        throw new Error('Please select an image');
+      }
+
+      const imageData = new FormData();
+      imageData.append('file', formData.imageFile);
+      imageData.append('upload_preset', 'basicUnsignedUpload');
+      imageData.append('cloud_name', 'dh4yaghm0');
+      // imageData.append('upload_preset', 'your_upload_preset');
+
+      const uploadResponse = await axios.post(`https://api.cloudinary.com/v1_1/dh4yaghm0/image/upload`, imageData);
+
+      const productData = {
         name: formData.name,
         category: formData.category as 'clothing' | 'music' | 'accessories',
         subCategory: formData.subCategory,
         price: parseFloat(formData.price),
         size: formData.size,
         stock: parseInt(formData.stock),
-        image: formData.image,
         description: formData.description,
         culture: formData.culture,
         tags: formData.tags,
         featured: formData.featured,
+        image: uploadResponse.data.secure_url
       };
+
+      await addProduct(productData);
       
-      // Add the product to the store
-      const newProduct = addProduct(productData);
-      
-      // Show success message
       setSuccess(true);
-      
-      // Reset form after successful submission
-      setFormData({
-        name: '',
-        category: '',
-        subCategory: '',
-        price: '',
-        size: [],
-        stock: '',
-        image: '',
-        description: '',
-        culture: '',
-        tags: [],
-        featured: false,
-      });
-      
-      // Redirect to product management after a short delay
+
       setTimeout(() => {
         navigate({ to: '/admin/products' });
       }, 2000);
-    } catch (err) {
-      console.error('Error adding product:', err);
+    } catch (error) {
+      console.error('Error: ', error);
       setError('An error occurred while adding the product. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   // Animation variants
   const formVariants = {
@@ -428,7 +483,7 @@ function AddProductPage() {
               </Grid>
               
               <Grid size = {{xs:12}}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   label="Image URL"
                   name="image"
@@ -437,7 +492,35 @@ function AddProductPage() {
                   error={!!formErrors.image}
                   helperText={formErrors.image || 'Enter a valid URL for the product image'}
                   required
-                />
+                /> */}
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <input
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    id="raised-button-file"
+                    type="file"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setFormData(prev => ({ ...prev, imageFile: e.target.files![0] }));
+                      }
+                    }}
+                  />
+                  <label htmlFor="raised-button-file">
+                    <Button
+                      variant="outlined"
+                      component="span"
+                      fullWidth
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload Product Image
+                    </Button>
+                  </label>
+                  {formData.imageFile && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      Selected file: {formData.imageFile.name}
+                    </Typography>
+                  )}
+                </FormControl>
               </Grid>
               
               <Grid size = {{xs:12}}>

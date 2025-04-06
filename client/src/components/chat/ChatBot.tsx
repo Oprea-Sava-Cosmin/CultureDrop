@@ -9,7 +9,6 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemText,
   Avatar,
   Divider,
   Button,
@@ -29,8 +28,7 @@ import { useStore } from '@tanstack/react-store';
 import { appStore, toggleChat as toggleChatStore, addChatMessage } from '../../store/appStore';
 import { getProductRecommendations } from '../../services/deepseekService';
 import ChatProductCard from './ChatProductCard';
-import { Link } from '@tanstack/react-router';
-import type { Product, ChatMessage } from '../../store/appStore';
+import type { Product } from '../../store/appStore';
 import ReactMarkdown from 'react-markdown';
 
 // Use the ChatMessage type from appStore
@@ -45,7 +43,7 @@ const ChatBot = () => {
   // Get state from store
   const isOpen = useStore(appStore, (state) => state.isChatOpen);
   const messages = useStore(appStore, (state) => state.chatMessages);
-  const products = useStore(appStore, (state) => state.products);
+  // const products = useStore(appStore, (state) => state.products);
   
   // Sample product tags for quick selection
   const suggestedTags = ['hip-hop', 'streetwear', 'vinyl', 'urban', 'indie', 'accessories'];
@@ -305,7 +303,7 @@ const ChatBot = () => {
               </Typography>
               <Grid container spacing={2}>
                 {recommendedProducts.map((product) => (
-                  <Grid size= {{xs:12}} key={product.id}>
+                  <Grid size= {{xs:12}} key={product._id}>
                     <ChatProductCard 
                       product={product} 
                       onProductClick={() => {

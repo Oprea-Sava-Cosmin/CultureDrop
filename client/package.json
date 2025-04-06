@@ -43,5 +43,8 @@
         "vite": "^6.2.5",
         "vitest": "^3.0.5",
         "web-vitals": "^4.2.4"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.6.1"
     }
 }

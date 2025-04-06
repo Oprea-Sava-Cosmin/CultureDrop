@@ -6,13 +6,13 @@ interface ImageCarouselProps {
 }
 
 const images: string[] = [
-    "/images/landing_page/landingPageText1-trans.png",
-    "/images/landing_page/landingPageText2-trans.png",
-    "/images/landing_page/landingPageText3-trans.png",
-    "/images/landing_page/landingPageText1-trans.png",
-    "/images/landing_page/landingPageText2-trans.png",
-    "/images/landing_page/landingPageText3-trans.png",
-    "/images/landing_page/landingPageText2-trans.png",
+    "/images/landing_page/landingPageText1-trans.webp",
+    "/images/landing_page/landingPageText2-trans.webp",
+    "/images/landing_page/landingPageText3-trans.webp",
+    "/images/landing_page/landingPageText1-trans.webp",
+    "/images/landing_page/landingPageText2-trans.webp",
+    "/images/landing_page/landingPageText3-trans.webp",
+    "/images/landing_page/landingPageText2-trans.webp",
 ];
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ onCarouselEnd }) => {
