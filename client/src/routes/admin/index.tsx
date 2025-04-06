@@ -1,5 +1,4 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -22,7 +21,7 @@ import { appStore } from '../../store/appStore';
 
 export const Route = createFileRoute('/admin/')({ 
   component: AdminDashboard,
-  beforeLoad: ({ context }) => {
+  beforeLoad: () => {
     // Check if user is authenticated
     const isAuthenticated = appStore.state.isAuthenticated;
     if (!isAuthenticated) {

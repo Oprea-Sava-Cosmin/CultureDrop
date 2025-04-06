@@ -219,7 +219,7 @@ function AddProductPage() {
       };
       
       // Add the product to the store
-      const newProduct = addProduct(productData);
+      addProduct(productData);
       
       // Show success message
       setSuccess(true);

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Card,
   CardActionArea,
@@ -7,7 +6,6 @@ import {
   Typography,
   Box,
   Chip,
-  Button,
   IconButton,
   useTheme,
 } from '@mui/material';
@@ -24,7 +22,6 @@ interface ChatProductCardProps {
 
 const ChatProductCard = ({ product, onProductClick }: ChatProductCardProps) => {
   const theme = useTheme();
-  const [isHovered, setIsHovered] = useState(false);
   
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -50,8 +47,6 @@ const ChatProductCard = ({ product, onProductClick }: ChatProductCardProps) => {
         overflow: 'hidden',
         borderRadius: 2,
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={onProductClick}
     >
       <CardActionArea component={Link} to={`/product/${product._id}`}>
