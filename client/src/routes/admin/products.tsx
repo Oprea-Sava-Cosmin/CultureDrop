@@ -44,7 +44,7 @@ const URL = import.meta.env.VITE_DATABASE_URL;
 export const Route = createFileRoute('/admin/products')({ 
   component: ProductsManagementPage,
   loader: async () => {
-    const response = await axios.get(`http://${URL}/api/products`, { headers: {
+    const response = await axios.get(`https://${URL}/api/products`, { headers: {
       'Content-Type': 'application/json'
     }});
     return response.data;
@@ -122,7 +122,7 @@ function ProductsManagementPage() {
         await deleteProduct(productToDelete);
         
         // Fetch fresh data after deletion
-        await axios.get(`http://${URL}/api/products`, {
+        await axios.get(`https://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -203,7 +203,7 @@ function ProductsManagementPage() {
         await updateProduct(editingProduct._id, updatedProduct);
         
         // Fetch fresh data after update
-        await axios.get(`http://${URL}/api/products`, {
+        await axios.get(`https://${URL}/api/products`, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -260,21 +260,21 @@ function ProductsManagementPage() {
         )}
         
         <Paper
-          component={motion.div}
-          variants={tableVariants}
-          initial="hidden"
-          animate="visible"
-          elevation={3}
-          sx={{ width: '100%', overflow: 'hidden' }}
-        >
-          {products.length > 0 ? (
-            <>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Image</TableCell>
-                      <TableCell>Name</TableCell>
+            component={motion.div}
+            variants={tableVariants}
+            initial="hidden"
+            animate="visible"
+            elevation={3}
+            sx={{ width: '100%', overflow: 'hidden' }}
+          >
+            {products.length > 0 ? (
+              <>
+                <TableContainer sx={{ height: '510px' }}>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Image</TableCell>
+                        <TableCell>Name</TableCell>
                       <TableCell>Category</TableCell>
                       <TableCell>Culture</TableCell>
                       <TableCell>Price</TableCell>

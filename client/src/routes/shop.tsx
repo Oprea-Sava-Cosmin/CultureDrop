@@ -16,7 +16,7 @@ const URL = import.meta.env.VITE_DATABASE_URL;
 export const Route = createFileRoute('/shop')({ 
   component: ShopPage,
   loader: async () => {
-    const response = await axios.get(`http://${URL}/api/products`, { headers: {
+    const response = await axios.get(`https://${URL}/api/products`, { headers: {
       'Content-Type': 'application/json'
     }});
 

@@ -50,7 +50,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchProductCount = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/products/count`);
+        const response = await axios.get(`https://${URL}/api/products/count`);
         setProductCount(response.data.count);
       } catch (error) {
         console.error('Error fetching product count:', error);
@@ -59,7 +59,7 @@ function AdminDashboard() {
     
     const fetchUserCount = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/auth/count`);
+        const response = await axios.get(`https://${URL}/api/auth/count`);
         setUserCount(response.data.count);
       } catch (error) {
         console.error('Error fetching product count:', error);
@@ -68,7 +68,7 @@ function AdminDashboard() {
 
     const fetchTransactionCout = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/transactions/count`);
+        const response = await axios.get(`https://${URL}/api/transactions/count`);
         setTransactionCount(response.data.count);
       } catch (error) {
         console.error('Error fetching transactions count: ', error);
@@ -77,7 +77,7 @@ function AdminDashboard() {
 
     const fetchTransactionValue = async () => {
       try {
-        const response = await axios.get(`http://${URL}/api/transactions/value`);
+        const response = await axios.get(`https://${URL}/api/transactions/value`);
         // console.log(response.data.value);
         setTransactionValue(response.data.value.toFixed(2));
       } catch (error) {

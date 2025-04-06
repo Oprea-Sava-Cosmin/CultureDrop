@@ -1,7 +1,7 @@
 import { Store } from '@tanstack/react-store';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'localhost:5000';
+const API_URL = import.meta.env.VITE_DATABASE_URL;
 
 export interface LoginCredentials {
   username: string;
@@ -160,7 +160,7 @@ export const filterProducts = (category?: string | null, culture?: string | null
 export const updateProduct = async (productId: string, updates: Partial<Product>) => {
   try {
     const token = localStorage.getItem('adminToken');
-    const response = await axios.put(`http://${API_URL}/api/products/${productId}`, updates, { 
+    const response = await axios.put(`httpss://${API_URL}/api/products/${productId}`, updates, { 
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -280,7 +280,7 @@ export const clearChatMessages = () => {
 // Admin actions
 export const login = async (credentials: AdminCredentials) => {
   try {
-    const response = await axios.post(`http://${API_URL}/api/auth/login`, credentials);
+    const response = await axios.post(`https://${API_URL}/api/auth/login`, credentials);
     const {token, user} = response.data;
 
     if(token) {
@@ -310,7 +310,7 @@ export const login = async (credentials: AdminCredentials) => {
 
 export const signup = async (userData: SignupData) => {
   try {
-    const response = await axios.post(`http://${API_URL}/api/auth/signup`, userData);
+    const response = await axios.post(`https://${API_URL}/api/auth/signup`, userData);
     const token = response.data;
 
     if(token) {
@@ -361,7 +361,7 @@ export const addProduct = async (product: Omit<Product, '_id'>) => {
   try {
     const token = appStore.state.adminToken || localStorage.getItem('adminToken');
 
-    const response = await axios.post(`http://${API_URL}/api/products/create`, product, {
+    const response = await axios.post(`https://${API_URL}/api/products/create`, product, {
       headers: {'Authorization': `Bearer ${token}`}
     });
 
@@ -386,7 +386,7 @@ export const addProduct = async (product: Omit<Product, '_id'>) => {
 export const deleteProduct = async (productId: string) => {
   try {
     const token = localStorage.getItem('adminToken');
-    await axios.delete(`http://${API_URL}/api/products/${productId}`, { 
+    await axios.delete(`https://${API_URL}/api/products/${productId}`, { 
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -419,7 +419,7 @@ export const deleteProduct = async (productId: string) => {
 export const fetchProducts = async () => {
   try {
     const token = localStorage.getItem('adminToken');
-    const response = await axios.get(`http://${API_URL}/api/products`, {
+    const response = await axios.get(`https://${API_URL}/api/products`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

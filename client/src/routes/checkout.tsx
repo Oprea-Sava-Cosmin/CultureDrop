@@ -115,7 +115,7 @@ function CheckoutPage() {
         return;
       }
 
-      await axios.post(`http://${URL}/api/transactions`, {
+      await axios.post(`https://${URL}/api/transactions`, {
         amount: total
       }, {
         headers: {
