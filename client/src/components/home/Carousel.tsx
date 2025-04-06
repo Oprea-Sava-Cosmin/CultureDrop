@@ -92,6 +92,56 @@ const Carousel = () => {
     }
   };
 
+  // Custom transform styles based on number of products for mobile (vertical layout)
+  const getMobileTransformStyles = () => {
+    const count = productImages.length;
+    if (count <= 1) return ["rotate(0deg)"];
+    if (count === 2) return ["rotate(-5deg) translate(0, -100px)", "rotate(5deg) translate(0, 100px)"];
+    if (count === 3) return [
+      "rotate(-5deg) translate(0, -200px)", 
+      "rotate(0deg)", 
+      "rotate(5deg) translate(0, 200px)"
+    ];
+    if (count === 4) return [
+      "rotate(-5deg) translate(0, -300px)",
+      "rotate(-2deg) translate(0, -100px)",
+      "rotate(2deg) translate(0, 100px)",
+      "rotate(5deg) translate(0, 300px)"
+    ];
+    // Default for 5 or more
+    return [
+      "rotate(-5deg) translate(0, -400px)",
+      "rotate(-3deg) translate(0, -200px)",
+      "rotate(0deg)",
+      "rotate(3deg) translate(0, 200px)",
+      "rotate(5deg) translate(0, 400px)",
+    ];
+  };
+
+  // Add state for animation
+  const [animationIndex, setAnimationIndex] = useState(0);
+  
+  // Add auto-scrolling effect with smoother transitions
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationIndex(prev => (prev + 1) % limitedProducts.length);
+    }, 5000); // Longer interval for smoother experience (5 seconds)
+    
+    return () => clearInterval(interval);
+  }, [limitedProducts.length]);
+  
+  // Get transform styles with animation offset and smoother transitions
+  const getAnimatedMobileStyles = () => {
+    const baseStyles = getMobileTransformStyles();
+    if (limitedProducts.length <= 1) return baseStyles;
+    
+    // Rotate the styles array based on animation index
+    return [
+      ...baseStyles.slice(animationIndex),
+      ...baseStyles.slice(0, animationIndex)
+    ];
+  };
+
   if (isMobile) {
     return (
       <Box
@@ -108,22 +158,12 @@ const Carousel = () => {
           padding: 2,
         }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 4, 
-            fontWeight: 'bold',
-            color: mode === 'dark' ? 'white' : 'black',
-            textAlign: 'center'
-          }}
-        >
-          Featured Products
-        </Typography>
+        {/* Removed the Featured Products title */}
         
         <Box 
           sx={{ 
             width: '100%', 
-            height: '70vh',
+            height: '85vh', // Increased height since title is removed
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
@@ -132,10 +172,10 @@ const Carousel = () => {
           <BounceCards
             images={productImages}
             containerWidth={300}
-            containerHeight={400}
+            containerHeight={600}
             enableHover={true}
-            transformStyles={getTransformStyles()}
-            className={`bounce-cards-${mode}`}
+            transformStyles={getAnimatedMobileStyles()}
+            className={`bounce-cards-${mode} bounce-cards-vertical`}
             onCardClick={handleCardClick}
           />
         </Box>
@@ -209,8 +249,61 @@ const Carousel = () => {
             border-color: #fff;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
           }
+          
+          .bounce-cards-vertical .card {
+            margin: 20px 0;
+            transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
+          }
+          
+          .bounce-cards-vertical .card:hover {
+            transform: scale(1.05) translateX(10px) !important;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+          
+          @keyframes fadeInOut {
+            0% { opacity: 0.7; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(0.95); }
+          }
+          
+          .bounce-cards-vertical .card {
+            animation: fadeInOut 8s infinite;
+            animation-delay: calc(var(--card-index, 0) * 1.5s);
+          }
         `}
       </style>
+      {`
+        .bounce-cards-dark .card {
+          border-color: #333;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .bounce-cards-light .card {
+          border-color: #fff;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bounce-cards-vertical .card {
+          margin: 20px 0;
+          transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
+        }
+        
+        .bounce-cards-vertical .card:hover {
+          transform: scale(1.05) translateX(10px) !important;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes fadeInOut {
+          0% { opacity: 0.7; transform: scale(0.95); }
+          50% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0.7; transform: scale(0.95); }
+        }
+        
+        .bounce-cards-vertical .card {
+          animation: fadeInOut 8s infinite;
+          animation-delay: calc(var(--card-index, 0) * 1.5s);
+        }
+      `}
     </div>
   );
 };
