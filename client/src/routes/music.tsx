@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
 import {
   Box,
   Typography,
@@ -13,8 +12,6 @@ import {
   Chip,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 import AlbumIcon from '@mui/icons-material/Album';
 import {useTheme as useMuiTheme} from '@mui/material';
 import Layout from '../components/layout/Layout';
@@ -74,10 +71,8 @@ const musicReleases = [
 ];
 
 function MusicPage() {
-  const muiTheme = useMuiTheme();
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  
-  // Animation variants
+  const muiTheme = useMuiTheme();  
+
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
@@ -97,11 +92,7 @@ function MusicPage() {
     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     hover: { y: -10, transition: { duration: 0.3 } },
   };
-  
-  // Toggle play/pause
-  const togglePlay = (id: string) => {
-    setPlayingId(playingId === id ? null : id);
-  };
+
   
   return (
     <Layout>

@@ -13,7 +13,7 @@ import {
   useTheme,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import StarIcon from '@mui/icons-material/Star'; // Add this import
+import StarIcon from '@mui/icons-material/Star';
 import { motion } from 'framer-motion';
 import { addToCart } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
