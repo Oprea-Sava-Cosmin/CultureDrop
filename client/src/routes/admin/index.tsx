@@ -27,6 +27,7 @@ export const Route = createFileRoute('/admin/')({
     // Check if user is authenticated
     const isAuthenticated = appStore.state.isAuthenticated;
     const token = localStorage.getItem('adminToken');
+
     if (!isAuthenticated) {
       throw redirect({
         to: '/auth',
@@ -69,7 +70,7 @@ function AdminDashboard() {
 
     const fetchTransactionCout = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/transactions/count');
+        const response = await axios.get(`http://${URL}/api/transactions/count`);
         setTransactionCount(response.data.count);
       } catch (error) {
         console.error('Error fetching transactions count: ', error);
@@ -78,7 +79,7 @@ function AdminDashboard() {
 
     const fetchTransactionValue = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/transactions/value');
+        const response = await axios.get(`http://${URL}/api/transactions/value`);
         // console.log(response.data.value);
         setTransactionValue(response.data.value.toFixed(2));
       } catch (error) {

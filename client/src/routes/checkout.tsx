@@ -24,6 +24,7 @@ import { appStore, clearCart } from '../store/appStore';
 import axios from 'axios';
 import { redirect } from '@tanstack/react-router';
 
+const URL = import.meta.env.VITE_DATABASE_URL;
 export const Route = createFileRoute('/checkout')({
   component: CheckoutPage,
   beforeLoad: () => {
@@ -114,7 +115,7 @@ function CheckoutPage() {
         return;
       }
 
-      const response = await axios.post('http://localhost:5000/api/transactions', {
+      await axios.post(`http://${URL}/api/transactions`, {
         amount: total
       }, {
         headers: {
