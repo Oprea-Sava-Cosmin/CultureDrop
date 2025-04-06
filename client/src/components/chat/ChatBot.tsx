@@ -7,10 +7,7 @@ import {
   TextField,
   IconButton,
   Paper,
-  List,
-  ListItem,
   Avatar,
-  Button,
   CircularProgress,
   Chip,
   useTheme,
@@ -28,10 +25,12 @@ import { appStore, toggleChat as toggleChatStore, addChatMessage, setRecommended
 import { getProductRecommendations } from '../../services/deepseekService';
 import ChatProductCard from './ChatProductCard';
 import ReactMarkdown from 'react-markdown';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 
 
 const ChatBot = () => {
   const theme = useTheme();
+  const { culture, mode } = useCustomTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -134,19 +133,94 @@ const ChatBot = () => {
     setInput(prev => prev + (prev ? ' ' : '') + tag);
   };
   
+  // Update color function to use ThemeContext colors with lighter dark mode colors
+  const getCultureColors = () => {
+    switch (culture.toLowerCase()) {
+      case 'punk':
+        return {
+          primary: mode === 'dark' ? '#FF4D6E' : '#D72638',     // Lightened for dark mode
+          secondary: mode === 'dark' ? '#FF2E63' : '#1B1B1E',   
+          accent: mode === 'dark' ? '#FF2E63' : '#D72638',      
+          button: mode === 'dark' ? '#FF4D6E' : '#D72638',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#000000' : '#EEEEEE',      
+          responseBg: mode === 'dark' ? '#1F1F1F' : '#FFFFFF'   
+        };
+      case 'hiphop':
+        return {
+          primary: mode === 'dark' ? '#FFD54F' : '#2D132C',     // Lightened for dark mode
+          secondary: mode === 'dark' ? '#C28800' : '#FFD700',   
+          accent: mode === 'dark' ? '#C28800' : '#FFD700',      
+          button: mode === 'dark' ? '#FFD54F' : '#FFD700',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#111111' : '#F0F0F0',      
+          responseBg: mode === 'dark' ? '#1D1D1D' : '#FFFFFF'   
+        };
+      case 'urban':
+        return {
+          primary: mode === 'dark' ? '#F9A825' : '#2C3E50',     // Lightened for dark mode
+          secondary: mode === 'dark' ? '#F39C12' : '#E67E22',   
+          accent: mode === 'dark' ? '#F39C12' : '#E67E22',      
+          button: mode === 'dark' ? '#F9A825' : '#E67E22',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#121212' : '#F5F5F5',      
+          responseBg: mode === 'dark' ? '#1E1E1E' : '#FFFFFF'   
+        };
+      case 'indie':
+        return {
+          primary: mode === 'dark' ? '#F9F871' : '#8D99AE',     // Lightened for dark mode
+          secondary: mode === 'dark' ? '#F1D302' : '#EF8354',   
+          accent: mode === 'dark' ? '#F1D302' : '#EF8354',      
+          button: mode === 'dark' ? '#F9F871' : '#EF8354',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#0D0D0D' : '#F9F9F9',      
+          responseBg: mode === 'dark' ? '#1A1A1A' : '#FFFFFF'   
+        };
+      case 'streetwear':
+        return {
+          primary: mode === 'dark' ? '#FF8A80' : '#1A1A1A',     // Lightened for dark mode
+          secondary: mode === 'dark' ? '#FF6B6B' : '#FF3B3F',   
+          accent: mode === 'dark' ? '#FF6B6B' : '#FF3B3F',      
+          button: mode === 'dark' ? '#FF8A80' : '#FF3B3F',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#0A0A0A' : '#F8F8F8',      
+          responseBg: mode === 'dark' ? '#181818' : '#FFFFFF'   
+        };
+      case 'goth':
+        return {
+          primary: mode === 'dark' ? '#CE93D8' : '#7b1fa2',     // Lightened for dark mode
+          secondary: '#212121',
+          accent: '#9c27b0',
+          button: mode === 'dark' ? '#CE93D8' : '#7b1fa2',      // Lightened for dark mode
+          chatBg: mode === 'dark' ? '#121212' : '#f5f5f5',      
+          responseBg: mode === 'dark' ? '#1C1C1C' : '#FFFFFF'   
+        };
+      default:
+        return {
+          primary: theme.palette.primary.main,
+          secondary: theme.palette.secondary.main,
+          accent: theme.palette.mode === 'dark' ? theme.palette.secondary.main : theme.palette.primary.main,
+          button: theme.palette.primary.main,
+          chatBg: theme.palette.background.default,             
+          responseBg: mode === 'dark' ? '#1E1E1E' : '#FFFFFF'   
+        };
+    }
+  };
+  
+  const cultureColors = getCultureColors();
+  
   return (
     <>
-      {/* Chat button */}
+      {/* Chat toggle button */}
       <Fab
         color="primary"
         aria-label="chat"
+        onClick={toggleChat}
         sx={{
           position: 'fixed',
           bottom: 20,
           right: 20,
           zIndex: 1000,
+          backgroundColor: cultureColors.button,
+          '&:hover': {
+            backgroundColor: cultureColors.accent,
+          },
         }}
-        onClick={toggleChat}
       >
         <ChatIcon />
       </Fab>
@@ -158,10 +232,9 @@ const ChatBot = () => {
         onClose={toggleChat}
         PaperProps={{
           sx: {
-            width: isMobile ? '100%' : '800px',
-            maxWidth: '100%',
-            borderRadius: isMobile ? 0 : '12px 0 0 12px',
-            overflow: 'hidden',
+            width: isMobile ? '100%' : 400,
+            backgroundColor: cultureColors.chatBg,
+            color: mode === 'dark' ? '#fff' : '#000',
           },
         }}
       >
@@ -169,229 +242,210 @@ const ChatBot = () => {
         <Box
           sx={{
             p: 2,
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            backgroundColor: cultureColors.primary,
+            color: '#fff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: 1,
-            borderColor: 'divider',
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <SmartToyIcon sx={{ mr: 1 }} />
-            <Typography variant="h6">Shopping Assistant</Typography>
+            <Typography variant="h6">Style Assistant</Typography>
           </Box>
-          <IconButton onClick={toggleChat} color="inherit">
+          <IconButton onClick={toggleChat} sx={{ color: '#fff' }}>
             <CloseIcon />
           </IconButton>
         </Box>
-        
-        {/* Chat content */}
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: isMobile ? 'column' : 'row',
-          height: 'calc(100% - 64px)' 
-        }}>
-          {/* Product recommendations panel - desktop version */}
-          {!isMobile && (
-            <Box 
-              sx={{ 
-                width: '600px', 
-                borderRight: 1, 
-                borderColor: 'divider',
-                display: recommendedProducts.length > 0 ? 'block' : 'none',
-                overflow: 'auto',
-                p: 2
-              }}
-            >
-              <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                Recommended Products
+
+        {/* Chat messages */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflow: 'auto',
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          <AnimatePresence>
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: message.sender === 'user' ? 'row-reverse' : 'row',
+                    alignItems: 'flex-start',
+                    mb: 2,
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      bgcolor: message.sender === 'user' ? cultureColors.accent : cultureColors.primary,
+                      width: 36,
+                      height: 36,
+                    }}
+                  >
+                    {message.sender === 'user' ? <PersonIcon /> : <SmartToyIcon />}
+                  </Avatar>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      ml: message.sender === 'user' ? 0 : 1,
+                      mr: message.sender === 'user' ? 1 : 0,
+                      backgroundColor: message.sender === 'user' 
+                        ? cultureColors.secondary 
+                        : cultureColors.responseBg, // Use the new responseBg for bot messages
+                      color: message.sender === 'user' 
+                        ? '#fff' 
+                        : (mode === 'dark' ? '#fff' : '#000'), // Adjust text color based on sender and mode
+                      borderRadius: 2,
+                      maxWidth: '80%',
+                    }}
+                  >
+                    {message.sender === 'bot' ? (
+                      <ReactMarkdown
+                        components={{
+                          p: ({node, ...props}) => (
+                            <Typography 
+                              variant="body1" 
+                              sx={{ 
+                                color: 'inherit',
+                                '& a': {
+                                  color: cultureColors.accent,
+                                  textDecoration: 'underline'
+                                }
+                              }} 
+                              {...props} 
+                            />
+                          )
+                        }}
+                      >
+                        {message.text}
+                      </ReactMarkdown>
+                    ) : (
+                      <Typography>{message.text}</Typography>
+                    )}
+                  </Paper>
+                </Box>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {/* Typing indicator */}
+          {isTyping && (
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 5 }}>
+              <CircularProgress size={20} sx={{ color: cultureColors.primary }} />
+              <Typography variant="body2" sx={{ ml: 1, color: 'text.secondary' }}>
+                Assistant is typing...
               </Typography>
-              
+            </Box>
+          )}
+
+          {/* Recommended products */}
+          {recommendedProducts.length > 0 && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
+                Recommended Products:
+              </Typography>
               <Grid container spacing={2}>
                 {recommendedProducts.map((product) => (
-                  <Grid size={{xs:12}} key={product._id}>
+                  <Grid size={{xs:12, md:6}} key={product._id}>
                     <ChatProductCard 
                       product={product} 
-                      onProductClick={() => toggleChat()} 
+                      onProductClick={() => {
+                        toggleChat();
+                      }}
                     />
                   </Grid>
                 ))}
               </Grid>
             </Box>
           )}
-          
-          {/* Chat messages area */}
-          <Box sx={{ 
-            flexGrow: 1, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            height: isMobile ? '100%' : '100%',
-            justifyContent: 'space-between'
-          }}>
-            {/* Messages list */}
-            <List 
-              sx={{ 
-                flexGrow: 1, 
-                overflow: 'auto', 
-                p: 2, 
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.05)' : 'rgba(0,0,0,0.02)',
-                maxHeight: isMobile ? 'calc(100vh - 200px)' : 'auto'
-              }}
-            >
-              <AnimatePresence>
-                {messages.map((msg, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ListItem
-                      sx={{
-                        flexDirection: msg.sender === 'user' ? 'row-reverse' : 'row',
-                        alignItems: 'flex-start',
-                        mb: 2,
-                      }}
-                    >
-                      <Avatar
-                        sx={{
-                          bgcolor: msg.sender === 'user' ? 'primary.main' : 'secondary.main',
-                          ml: msg.sender === 'user' ? 1 : 0,
-                          mr: msg.sender === 'user' ? 0 : 1,
-                        }}
-                      >
-                        {msg.sender === 'user' ? <PersonIcon /> : <SmartToyIcon />}
-                      </Avatar>
-                      <Paper
-                        elevation={1}
-                        sx={{
-                          p: 2,
-                          maxWidth: '70%',
-                          backgroundColor: msg.sender === 'user' ? 'primary.light' : 'background.paper',
-                          color: msg.sender === 'user' ? 'primary.contrastText' : 'text.primary',
-                          borderRadius: 2,
-                        }}
-                      >
-                        <ReactMarkdown>{msg.text}</ReactMarkdown>
-                      </Paper>
-                    </ListItem>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              
-              {/* Typing indicator */}
-              {isTyping && (
-                <ListItem sx={{ mb: 2 }}>
-                  <Avatar sx={{ bgcolor: 'secondary.main', mr: 1 }}>
-                    <SmartToyIcon />
-                  </Avatar>
-                  <Paper
-                    elevation={1}
-                    sx={{
-                      p: 2,
-                      maxWidth: '70%',
-                      backgroundColor: 'background.paper',
-                      borderRadius: 2,
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CircularProgress size={16} sx={{ mr: 1 }} />
-                      <Typography variant="body2">Thinking...</Typography>
-                    </Box>
-                  </Paper>
-                </ListItem>
-              )}
-              
-              <div ref={messagesEndRef} />
-            </List>
-            
-            {/* Bottom section with recommendations, tags and input */}
-            <Box sx={{ 
-              display: 'flex',
-              flexDirection: 'column',
-              borderTop: 1,
-              borderColor: 'divider',
-              backgroundColor: theme.palette.background.paper,
-            }}>
-              {/* Mobile recommendations panel */}
-              {isMobile && recommendedProducts.length > 0 && (
-                <Box 
-                  sx={{ 
-                    p: 1.5,
-                    maxHeight: '30vh',
-                    overflow: 'auto',
-                    borderBottom: 1,
-                    borderColor: 'divider',
-                  }}
-                >
-                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                    Recommended Products
-                  </Typography>
-                  
-                  <Grid container spacing={1}>
-                    {recommendedProducts.map((product) => (
-                      <Grid size={{xs:6}} key={product._id}>
-                        <ChatProductCard 
-                          product={product} 
-                          onProductClick={() => toggleChat()} 
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              )}
-              
-              {/* Quick tags */}
-              <Box sx={{ p: 1, borderBottom: 1, borderColor: 'divider' }}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
-                  {suggestedTags.map((tag) => (
-                    <Chip
-                      key={tag}
-                      label={tag}
-                      size="small"
-                      onClick={() => handleTagClick(tag)}
-                      sx={{ 
-                        '&:hover': { 
-                          backgroundColor: theme.palette.primary.light,
-                          color: theme.palette.primary.contrastText
-                        } 
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-              
-              {/* Input area */}
-              <Box sx={{ p: 2, backgroundColor: 'background.paper' }}>
-                <Box sx={{ display: 'flex' }}>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Ask about products..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    size="small"
-                    multiline
-                    maxRows={3}
-                    sx={{ mr: 1 }}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSendMessage}
-                    disabled={isTyping || input.trim() === ''}
-                    sx={{ minWidth: 'auto' }}
-                  >
-                    <SendIcon />
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
+
+          <div ref={messagesEndRef} />
+        </Box>
+
+        {/* Suggested tags */}
+        <Box sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
+          <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+            Suggested:
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {suggestedTags.map((tag) => (
+              <Chip
+                key={tag}
+                label={tag}
+                size="small"
+                onClick={() => handleTagClick(tag)}
+                sx={{ 
+                  backgroundColor: cultureColors.primary,
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: cultureColors.accent,
+                  }
+                }}
+              />
+            ))}
           </Box>
+        </Box>
+
+        {/* Chat input */}
+        <Box
+          sx={{
+            p: 2,
+            borderTop: `1px solid ${theme.palette.divider}`,
+            backgroundColor: theme.palette.background.paper,
+            display: 'flex',
+          }}
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+        >
+          <TextField
+            fullWidth
+            placeholder="Ask about products or styles..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            variant="outlined"
+            size="small"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 4,
+                '&.Mui-focused fieldset': {
+                  borderColor: cultureColors.primary,
+                },
+              },
+            }}
+          />
+          <IconButton
+            type="submit"
+            sx={{ 
+              ml: 1, 
+              backgroundColor: cultureColors.primary,
+              color: '#fff',
+              '&:hover': {
+                backgroundColor: cultureColors.accent,
+              },
+              '&.Mui-disabled': {
+                backgroundColor: theme.palette.action.disabledBackground,
+              },
+            }}
+            disabled={input.trim() === '' || isTyping}
+          >
+            <SendIcon />
+          </IconButton>
         </Box>
       </Drawer>
     </>
