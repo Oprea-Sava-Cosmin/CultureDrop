@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 import {
   Box,
   Typography,
@@ -11,6 +12,7 @@ import {
   IconButton,
   Paper,
   Breadcrumbs,
+  CircularProgress,
 } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
@@ -20,24 +22,38 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 import Layout from '../components/layout/Layout';
-import { useStore } from '@tanstack/react-store';
-import { appStore, addToCart } from '../store/appStore';
+import { addToCart } from '../store/appStore';
 import type { Product } from '../store/appStore';
+
+interface LoaderData {
+  product: Product | null;
+  error?: string;
+}
 
 export const Route = createFileRoute('/product/$id')({
   component: ProductDetailPage,
+  loader: async ({ params }) => {
+    console.log(params)
+    try {
+      const response = await axios.get(`http://localhost:5000/api/products/${params.id}`);
+      return { product: response.data };
+    } catch (error) {
+      console.error('Error loading product:', error);
+      return { product: null, error: 'Failed to load product' };
+    }
+  },
+  pendingComponent: () => (
+    <Layout>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    </Layout>
+  ),
 });
 
 function ProductDetailPage() {
-  const { id } = Route.useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const { product: loadedProduct, error: loadError } = Route.useLoaderData() as LoaderData;
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Get products and cart functions from store
-  const products = useStore(appStore, (state) => state.products);
-  // const addToCart = useStore(appStore, (state) => state.addToCart);
 
   // Animation variants
   const pageVariants = {
@@ -56,26 +72,6 @@ function ProductDetailPage() {
     animate: { opacity: 1, x: 0, transition: { duration: 0.5, delay: 0.2 } },
   };
 
-  // Find product by ID
-  useEffect(() => {
-    setLoading(true);
-    try {
-      // In a real app, this would be an API call
-      // For now, we'll find the product in our local data
-      const foundProduct = products.find((p) => p._id === id);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      } else {
-        setError('Product not found');
-      }
-    } catch (err) {
-      setError('Error loading product');
-      console.error('Error loading product:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [id, products]);
-
   // Handle quantity change
   const handleQuantityChange = (value: number) => {
     if (value >= 1) {
@@ -85,30 +81,19 @@ function ProductDetailPage() {
 
   // Handle add to cart
   const handleAddToCart = () => {
-    if (product) {
-      addToCart(product, quantity);
+    if (loadedProduct) {
+      addToCart(loadedProduct, quantity);
       // Reset quantity after adding to cart
       setQuantity(1);
     }
   };
 
-  // Loading state
-  if (loading) {
-    return (
-      <Layout>
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-          <Typography>Loading product...</Typography>
-        </Box>
-      </Layout>
-    );
-  }
-
   // Error state
-  if (error || !product) {
+  if (loadError || !loadedProduct) {
     return (
       <Layout>
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-          <Typography color="error">{error || 'Product not found'}</Typography>
+          <Typography color="error">{loadError || 'Product not found'}</Typography>
         </Box>
       </Layout>
     );
@@ -131,10 +116,7 @@ function ProductDetailPage() {
           >
             <Link to="/">Home</Link>
             <Link to="/shop">Shop</Link>
-            {/* <Link to={`/shop?category=${product.category}`}>
-              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-            </Link> */}
-            <Typography color="text.primary">{product.name}</Typography>
+            <Typography color="text.primary">{loadedProduct.name}</Typography>
           </Breadcrumbs>
 
           <Grid container spacing={4}>
@@ -153,8 +135,8 @@ function ProductDetailPage() {
                 >
                   <Box
                     component="img"
-                    src={product.image}
-                    alt={product.name}
+                    src={loadedProduct.image}
+                    alt={loadedProduct.name}
                     sx={{
                       position: 'absolute',
                       top: 0,
@@ -175,13 +157,13 @@ function ProductDetailPage() {
                   {/* Tags */}
                   <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <Chip 
-                      label={product.culture} 
+                      label={loadedProduct.culture} 
                       color="primary" 
                       size="small"
                       sx={{ textTransform: 'capitalize' }}
                     />
                     <Chip 
-                      label={product.category} 
+                      label={loadedProduct.category} 
                       color="secondary" 
                       size="small"
                       sx={{ textTransform: 'capitalize' }}
@@ -190,19 +172,19 @@ function ProductDetailPage() {
 
                   {/* Product Name */}
                   <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-                    {product.name}
+                    {loadedProduct.name}
                   </Typography>
 
                   {/* Price */}
                   <Typography variant="h4" color="primary" sx={{ mb: 2 }}>
-                    ${product.price.toFixed(2)}
+                    ${loadedProduct.price.toFixed(2)}
                   </Typography>
 
                   <Divider sx={{ my: 2 }} />
 
                   {/* Description */}
                   <Typography variant="body1" sx={{ mb: 4 }}>
-                    {product.description}
+                    {loadedProduct.description}
                   </Typography>
 
                   {/* Quantity Selector */}
