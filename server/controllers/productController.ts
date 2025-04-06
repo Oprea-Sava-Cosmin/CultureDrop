@@ -111,3 +111,13 @@ export const deleteProduct = async (req: Request, res: Response) => {
         res.status(500).json({message: 'Error deleting product'});
     }
 }
+
+export const getProductCount = async (req: Request, res: Response) => {
+    try {
+        const count = await Product.countDocuments();
+        res.json({count});
+    } catch (error) {
+        console.error('Error counting products: ', error);
+        res.status(500).json({message: 'Error counting products'});
+    }
+}
