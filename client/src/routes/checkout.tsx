@@ -131,9 +131,6 @@ function CheckoutPage() {
     } catch (error) {
       console.error('Error processign order: ', error);
     }
-    
-    // In a real app, you would redirect to an order confirmation page
-    // with the order details and order number
   };
   
   // Render step content based on active step
