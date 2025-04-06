@@ -21,9 +21,22 @@ import PaymentForm from '../components/checkout/PaymentForm';
 import OrderSummary from '../components/checkout/OrderSummary';
 import { useStore } from '@tanstack/react-store';
 import { appStore, clearCart } from '../store/appStore';
+import axios from 'axios';
+import { redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/checkout')({
   component: CheckoutPage,
+  beforeLoad: () => {
+    const isAuthenticated = appStore.state.isAuthenticated;
+    if(!isAuthenticated) {
+      throw redirect({
+        to: '/auth',
+        search: {
+          redirect: '/checkout'
+        }
+      });
+    }
+  }
 });
 
 // Steps for checkout process
@@ -93,15 +106,30 @@ function CheckoutPage() {
     handleNext();
   };
   
-  const handlePlaceOrder = () => {
-    // In a real app, this would submit the order to an API
-    // For now, we'll just simulate a successful order
-    
-    // Show success message
+  const handlePlaceOrder = async () => {
+    try {
+      const userToken = localStorage.getItem('userToken');
+      if(!userToken) {
+        navigate({to: '/auth'});
+        return;
+      }
+
+      const response = await axios.post('http://localhost:5000/api/transactions', {
+        amount: total
+      }, {
+        headers: {
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+     
+
     setOrderComplete(true);
-    
-    // Clear cart
     clearCart();
+    // navigate('/order-confirmation');
+    } catch (error) {
+      console.error('Error processign order: ', error);
+    }
     
     // In a real app, you would redirect to an order confirmation page
     // with the order details and order number

@@ -70,6 +70,7 @@ interface AppState {
   isAuthenticated: boolean;
   isAdminPanelOpen: boolean;
   adminToken: string | null;
+  userToken: string | null;
   // Chat state
   isChatOpen: boolean;
   chatMessages: ChatMessage[];
@@ -79,6 +80,7 @@ interface AppState {
 // Check if admin is already authenticated from localStorage
 const storedToken = localStorage.getItem('adminToken');
 const storedIsAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+const storedUserToken = localStorage.getItem('userToken');
 
 // Create the store with initial state
 export const appStore = new Store<AppState>({
@@ -97,6 +99,7 @@ export const appStore = new Store<AppState>({
   isAuthenticated: storedIsAuthenticated || false,
   isAdminPanelOpen: false,
   adminToken: storedToken || null,
+  userToken: storedUserToken || null,
   // Chat state
   isChatOpen: false,
   chatMessages: [],
@@ -283,12 +286,15 @@ export const login = async (credentials: AdminCredentials) => {
     if(token) {
       if(user.isAdmin) {
         localStorage.setItem('adminToken', token);
+      } else{
+        localStorage.setItem('userToken', token);
       }
       localStorage.setItem('isAuthenticated', 'true');
     
       appStore.setState((state) => ({
         ...state,
         isAuthenticated: true,
+        userToken: token,
         adminToken: user.isAdmin ? token : null,
         // userRole: user.isAdmin ? 'admin' : 'user'
       }));

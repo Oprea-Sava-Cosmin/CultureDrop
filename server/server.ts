@@ -6,7 +6,8 @@ import deepseekRoutes from './routes/deepseek';
 import {connectDB} from './config/database';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
-import  {uploadPhotos} from './config/cloudinary';
+import transactionRoutes from './routes/transactionRoutes';
+// import  {uploadPhotos} from './config/cloudinary';
 
 const PORT = process.env.PORT || 5000;
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 connectDB();
 

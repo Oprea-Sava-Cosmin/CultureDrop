@@ -1,4 +1,4 @@
-import { useState } from 'react';
+  import { useState, useEffect } from 'react';
 import {
   Box,
   Tabs,
@@ -7,7 +7,7 @@ import {
   TextField,
   InputAdornment,
   useMediaQuery,
-  useTheme as useMuiTheme,
+  useTheme,
   IconButton,
   Drawer,
   Button,
@@ -23,7 +23,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
 
 import { productCategories, culturalThemes } from '../../data/mockData';
 
@@ -40,20 +39,24 @@ const FilterBar = ({
   activeCulture,
   searchQuery,
 }: FilterBarProps) => {
-  const muiTheme = useMuiTheme();
-  const { setCulture } = useTheme();
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
 
+  // Sync local search query with prop when it changes
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+  }, [searchQuery]);
+
   // Handle category change
   const handleCategoryChange = (_event: React.SyntheticEvent, newValue: string) => {
-    onFilterChange(newValue === 'all' ? null : newValue, activeCulture, searchQuery);
+    onFilterChange(newValue === 'all' ? null : newValue, activeCulture, localSearchQuery);
   };
 
   // Handle culture filter change
   const handleCultureChange = (culture: string) => {
-    onFilterChange(activeCategory, culture === activeCulture ? null : culture, searchQuery);
+    onFilterChange(activeCategory, culture === activeCulture ? null : culture, localSearchQuery);
   };
 
   // Handle search input change
@@ -67,6 +70,12 @@ const FilterBar = ({
     onFilterChange(activeCategory, activeCulture, localSearchQuery);
   };
 
+  // Clear search only
+  const clearSearch = () => {
+    setLocalSearchQuery('');
+    onFilterChange(activeCategory, activeCulture, '');
+  };
+
   // Toggle mobile filter drawer
   const toggleMobileFilter = () => {
     setMobileFilterOpen(!mobileFilterOpen);
@@ -77,11 +86,6 @@ const FilterBar = ({
     onFilterChange(null, null, '');
     setLocalSearchQuery('');
     setMobileFilterOpen(false);
-    
-    // Reset culture theme to default 'urban'
-    if (activeCulture) {
-      setCulture('urban');
-    }
   };
 
   // Animation variants
@@ -160,6 +164,7 @@ const FilterBar = ({
           mb: 2,
           flexDirection: { xs: 'column', sm: 'row' },
           gap: { xs: 2, sm: 1 },
+          maxWidth: { sm: '500px', md: 'none' },
         }}
       >
         {/* Search form */}
@@ -176,12 +181,28 @@ const FilterBar = ({
             placeholder="Search products..."
             value={localSearchQuery}
             onChange={handleSearchChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearchSubmit(e);
+              }
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>
               ),
+              endAdornment: localSearchQuery ? (
+                <InputAdornment position="end">
+                  <IconButton 
+                    size="small" 
+                    onClick={clearSearch}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
             }}
             sx={{ width: { xs: '100%', sm: 300 } }}
           />

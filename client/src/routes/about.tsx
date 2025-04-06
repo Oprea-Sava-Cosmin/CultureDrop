@@ -220,7 +220,7 @@ function AboutPage() {
               >
                 <Box
                   component="img"
-                  src="/images/about-story.jpg"
+                  src="/images/OurStory.webp"
                   alt="Our story"
                   sx={{
                     width: '100%',
