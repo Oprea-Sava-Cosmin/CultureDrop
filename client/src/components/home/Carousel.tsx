@@ -5,7 +5,6 @@ import { useRef, useEffect, useState } from 'react';
 import Footer from '../layout/Footer';
 import BounceCards from '../ui/Components/BounceCards/BounceCards';
 import axios from 'axios';
-import { Link } from '@tanstack/react-router';
 
 interface Product {
   _id: string;
