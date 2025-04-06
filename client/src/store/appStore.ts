@@ -1,7 +1,7 @@
 import { Store } from '@tanstack/react-store';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export interface LoginCredentials {
   username: string;
