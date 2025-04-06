@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
 import {
   Box,
   Typography,
@@ -13,8 +12,6 @@ import {
   Chip,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 import AlbumIcon from '@mui/icons-material/Album';
 import {useTheme as useMuiTheme} from '@mui/material';
 import Layout from '../components/layout/Layout';
@@ -28,56 +25,54 @@ export const Route = createFileRoute('/music')({
 const musicReleases = [
   {
     id: '1',
-    title: 'Urban Beats Vol. 1',
-    artist: 'Various Artists',
+    title: 'The Miseducation of Lauryn Hill',
+    artist: 'Lauryn Hill',
     cover: '/images/urban-vinyl.jpg',
     culture: 'urban',
-    releaseDate: '2023-05-15',
-    description: 'A collection of the hottest urban tracks from emerging artists.',
+    releaseDate: '1998-08-25',
+    description: 'A genre-blending masterpiece rooted in soul, R&B, and hip-hop, this album embodies emotional depth and social commentary typical of urban culture.',
   },
   {
     id: '2',
-    title: 'Hip-Hop Classics',
-    artist: 'Old School Crew',
-    cover: '/images/hiphop-collection.jpg',
+    title: 'To Pimp a Butterfly',
+    artist: 'Kendrick Lamar',
+    cover: '/images/hiphop-collection.png',
     culture: 'hiphop',
-    releaseDate: '2023-03-22',
-    description: 'Revisiting the golden era of hip-hop with remastered classics.',
+    releaseDate: '2015-03-15',
+    description: 'A modern hip-hop classic combining jazz, funk, and powerful storytelling. It captures the essence of cultural identity and social struggle.',
   },
   {
     id: '3',
-    title: 'Street Anthems',
-    artist: 'Street Collective',
-    cover: '/images/streetwear-culture.jpg',
+    title: 'Yeezus',
+    artist: 'Kanye West',
+    cover: '/images/streetwear-culture.png',
     culture: 'streetwear',
-    releaseDate: '2023-07-08',
-    description: 'The soundtrack of street culture featuring exclusive collaborations.',
+    releaseDate: '2013-06-18',
+    description: 'Bold, experimental, and unapologetically fashion-forward—much like the streetwear scene itself. Kanye also heavily influences street fashion trends.',
   },
   {
     id: '4',
-    title: 'Indie Discoveries',
-    artist: 'The Independents',
+    title: 'For Emma, Forever Ago',
+    artist: 'Bon Iver',
     cover: '/images/indie-compilation.jpg',
     culture: 'indie',
-    releaseDate: '2023-04-12',
-    description: 'Fresh sounds from the independent music scene across the globe.',
+    releaseDate: '2007-07-12',
+    description: 'Raw, introspective, and lo-fi in spirit, this album is a pillar of indie folk and DIY ethos, resonating deeply with indie culture.',
   },
   {
     id: '5',
-    title: 'Punk Revival',
-    artist: 'Anarchy Band',
+    title: 'London Calling',
+    artist: 'The Clash',
     cover: '/images/punk-anthology.jpg',
     culture: 'punk',
-    releaseDate: '2023-06-30',
-    description: 'Modern punk rock anthems that capture the rebellious spirit.',
+    releaseDate: '1979-12-14',
+    description: 'A rebellious and genre-defying punk album that shaped generations. Politically charged, energetic, and eternally iconic.',
   },
 ];
 
 function MusicPage() {
-  const muiTheme = useMuiTheme();
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  
-  // Animation variants
+  const muiTheme = useMuiTheme();  
+
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
@@ -97,11 +92,7 @@ function MusicPage() {
     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     hover: { y: -10, transition: { duration: 0.3 } },
   };
-  
-  // Toggle play/pause
-  const togglePlay = (id: string) => {
-    setPlayingId(playingId === id ? null : id);
-  };
+
   
   return (
     <Layout>
@@ -200,31 +191,6 @@ function MusicPage() {
                           Released: {release.releaseDate}
                         </Typography>
                       </Box>
-                      
-                      {/* Play button overlay */}
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => togglePlay(release.id)}
-                          sx={{
-                            borderRadius: '50%',
-                            minWidth: '60px',
-                            height: '60px',
-                            opacity: 0.9,
-                          }}
-                        >
-                          {playingId === release.id ? <PauseIcon /> : <PlayArrowIcon />}
-                        </Button>
-                      </Box>
-                      
                       {/* Culture tag */}
                       <Chip
                         label={release.culture}
