@@ -11,6 +11,7 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 });
 
+
 const containerStyle: React.CSSProperties = {
   backgroundColor: '#040403',
   height: '100vh',
@@ -33,55 +34,55 @@ function HomePage() {
   };
 
   return (
-    <div style={containerStyle}>
-      <section style={sectionStyle}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          style={{
-            backgroundColor: '#040403',
-            width: '100%',
-            height: '100%',
-            position: 'relative',
-          }}
-        >
-          <ImageCarousel onCarouselEnd={handleCarouselEnd} />
-          {showText && (
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <TextReveal />
-            </div>
-          )}
-        </motion.div>
-      </section>
-      <section style={sectionStyle}>
-        <ScrollPhotos />
-      </section>
-      <section style={sectionStyle}>
-        <Hero />
-      </section>
-      <section style={sectionStyle}>
-        <Carousel/>
-      </section>
-      <style>
-        {`
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}
-      </style>
-    </div>
+      <div style={containerStyle}>
+        <section style={sectionStyle}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              backgroundColor: '#040403',
+              width: '100%',
+              height: '100%',
+              position: 'relative',
+            }}
+          >
+            <ImageCarousel onCarouselEnd={handleCarouselEnd} />
+            {showText && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <TextReveal />
+              </div>
+            )}
+          </motion.div>
+        </section>
+        <section style={sectionStyle}>
+          <ScrollPhotos />
+        </section>
+        <section style={sectionStyle}>
+          <Hero />
+        </section>
+        <section style={sectionStyle}>
+          <Carousel />
+        </section>
+        <style>
+          {`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
+      </div>
   );
 }
 
