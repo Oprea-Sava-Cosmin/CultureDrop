@@ -12,6 +12,7 @@ import {
 import { motion } from 'framer-motion';
 import { Link } from '@tanstack/react-router';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import StarIcon from '@mui/icons-material/Star'; // Add this import
 import { addToCart } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 
@@ -65,13 +66,35 @@ const ChatProductCard = ({ product, onProductClick }: ChatProductCardProps) => {
             }}
           />
           
-          {/* Culture tag */}
+          {/* Featured star icon */}
+          {product.featured && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 8,
+                left: 8,
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: theme.palette.warning.main,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              }}
+            >
+              <StarIcon sx={{ color: 'white', fontSize: '1rem' }} />
+            </Box>
+          )}
+          
+          {/* Culture tag - moved down to make room for the star */}
           <Chip
             label={product.culture}
             size="small"
             sx={{
               position: 'absolute',
-              top: 8,
+              top: product.featured ? 48 : 8,
               left: 8,
               backgroundColor: 'rgba(0,0,0,0.6)',
               color: 'white',
