@@ -39,7 +39,7 @@ export const Route = createFileRoute('/admin/')({
     }
   },
 });
-
+const URL = import.meta.env.VITE_DATABASE_URL;
 function AdminDashboard() {
   const [productCount, setProductCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
@@ -49,7 +49,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchProductCount = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products/count');
+        const response = await axios.get(`http://${URL}/api/products/count`);
         setProductCount(response.data.count);
       } catch (error) {
         console.error('Error fetching product count:', error);
@@ -58,7 +58,7 @@ function AdminDashboard() {
     
     const fetchUserCount = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/count');
+        const response = await axios.get(`http://${URL}/api/auth/count`);
         setUserCount(response.data.count);
       } catch (error) {
         console.error('Error fetching product count:', error);

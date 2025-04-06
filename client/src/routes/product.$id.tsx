@@ -38,11 +38,13 @@ interface LoaderData {
   error?: string;
 }
 
+const URL = import.meta.env.VITE_DATABASE_URL;
+
 export const Route = createFileRoute('/product/$id')({
   component: ProductDetailPage,
   loader: async ({ params }) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/products/${params.id}`);
+      const response = await axios.get(`http://${URL}/api/products/${params.id}`);
       return { product: response.data };
     } catch (error) {
       console.error('Error loading product:', error);
