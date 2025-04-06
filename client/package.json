@@ -22,6 +22,7 @@
         "@tanstack/router-plugin": "^1.114.3",
         "axios": "^1.8.4",
         "framer-motion": "^11.18.2",
+        "gsap": "^3.12.7",
         "motion": "^12.6.3",
         "ogl": "^1.0.11",
         "postprocessing": "^6.37.2",
