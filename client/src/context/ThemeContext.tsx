@@ -23,6 +23,15 @@ const ThemeContext = createContext<ThemeContextType>({
   setCulture: () => {},
 });
 
+// Define culture-specific fonts
+const cultureFonts = {
+  urban: '"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif',
+  streetwear: '"Anton", "Roboto", "Helvetica", "Arial", sans-serif',
+  hiphop: '"Bebas Neue", "Roboto", "Helvetica", "Arial", sans-serif',
+  indie: '"Quicksand", "Roboto", "Helvetica", "Arial", sans-serif',
+  punk: '"Rubik Mono One", "Roboto", "Helvetica", "Arial", sans-serif',
+};
+
 // Define culture-specific theme palettes
 const cultureThemes = {
   urban: {
@@ -133,16 +142,68 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     typography: {
-      fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: cultureFonts[culture], // Apply the culture-specific font
       h1: {
-        fontWeight: 700,
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
       },
       h2: {
-        fontWeight: 600,
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        marginBottom: culture === 'hiphop' ? '0.3em' : undefined,
+      },
+      h3: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+      },
+      h4: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+      },
+      h5: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+      },
+      h6: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
       },
       button: {
-        textTransform: 'none',
-        fontWeight: 500,
+        fontFamily: cultureFonts[culture],
+        textTransform: 'none', // Prevent uppercase transformation
+        fontWeight: culture === 'punk' || culture === 'streetwear' ? 400 : 500,
+        letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        lineHeight: 1.2,
+      },
+      body1: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: 1.6,
+        letterSpacing: culture === 'hiphop' ? '0.03em' : 'normal',
+        marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+      },
+      body2: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: 1.6,
+        letterSpacing: culture === 'hiphop' ? '0.03em' : 'normal',
+        marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+      },
+      subtitle1: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: 1.5,
+        letterSpacing: culture === 'hiphop' ? '0.04em' : 'normal',
+        marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+      },
+      subtitle2: {
+        fontFamily: cultureFonts[culture],
+        lineHeight: 1.5,
+        letterSpacing: culture === 'hiphop' ? '0.04em' : 'normal',
       },
     },
     components: {
@@ -150,6 +211,37 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         styleOverrides: {
           root: {
             borderRadius: 8,
+            padding: culture === 'hiphop' ? '8px 16px 6px' : undefined, // Adjust padding for Bebas Neue
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          label: {
+            // Adjust chip label alignment for different fonts
+            lineHeight: culture === 'hiphop' ? 1.4 : 1.4,
+            padding: culture === 'hiphop' ? '0 8px' : undefined,
+            letterSpacing: culture === 'hiphop' ? '0.05em' : undefined,
+          },
+        },
+      },
+      MuiCardContent: {
+        styleOverrides: {
+          root: {
+            padding: culture === 'hiphop' ? '16px 16px 8px' : undefined,
+            '&:last-child': {
+              paddingBottom: culture === 'hiphop' ? '16px' : undefined,
+            },
+          },
+        },
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+          },
+          gutterBottom: {
+            marginBottom: culture === 'hiphop' ? '0.8em' : '0.35em',
           },
         },
       },
