@@ -32,7 +32,6 @@ const PaymentForm = ({ onSubmit, initialData = {} }: PaymentFormProps) => {
   // Form validation
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  // Animation variants
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -45,7 +44,6 @@ const PaymentForm = ({ onSubmit, initialData = {} }: PaymentFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
     const newErrors: Record<string, string> = {};
     
     if (paymentMethod === 'credit_card') {

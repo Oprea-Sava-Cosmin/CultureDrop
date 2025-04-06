@@ -118,7 +118,7 @@ export const setProducts = (products: Product[]) => {
     ...state,
     products,
     featuredProducts: products.filter((product) => product.featured),
-    filteredProducts: products, // Assuming initial filtered products is the full list
+    filteredProducts: products,
   }));
 };
 
@@ -185,7 +185,6 @@ export const updateProduct = async (productId: string, updates: Partial<Product>
 export const addToCart = (product: Product, quantity: number = 1) => {
   appStore.setState((state) => {
     const existingItem = state.cart.find((item) => item.product._id === product._id);
-    // console.log(existingItem);
     if (existingItem) {
       return {
         ...state,
@@ -340,7 +339,7 @@ export const adminLogout = () => {
   // Clear authentication data from localStorage
   localStorage.removeItem('adminToken');
   localStorage.removeItem('isAuthenticated');
-  localStorage.removeItem('userRole'); // Add this line
+  localStorage.removeItem('userRole');
   
   appStore.setState((state) => ({
     ...state,

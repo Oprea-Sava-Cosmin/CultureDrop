@@ -25,6 +25,7 @@ const countries = [
   { code: 'DE', name: 'Germany' },
   { code: 'FR', name: 'France' },
   { code: 'JP', name: 'Japan' },
+  { code: 'RO', name: 'Romania'}
 ];
 
 const ShippingForm = ({ onSubmit, initialData = {} }: ShippingFormProps) => {
@@ -44,7 +45,6 @@ const ShippingForm = ({ onSubmit, initialData = {} }: ShippingFormProps) => {
   // Form validation
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  // Animation variants
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -57,7 +57,6 @@ const ShippingForm = ({ onSubmit, initialData = {} }: ShippingFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
     const newErrors: Record<string, string> = {};
     
     if (!firstName.trim()) newErrors.firstName = 'First name is required';

@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { signup, login, checkAdminStatus, getUserCount } from '../config/authController';
-import {verifyAdmin} from '../config/auth';
+import { signup, login, checkAdminStatus, getUserCount } from '../controllers/authController';
 
 const router = Router();
 

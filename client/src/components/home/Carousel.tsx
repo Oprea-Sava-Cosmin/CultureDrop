@@ -24,7 +24,6 @@ const Carousel = () => {
   const [footerHeight, setFooterHeight] = useState('calc(100vh - 96px)');
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
-  // Fetch featured products from the database
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {

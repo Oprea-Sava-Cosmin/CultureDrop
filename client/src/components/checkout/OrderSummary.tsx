@@ -12,7 +12,6 @@ interface OrderSummaryProps {
 }
 
 const OrderSummary = ({ cartItems, subtotal, tax, shipping, total }: OrderSummaryProps) => {
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {

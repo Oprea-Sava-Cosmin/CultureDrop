@@ -335,4 +335,5 @@ const countries = [
   { code: 'DE', name: 'Germany' },
   { code: 'FR', name: 'France' },
   { code: 'JP', name: 'Japan' },
+  { code: 'RO', name: 'Romania' },
 ];

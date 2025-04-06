@@ -29,7 +29,6 @@ import { getProductRecommendations } from '../../services/deepseekService';
 import ChatProductCard from './ChatProductCard';
 import ReactMarkdown from 'react-markdown';
 
-// Use the ChatMessage type from appStore
 
 const ChatBot = () => {
   const theme = useTheme();
@@ -159,7 +158,7 @@ const ChatBot = () => {
         onClose={toggleChat}
         PaperProps={{
           sx: {
-            width: isMobile ? '100%' : '800px', // Increased width from typical 400px
+            width: isMobile ? '100%' : '800px',
             maxWidth: '100%',
             borderRadius: isMobile ? 0 : '12px 0 0 12px',
             overflow: 'hidden',

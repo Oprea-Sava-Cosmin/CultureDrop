@@ -483,16 +483,6 @@ interface FormData {
               </Grid>
               
               <Grid size = {{xs:12}}>
-                {/* <TextField
-                  fullWidth
-                  label="Image URL"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  error={!!formErrors.image}
-                  helperText={formErrors.image || 'Enter a valid URL for the product image'}
-                  required
-                /> */}
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <input
                     accept="image/*"

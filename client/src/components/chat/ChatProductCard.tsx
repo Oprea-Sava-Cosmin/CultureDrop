@@ -12,7 +12,7 @@ import {
 import { motion } from 'framer-motion';
 import { Link } from '@tanstack/react-router';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import StarIcon from '@mui/icons-material/Star'; // Add this import
+import StarIcon from '@mui/icons-material/Star';
 import { addToCart } from '../../store/appStore';
 import type { Product } from '../../store/appStore';
 
