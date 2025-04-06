@@ -14,6 +14,11 @@ import {
   Breadcrumbs,
   CircularProgress,
   useTheme,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
@@ -56,6 +61,7 @@ export const Route = createFileRoute('/product/$id')({
 function ProductDetailPage() {
   const { product: loadedProduct, error: loadError } = Route.useLoaderData() as LoaderData;
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState('M'); // Default size
   const theme = useTheme();
   const { setCulture } = useAppTheme();
 
@@ -93,10 +99,20 @@ function ProductDetailPage() {
     }
   };
 
-  // Handle add to cart
+  // Handle size change
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSize(event.target.value);
+  };
+
+  // Handle add to cart - updated to include size
   const handleAddToCart = () => {
     if (loadedProduct) {
-      addToCart(loadedProduct, quantity);
+      // Add size to the product when adding to cart
+      const productWithSize = {
+        ...loadedProduct,
+        selectedSize
+      };
+      addToCart(productWithSize, quantity);
       // Reset quantity after adding to cart
       setQuantity(1);
     }
@@ -232,6 +248,35 @@ function ProductDetailPage() {
                   >
                     {loadedProduct.description}
                   </Typography>
+
+                  {/* Size Selector */}
+                  {loadedProduct.category.toLowerCase() === 'clothing' && loadedProduct.size && loadedProduct.size.length > 0 && (
+                    <Box sx={{ mb: 3 }}>
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend" sx={{ mb: 1 }}>Select Size</FormLabel>
+                        <RadioGroup
+                          row
+                          name="size-selector"
+                          value={selectedSize}
+                          onChange={handleSizeChange}
+                        >
+                          {loadedProduct.size.map((size) => (
+                            <FormControlLabel 
+                              key={size} 
+                              value={size} 
+                              control={<Radio />} 
+                              label={size}
+                              sx={{
+                                '& .MuiFormControlLabel-label': {
+                                  fontWeight: selectedSize === size ? 600 : 400,
+                                }
+                              }}
+                            />
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                    </Box>
+                  )}
 
                   {/* Quantity Selector */}
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>

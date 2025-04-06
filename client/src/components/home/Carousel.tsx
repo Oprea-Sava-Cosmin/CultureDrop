@@ -4,6 +4,14 @@ import { useTheme } from '../../context/ThemeContext';
 import { useRef, useEffect, useState } from 'react';
 import Footer from '../layout/Footer';
 import CircularGallery from '../ui/Components/CircularGallery/CircularGallery';
+import axios from 'axios';
+
+interface Product {
+  id: string;
+  name: string;
+  image: string;
+  featured?: boolean;
+}
 
 const Carousel = () => {
   const muiTheme = useMuiTheme();
@@ -11,6 +19,35 @@ const Carousel = () => {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
   const footerRef = useRef<HTMLDivElement>(null);
   const [footerHeight, setFooterHeight] = useState('calc(100vh - 96px)');
+  const [featuredProducts, setFeaturedProducts] = useState<{image: string, text: string}[]>([]);
+
+  // Fetch featured products from the database
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/products?featured=true');
+        
+        // Transform the data to match CircularGallery's expected format
+        const formattedProducts = response.data.map((product: Product) => ({
+          image: product.image,
+          text: product.name
+        }));
+        console.log(formattedProducts);
+        
+        setFeaturedProducts(formattedProducts);
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+        // Fallback data in case of error
+        setFeaturedProducts([
+          { image: '/images/product-placeholder.jpg', text: 'Product 1' },
+          { image: '/images/product-placeholder.jpg', text: 'Product 2' },
+          { image: '/images/product-placeholder.jpg', text: 'Product 3' }
+        ]);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
 
   useEffect(() => {
     const updateFooterHeight = () => {
@@ -45,12 +82,13 @@ const Carousel = () => {
         <Box sx={{ 
           width: '90%', // Constrain width on mobile
           maxWidth: '500px', // Maximum width
-          height: '80vh', // Reduce height to fit more photos
+          height: '80vh',
         }}>
           <CircularGallery 
             bend={1.5}
             textColor={mode === 'light' ? "#000000" : "#ffffff"}
             font={'bold 24px Segoe UI'}
+            items={featuredProducts}
           />
         </Box>
       </Box>
@@ -81,6 +119,7 @@ const Carousel = () => {
             bend={2}
             textColor={mode === 'light' ? "#000000" : "#ffffff"}
             font={'bold 40px Segoe UI'}
+            items={featuredProducts}
           />
         </Box>
       </Box>

@@ -142,68 +142,117 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     typography: {
-      fontFamily: cultureFonts[culture], // Apply the culture-specific font
+      fontFamily: cultureFonts[culture],
+      // Adjust base font size: increase for hiphop/streetwear, decrease for punk
+      fontSize: 
+        ['hiphop', 'streetwear'].includes(culture) ? 16 * 1.15 : 
+        culture === 'punk' ? 16 * 0.85 : 
+        16,
       h1: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '2.75rem' : 
+          culture === 'punk' ? '2.125rem' : 
+          '2.5rem',
       },
       h2: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
         marginBottom: culture === 'hiphop' ? '0.3em' : undefined,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '2.3rem' : 
+          culture === 'punk' ? '1.7rem' : 
+          '2rem',
       },
       h3: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.84rem' : 
+          culture === 'punk' ? '1.36rem' : 
+          '1.6rem',
       },
       h4: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.495rem' : 
+          culture === 'punk' ? '1.105rem' : 
+          '1.3rem',
       },
       h5: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
         marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.265rem' : 
+          culture === 'punk' ? '0.935rem' : 
+          '1.1rem',
       },
       h6: {
         fontFamily: cultureFonts[culture],
         lineHeight: culture === 'hiphop' ? 1.2 : 1.2,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.15rem' : 
+          culture === 'punk' ? '0.85rem' : 
+          '1rem',
       },
       button: {
         fontFamily: cultureFonts[culture],
-        textTransform: 'none', // Prevent uppercase transformation
+        textTransform: 'none',
         fontWeight: culture === 'punk' || culture === 'streetwear' ? 400 : 500,
         letterSpacing: culture === 'hiphop' ? '0.05em' : 'normal',
         lineHeight: 1.2,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.035rem' : 
+          culture === 'punk' ? '0.765rem' : 
+          '0.9rem',
       },
       body1: {
         fontFamily: cultureFonts[culture],
         lineHeight: 1.6,
         letterSpacing: culture === 'hiphop' ? '0.03em' : 'normal',
         marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.15rem' : 
+          culture === 'punk' ? '0.85rem' : 
+          '1rem',
       },
       body2: {
         fontFamily: cultureFonts[culture],
         lineHeight: 1.6,
         letterSpacing: culture === 'hiphop' ? '0.03em' : 'normal',
         marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '0.92rem' : 
+          culture === 'punk' ? '0.68rem' : 
+          '0.8rem',
       },
       subtitle1: {
         fontFamily: cultureFonts[culture],
         lineHeight: 1.5,
         letterSpacing: culture === 'hiphop' ? '0.04em' : 'normal',
         marginBottom: culture === 'hiphop' ? '0.5em' : undefined,
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '1.035rem' : 
+          culture === 'punk' ? '0.765rem' : 
+          '0.9rem',
       },
       subtitle2: {
         fontFamily: cultureFonts[culture],
         lineHeight: 1.5,
         letterSpacing: culture === 'hiphop' ? '0.04em' : 'normal',
+        fontSize: 
+          ['hiphop', 'streetwear'].includes(culture) ? '0.92rem' : 
+          culture === 'punk' ? '0.68rem' : 
+          '0.8rem',
       },
     },
     components: {
@@ -211,7 +260,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         styleOverrides: {
           root: {
             borderRadius: 8,
-            padding: culture === 'hiphop' ? '8px 16px 6px' : undefined, // Adjust padding for Bebas Neue
+            padding: culture === 'hiphop' ? '8px 16px 6px' : undefined,
+            textAlign: 'center',
+            justifyContent: 'center',
           },
         },
       },
