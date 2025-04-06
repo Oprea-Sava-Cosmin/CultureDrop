@@ -43,6 +43,8 @@ export const Route = createFileRoute('/admin/')({
 function AdminDashboard() {
   const [productCount, setProductCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
+  const [transactionCount, setTransactionCount] = useState(0);
+  const [transactionValue, setTransactionValue] = useState(0);
 
   const products = useStore(appStore, (state) => state.products);
   
@@ -65,8 +67,30 @@ function AdminDashboard() {
       }
     };
 
+    const fetchTransactionCout = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/transactions/count');
+        setTransactionCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching transactions count: ', error);
+      }
+    };
+
+    const fetchTransactionValue = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/transactions/value');
+        // console.log(response.data.value);
+        setTransactionValue(response.data.value.toFixed(2));
+      } catch (error) {
+        console.error('Error fetching transactions value', error);
+      }
+    };
+
+
     fetchProductCount();
     fetchUserCount();
+    fetchTransactionCout();
+    fetchTransactionValue();
   }, []);
 
   // Animation variants for dashboard elements
@@ -143,7 +167,7 @@ function AdminDashboard() {
                   <CardContent sx={{ textAlign: 'center' }}>
                     <ShoppingCartIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
                     <Typography variant="h5" component="div">
-                      0
+                      {transactionCount}
                     </Typography>
                     <Typography color="text.secondary">
                       Orders
@@ -158,7 +182,7 @@ function AdminDashboard() {
                 <Card elevation={3}>
                   <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h5" component="div" sx={{ color: 'success.main' }}>
-                      $0
+                      ${transactionValue}
                     </Typography>
                     <Typography color="text.secondary">
                       Total Revenue
