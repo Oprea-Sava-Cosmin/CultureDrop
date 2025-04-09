@@ -8,7 +8,6 @@ import {
   IconButton,
   Paper,
   Avatar,
-  CircularProgress,
   Chip,
   useTheme,
   useMediaQuery,
@@ -303,7 +302,7 @@ const ChatBot = () => {
                       mr: message.sender === 'user' ? 1 : 0,
                       backgroundColor: message.sender === 'user' 
                         ? cultureColors.secondary 
-                        : cultureColors.responseBg, // Use the new responseBg for bot messages
+                        : cultureColors.responseBg,
                       color: message.sender === 'user' 
                         ? '#fff' 
                         : (mode === 'dark' ? '#fff' : '#000'), // Adjust text color based on sender and mode
@@ -322,7 +321,8 @@ const ChatBot = () => {
                                 '& a': {
                                   color: cultureColors.accent,
                                   textDecoration: 'underline'
-                                }
+                                },
+                                margin: 0, // Remove default margin
                               }} 
                               {...props} 
                             />
@@ -332,23 +332,110 @@ const ChatBot = () => {
                         {message.text}
                       </ReactMarkdown>
                     ) : (
-                      <Typography>{message.text}</Typography>
+                      <Typography sx={{ margin: 0 }}>{message.text}</Typography>
                     )}
                   </Paper>
                 </Box>
               </motion.div>
             ))}
+            
+            {/* Typing indicator with animated bubbles */}
+            {isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    mb: 2,
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      bgcolor: cultureColors.primary,
+                      width: 36,
+                      height: 36,
+                    }}
+                  >
+                    <SmartToyIcon />
+                  </Avatar>
+                  <Paper
+                    sx={{
+                      py: 1.5, // Reduced vertical padding
+                      px: 2,   // Keep horizontal padding
+                      ml: 1,
+                      backgroundColor: cultureColors.responseBg,
+                      color: mode === 'dark' ? '#fff' : '#000',
+                      borderRadius: 2,
+                      display: 'flex',
+                      alignItems: 'center',
+                      minWidth: 60,
+                      minHeight: 24, // Ensure minimum height
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <motion.div
+                        animate={{
+                          y: [0, -5, 0],
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          delay: 0,
+                        }}
+                        style={{ 
+                          width: 8, 
+                          height: 8, 
+                          borderRadius: '50%', 
+                          backgroundColor: cultureColors.primary, 
+                        }}
+                      />
+                      <motion.div
+                        animate={{
+                          y: [0, -5, 0],
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          delay: 0.2,
+                        }}
+                        style={{ 
+                          width: 8, 
+                          height: 8, 
+                          borderRadius: '50%', 
+                          backgroundColor: cultureColors.primary, 
+                        }}
+                      />
+                      <motion.div
+                        animate={{
+                          y: [0, -5, 0],
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          delay: 0.4,
+                        }}
+                        style={{ 
+                          width: 8, 
+                          height: 8, 
+                          borderRadius: '50%', 
+                          backgroundColor: cultureColors.primary, 
+                        }}
+                      />
+                    </Box>
+                  </Paper>
+                </Box>
+              </motion.div>
+            )}
           </AnimatePresence>
-
-          {/* Typing indicator */}
-          {isTyping && (
-            <Box sx={{ display: 'flex', alignItems: 'center', ml: 5 }}>
-              <CircularProgress size={20} sx={{ color: cultureColors.primary }} />
-              <Typography variant="body2" sx={{ ml: 1, color: 'text.secondary' }}>
-                Assistant is typing...
-              </Typography>
-            </Box>
-          )}
 
           {/* Recommended products */}
           {recommendedProducts.length > 0 && (
